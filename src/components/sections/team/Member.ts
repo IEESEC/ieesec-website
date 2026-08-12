@@ -1,15 +1,15 @@
-// Typescript interfaces define data structures and types for the members of the team section. 
+// Typescript interfaces define data structures and types for the members of the team section.
 // This ensures type safety and better code maintainability when working with member data throughout the application.
 export interface Member {
-  firstname: string;    // The first name of the member.
-  lastname: string;     // The last name of the member.
-  role: string;         // The role of the member.
-  image: string;        // The URL of the member's image.
-  bio: string;          // A brief biography of the member.
+  firstname: string; // The first name of the member.
+  lastname: string; // The last name of the member.
+  role: string; // The role of the member.
+  image: string; // The URL of the member's image.
+  bio: string; // A brief biography of the member.
   socialLinks: {
-    linkedIn?: string;  // The URL of the member's LinkedIn profile (optional).
-    github?: string;    // The URL of the member's GitHub profile (optional).
-    twitter?: string;   // The URL of the member's Twitter profile (optional).
+    linkedIn?: string; // The URL of the member's LinkedIn profile (optional).
+    github?: string; // The URL of the member's GitHub profile (optional).
+    twitter?: string; // The URL of the member's Twitter profile (optional).
   };
 }
 
