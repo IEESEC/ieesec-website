@@ -1,5 +1,5 @@
 // Prerequisite imports for the MemberCard component, including UI components and the Member interface.
-import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
+import {Card} from "@/components/ui/card";
 import {Member} from "./Member";
 
 // The MemberCard component is a reusable UI component that displays information about a team member.
