@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./theme-toggle";
 
 const navItems = [
   { label: "Home", href: "#home" },
@@ -101,8 +102,8 @@ export function Navbar() {
                   className={cn(
                     "px-3.5 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200",
                     activeSection === item.href.slice(1)
-                      ? "text-primary bg-primary/15"
-                      : "text-white/70 hover:text-primary hover:bg-primary/10",
+                      ? "text-primary-foreground bg-primary"
+                      : "text-foreground/70 hover:text-primary hover:bg-primary/25",
                   )}
                 >
                   {item.label}
@@ -112,6 +113,7 @@ export function Navbar() {
 
             {/* Desktop actions */}
             <div className="hidden md:flex items-center gap-2">
+              <ThemeToggle />
               <Button className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/85 transition-colors">
                 Join Us
               </Button>
@@ -152,6 +154,7 @@ export function Navbar() {
           >
             <X className="h-5 w-5" />
           </button>
+          <ThemeToggle />
         </div>
 
         <nav className="flex flex-col gap-1">
@@ -166,8 +169,8 @@ export function Navbar() {
               className={cn(
                 "px-4 py-3 text-base font-medium rounded-xl transition-colors",
                 activeSection === item.href.slice(1)
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-primary hover:bg-primary/5",
+                  ? "text-primary-foreground bg-primary"
+                  : "text-muted-foreground hover:text-primary hover:bg-primary/15",
               )}
             >
               {item.label}
