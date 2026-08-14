@@ -1,7 +1,6 @@
 import { HeroCarousel } from "@/components/hero-carousel";
 import { TeamSection } from "@/components/sections/team";
 import { ProjectsSection } from "@/components/sections/projects";
-import { TechStackSection } from "@/components/sections/tech-stack";
 import { EventsSection } from "@/components/sections/events";
 import { BlogSection } from "@/components/sections/blog";
 
@@ -15,7 +14,6 @@ export default function HomePage() {
 
       <TeamSection />
       <ProjectsSection />
-      <TechStackSection />
       <EventsSection />
       <BlogSection />
     </main>
