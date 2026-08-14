@@ -62,9 +62,11 @@ export function Footbar() {
               <li>International Hellenic University</li>
               <li>Sindos Campus</li>
               <li>Sindos 574 00</li>
-              <Link href="mailto:ieesec.ihu@gmail.com">
-                <li className="text-primary/70">ieesec.ihu@gmail.com</li>
-              </Link>
+              <li>
+                <Link href="mailto:ieesec.ihu@gmail.com" className="text-primary/70">
+                  ieesec.ihu@gmail.com
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
