@@ -17,7 +17,8 @@ export function TeamSection() {
           </Reveal>
           {/*Required revealing of the members section*/}
           <Reveal direction="right" className="mt-8">
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 items-stretch">
+            <div className="mr-auto grid max-w-5xl grid-cols-1 items-stretch gap-6 sm:grid-cols-2 md:grid-cols-3">
+              {" "}
               {/*Dedicated member reveal with a delay for each member to create a staggered animation effect*/}
               {members.map((member, i) => (
                 <Reveal
