@@ -23,9 +23,7 @@ export const members: Member[] = [
     lastname: "Kapsalis",
     role: "Chair | Full-stack Developer",
     image: "https://avatars.githubusercontent.com/u/57574085?v=4",
-    bio:
-      "I'm a first-year Information and Electronic Systems Engineering student at the International Hellenic University. " +
-      "Having been coding since my early teens, I’m now focused on grounding my practical background in software development with formal engineering studies.",
+    bio: "Studying at Information and Electronic Systems Engineering department of International Hellenic University. Actively experimenting with various technologies and software stacks.",
     socialLinks: {
       linkedIn: "https://linkedin.com/in/andrkapsalis",
       github: "https://github.com/andreaskapsalhs",
