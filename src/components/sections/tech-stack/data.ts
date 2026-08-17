@@ -1,76 +1,78 @@
+import { VscVscode } from "react-icons/vsc";
+import {
+  SiDocker,
+  SiFigma,
+  SiGit,
+  SiGithubactions,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiPostgresql,
+  SiPython,
+  SiReact,
+  SiTailwindcss,
+  SiTypescript,
+} from "react-icons/si";
 import type { TechItem } from "@/types/tech";
 
 export const techStack: TechItem[] = [
   {
     name: "React",
-    icon: "Atom",
+    icon: SiReact,
     category: "Frontend",
-    description: "Component-based library for building interactive user interfaces.",
   },
   {
     name: "Next.js",
-    icon: "N",
+    icon: SiNextdotjs,
     category: "Frontend",
-    description: "React framework for server-rendered and statically generated apps.",
   },
   {
     name: "Tailwind CSS",
-    icon: "Palette",
+    icon: SiTailwindcss,
     category: "Frontend",
-    description: "Utility-first CSS framework for building custom designs fast.",
   },
   {
     name: "Node.js",
-    icon: "Server",
+    icon: SiNodedotjs,
     category: "Backend",
-    description: "JavaScript runtime for building fast, scalable backend services.",
   },
   {
     name: "PostgreSQL",
-    icon: "Database",
+    icon: SiPostgresql,
     category: "Backend",
-    description: "Reliable open-source relational database for structured data.",
   },
   {
     name: "Docker",
-    icon: "Container",
+    icon: SiDocker,
     category: "DevOps",
-    description: "Packages applications into containers for consistent deployment.",
   },
   {
     name: "Git",
-    icon: "GitBranch",
+    icon: SiGit,
     category: "DevOps",
-    description: "Version control system for tracking changes and collaborating on code.",
   },
   {
     name: "GitHub Actions",
-    icon: "Workflow",
+    icon: SiGithubactions,
     category: "DevOps",
-    description: "Automates testing, builds, and deployments directly from GitHub.",
   },
   {
     name: "Figma",
-    icon: "Fg",
+    icon: SiFigma,
     category: "Tools",
-    description: "Collaborative design tool used for UI/UX mockups and prototypes.",
   },
   {
     name: "VS Code",
-    icon: "Code2",
+    icon: VscVscode,
     category: "Tools",
-    description: "Lightweight, extensible code editor used across the team.",
   },
   {
     name: "TypeScript",
-    icon: "TS",
+    icon: SiTypescript,
     category: "Languages",
-    description: "Typed superset of JavaScript that catches bugs before runtime.",
   },
   {
     name: "Python",
-    icon: "Py",
+    icon: SiPython,
     category: "Languages",
-    description: "Versatile language used for scripting, tooling, and backend logic.",
   },
 ];
