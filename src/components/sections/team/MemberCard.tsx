@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Card } from "@/components/ui/card";
 import type { Member } from "./Member";
 
@@ -29,6 +29,9 @@ function SocialLink({
 
 export default function MemberCard({ member }: { member: Member }) {
   const fullName = `${member.firstname} ${member.lastname}`;
+  const nameParts = fullName.split(/\s+/);
+  const [role, specialization = ""] = member.role.split("|").map((value) => value.trim());
+  const specializationLabel = specialization.replace(/\s+developer$/i, "");
 
   return (
     <Card className="group relative isolate mx-auto h-full w-full max-w-sm gap-0 overflow-hidden rounded-3xl border border-border/80 bg-card p-0 shadow-sm transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10 focus-within:border-primary/50 motion-reduce:transform-none">
@@ -101,12 +104,24 @@ export default function MemberCard({ member }: { member: Member }) {
           className="absolute left-5 top-0 h-0.5 w-12 bg-primary transition-[width] duration-500 group-hover:w-20"
         />
 
-        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-          {member.role}
-        </p>
-        <h2 className="mt-2.5 text-xl font-semibold leading-tight tracking-tight text-foreground">
-          {fullName}
-        </h2>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3">
+          <h2 className="min-w-0 text-xl font-semibold leading-tight tracking-tight text-foreground">
+            {nameParts.map((part, index) => (
+              <Fragment key={`${part}-${index}`}>
+                {part}
+                {index < nameParts.length - 1 ? <br /> : null}
+              </Fragment>
+            ))}
+          </h2>
+          <p className="whitespace-nowrap text-right text-sm font-medium tracking-wide text-muted-foreground">
+            {role}
+          </p>
+        </div>
+        {specializationLabel ? (
+          <span className="mt-2.5 inline-flex w-fit items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-primary">
+            {specializationLabel}
+          </span>
+        ) : null}
         <p className="mt-3 text-sm leading-5 text-muted-foreground">{member.bio}</p>
       </div>
     </Card>
