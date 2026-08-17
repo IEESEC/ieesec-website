@@ -99,15 +99,15 @@
   --secondary-foreground: oklch(0.28 0.025 230);
   --muted: oklch(0.955 0.008 220);
   --muted-foreground: oklch(0.48 0.02 230);
-  /* Accent = warm coral-amber #D4845A (split-complementary) */
-  --accent: oklch(0.68 0.125 55);
-  --accent-foreground: oklch(0.99 0.01 55);
+  /* Accent = saturated cobalt blue, paired with the steel-blue primary */
+  --accent: oklch(0.58 0.14 245);
+  --accent-foreground: oklch(0.99 0.002 220);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.905 0.015 220);
   --input: oklch(0.905 0.015 220);
   --ring: oklch(0.588 0.065 220);
   --chart-1: oklch(0.588 0.065 220);
-  --chart-2: oklch(0.68 0.125 55);
+  --chart-2: oklch(0.58 0.14 245);
   --chart-3: oklch(0.52 0.06 230);
   --chart-4: oklch(0.65 0.09 180);
   --chart-5: oklch(0.55 0.1 30);
@@ -138,15 +138,15 @@
   --secondary-foreground: oklch(0.9 0.008 220);
   --muted: oklch(0.2 0.012 232);
   --muted-foreground: oklch(0.58 0.015 220);
-  /* Accent = warm coral, lifted for dark bg */
-  --accent: oklch(0.72 0.13 55);
-  --accent-foreground: oklch(0.12 0.015 55);
+  /* Accent = lighter cobalt blue for dark surfaces */
+  --accent: oklch(0.72 0.12 230);
+  --accent-foreground: oklch(0.13 0.015 235);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(0.22 0.012 230);
   --input: oklch(0.24 0.014 230);
   --ring: oklch(0.66 0.075 220);
   --chart-1: oklch(0.66 0.075 220);
-  --chart-2: oklch(0.72 0.13 55);
+  --chart-2: oklch(0.72 0.12 230);
   --chart-3: oklch(0.55 0.06 230);
   --chart-4: oklch(0.65 0.09 180);
   --chart-5: oklch(0.58 0.1 30);

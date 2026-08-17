@@ -7,15 +7,23 @@ import Autoplay from "embla-carousel-autoplay";
 import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const slides = [
+type HeroSlide = {
+  image: string;
+  alt: string;
+};
+
+const slides: HeroSlide[] = [
   {
     image: "/images/hero/campus3.jpg",
+    alt: "International Hellenic University campus viewed from the surrounding grounds",
   },
   {
     image: "/images/hero/campus2.jpg",
+    alt: "International Hellenic University campus building",
   },
   {
     image: "/images/hero/campus1.jpg",
+    alt: "International Hellenic University campus exterior",
   },
 ];
 
@@ -112,7 +120,7 @@ export function HeroCarousel() {
         <div className="mx-auto w-full max-w-7xl px-5 pb-14 pt-28 sm:px-10 sm:pt-32 md:pb-32 lg:px-12 lg:pb-36">
           <div className="pointer-events-auto max-w-3xl">
             <h1 className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(2.35rem,12vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)] sm:text-7xl lg:text-8xl">
-              Turn theory into <span className="text-accent">working software.</span>
+              Turn theory into <span className="text-primary">working software.</span>
             </h1>
             <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-white/80 drop-shadow-[0_2px_10px_rgb(0,0,0,0.5)] sm:text-lg">
               From curiosity to shipped projects, shared knowledge, and a community that keeps
