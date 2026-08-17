@@ -7,7 +7,7 @@ import { BlogSection } from "@/components/sections/blog";
 
 export default function HomePage() {
   return (
-    <main className="relative z-10 flex flex-col flex-1">
+    <main className="relative z-10 flex min-w-0 w-full flex-1 flex-col overflow-x-clip">
       {/* Home Section (Hero) */}
       <div id="home">
         <HeroCarousel />
