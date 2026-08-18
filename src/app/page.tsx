@@ -1,12 +1,13 @@
 import { HeroCarousel } from "@/components/hero-carousel";
 import { TeamSection } from "@/components/sections/team";
 import { ProjectsSection } from "@/components/sections/projects";
+import { TechStackSection } from "@/components/sections/tech-stack";
 import { EventsSection } from "@/components/sections/events";
 import { BlogSection } from "@/components/sections/blog";
 
 export default function HomePage() {
   return (
-    <main className="relative z-10 flex flex-col flex-1">
+    <main className="relative z-10 flex min-w-0 w-full flex-1 flex-col overflow-x-clip">
       {/* Home Section (Hero) */}
       <div id="home">
         <HeroCarousel />
@@ -14,6 +15,7 @@ export default function HomePage() {
 
       <TeamSection />
       <ProjectsSection />
+      <TechStackSection />
       <EventsSection />
       <BlogSection />
     </main>

@@ -5,11 +5,13 @@ import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./theme-toggle";
 
 const navItems = [
   { label: "Home", href: "#home" },
   { label: "Team", href: "#team" },
   { label: "Projects", href: "#projects" },
+  { label: "Tech Stack", href: "#tech-stack" },
   { label: "Events", href: "#events" },
   { label: "Blog", href: "#blog" },
 ];
@@ -76,7 +78,7 @@ export function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 w-full">
+      <header className="fixed top-0 left-0 right-0 z-40 w-full max-w-full overflow-x-clip">
         <div className="mx-auto max-w-7xl px-4 pt-3">
           <div className="relative flex h-14 items-center justify-between rounded-2xl bg-background/20 dark:bg-background/30 backdrop-blur-md border border-primary/10 px-5 shadow-lg shadow-black/3 dark:shadow-black/20">
             <div className="absolute -bottom-px left-1/2 -translate-x-1/2 w-1/2 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
@@ -101,8 +103,8 @@ export function Navbar() {
                   className={cn(
                     "px-3.5 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200",
                     activeSection === item.href.slice(1)
-                      ? "text-primary bg-primary/15"
-                      : "text-white/70 hover:text-primary hover:bg-primary/10",
+                      ? "text-primary-foreground bg-primary"
+                      : "text-foreground/70 hover:text-primary hover:bg-primary/25",
                   )}
                 >
                   {item.label}
@@ -112,6 +114,7 @@ export function Navbar() {
 
             {/* Desktop actions */}
             <div className="hidden md:flex items-center gap-2">
+              <ThemeToggle />
               <Button className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/85 transition-colors">
                 Join Us
               </Button>
@@ -120,9 +123,11 @@ export function Navbar() {
             {/* Mobile actions */}
             <div className="flex md:hidden items-center gap-2">
               <button
-                className="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground hover:bg-muted cursor-pointer"
+                className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground hover:bg-muted cursor-pointer"
                 onClick={toggleSidebar}
-                aria-label="Toggle menu"
+                aria-label="Open menu"
+                aria-controls="mobile-navigation"
+                aria-expanded={isSidebarOpen}
               >
                 <Menu className="h-5 w-5" />
               </button>
@@ -141,17 +146,22 @@ export function Navbar() {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed inset-y-0 right-0 z-60 w-72 transform bg-card border-l border-border p-8 shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
+        id="mobile-navigation"
+        aria-hidden={!isSidebarOpen}
+        inert={!isSidebarOpen}
+        className={`fixed inset-y-0 right-0 z-60 w-[min(18rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain transform bg-card border-l border-border p-6 sm:p-8 shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between mb-10">
           <button
             onClick={toggleSidebar}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+            aria-label="Close menu"
           >
             <X className="h-5 w-5" />
           </button>
+          <ThemeToggle />
         </div>
 
         <nav className="flex flex-col gap-1">
@@ -166,8 +176,8 @@ export function Navbar() {
               className={cn(
                 "px-4 py-3 text-base font-medium rounded-xl transition-colors",
                 activeSection === item.href.slice(1)
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-primary hover:bg-primary/5",
+                  ? "text-primary-foreground bg-primary"
+                  : "text-muted-foreground hover:text-primary hover:bg-primary/15",
               )}
             >
               {item.label}

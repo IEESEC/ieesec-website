@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/navbar";
 import { Footbar } from "@/components/footbar";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -98,10 +99,10 @@ export default function RootLayout({
   return (
     <html
       lang="el"
+      suppressHydrationWarning
       className={cn(
         "h-full",
         "antialiased",
-        "dark",
         jakartaSans.variable,
         geistMono.variable,
         geistSans.variable,
@@ -110,9 +111,11 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-full flex flex-col">
-        <Navbar />
-        {children}
-        <Footbar />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Navbar />
+          {children}
+          <Footbar />
+        </ThemeProvider>
       </body>
     </html>
   );
