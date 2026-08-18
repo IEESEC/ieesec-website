@@ -27,6 +27,34 @@ const slides: HeroSlide[] = [
   },
 ];
 
+const headline = "Turn theory into working software.";
+
+function TypingHeadline() {
+  return (
+    <h1
+      aria-label={headline}
+      className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(2.35rem,12vw,3.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-white drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)] sm:text-7xl lg:text-8xl"
+    >
+      <span aria-hidden="true" className="hero-typewriter block">
+        <span className="hero-typewriter-line" data-text="Turn theory">
+          <span className="hero-typewriter-reveal">Turn theory</span>
+          <span aria-hidden="true" className="hero-typewriter-caret" />
+        </span>
+        <span className="hero-typewriter-line" data-text="into working">
+          <span className="hero-typewriter-reveal">
+            into <span className="text-primary">working</span>
+          </span>
+          <span aria-hidden="true" className="hero-typewriter-caret" />
+        </span>
+        <span className="hero-typewriter-line text-primary" data-text="software.">
+          <span className="hero-typewriter-reveal">software.</span>
+          <span aria-hidden="true" className="hero-typewriter-caret" />
+        </span>
+      </span>
+    </h1>
+  );
+}
+
 export function HeroCarousel() {
   const autoplayPlugin = React.useRef(
     Autoplay({
@@ -101,7 +129,7 @@ export function HeroCarousel() {
                 alt={slide.alt}
                 fill
                 className="object-cover"
-                preload={index === 0}
+                loading="eager"
                 sizes="100vw"
               />
 
@@ -116,12 +144,10 @@ export function HeroCarousel() {
       </div>
 
       {/* Fixed onboarding message while the background images autoplay */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10">
-        <div className="mx-auto w-full max-w-7xl px-5 pb-14 pt-28 sm:px-10 sm:pt-32 md:pb-32 lg:px-12 lg:pb-36">
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center md:block">
+        <div className="mx-auto min-w-0 w-full max-w-7xl px-5 sm:px-10 md:absolute md:inset-x-0 md:bottom-0 md:pb-32 md:pt-32 lg:px-12 lg:pb-36">
           <div className="pointer-events-auto max-w-3xl">
-            <h1 className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(2.35rem,12vw,3.5rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-white drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)] sm:text-7xl lg:text-8xl">
-              Turn theory into <span className="text-primary">working software.</span>
-            </h1>
+            <TypingHeadline />
             <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-white/80 drop-shadow-[0_2px_10px_rgb(0,0,0,0.5)] sm:text-lg">
               From curiosity to shipped projects, shared knowledge, and a community that keeps
               moving with you.
