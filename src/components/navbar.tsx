@@ -115,8 +115,11 @@ export function Navbar() {
             {/* Desktop actions */}
             <div className="hidden md:flex items-center gap-2">
               <ThemeToggle />
-              <Button className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/85 transition-colors">
-                Join Us
+              <Button
+                asChild
+                className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/85 transition-colors"
+              >
+                <Link href="/join">Join Us</Link>
               </Button>
             </div>
 
@@ -178,8 +181,13 @@ export function Navbar() {
             </Link>
           ))}
           <div className="mt-6 px-4">
-            <Button className="w-full h-10 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/85 transition-colors">
-              Join Us
+            <Button
+              asChild
+              className="w-full h-10 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/85 transition-colors"
+            >
+              <Link href="/join" onClick={toggleSidebar}>
+                Join Us
+              </Link>
             </Button>
           </div>
         </nav>
