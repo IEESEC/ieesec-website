@@ -31,7 +31,7 @@ export const members: Member[] = [
   },
   {
     firstname: "Magda (Madelyn)",
-    lastname: "Efstathiou",
+    lastname: "Efstathiadou",
     role: "Project Manager | Backend Developer",
     image: "/images/members/magda.jpg",
     bio:
