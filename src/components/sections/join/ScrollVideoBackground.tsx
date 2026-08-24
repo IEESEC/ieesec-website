@@ -2,7 +2,11 @@
 
 import { useEffect, useRef } from "react";
 
-import { getScrollVideoTime } from "./scroll-video-progress";
+import {
+  getScrollVideoTime,
+  getSmoothedVideoTime,
+  VIDEO_SEEK_TOLERANCE_SECONDS,
+} from "./scroll-video-progress";
 
 const ENCODED_VIDEO_DURATION = 13.37;
 
@@ -15,15 +19,50 @@ export function ScrollVideoBackground() {
     if (!video) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let animationFrame = 0;
+    let scrollAnimationFrame = 0;
+    let seekAnimationFrame = 0;
     let videoDuration = ENCODED_VIDEO_DURATION;
-    let lastRequestedTime = -1;
+    let scrollStart = 0;
+    let scrollRange = 1;
+    let targetTime = 0;
 
-    const updateVideoTime = () => {
-      animationFrame = 0;
+    const seekTowardsTarget = () => {
+      seekAnimationFrame = 0;
 
-      if (reduceMotion) return;
+      if (reduceMotion || video.readyState < 2 || video.seeking) return;
 
+      const nextTime = getSmoothedVideoTime(video.currentTime, targetTime);
+
+      if (nextTime === video.currentTime) return;
+
+      video.currentTime = nextTime;
+    };
+
+    const requestSeek = () => {
+      if (seekAnimationFrame || video.seeking || reduceMotion) return;
+
+      seekAnimationFrame = window.requestAnimationFrame(seekTowardsTarget);
+    };
+
+    const handleSeeked = () => {
+      if (Math.abs(targetTime - video.currentTime) <= VIDEO_SEEK_TOLERANCE_SECONDS) return;
+      requestSeek();
+    };
+
+    const updateTargetTime = () => {
+      scrollAnimationFrame = 0;
+      const progress = (window.scrollY - scrollStart) / scrollRange;
+      targetTime = getScrollVideoTime(progress, videoDuration);
+      requestSeek();
+    };
+
+    const requestTargetUpdate = () => {
+      if (scrollAnimationFrame || reduceMotion) return;
+
+      scrollAnimationFrame = window.requestAnimationFrame(updateTargetTime);
+    };
+
+    const updateTimelineBounds = () => {
       const timeline = document.querySelector<HTMLElement>("[data-scroll-video-timeline]");
 
       if (!timeline) return;
@@ -32,20 +71,9 @@ export function ScrollVideoBackground() {
       const viewportHeight = window.innerHeight;
       const documentTop = window.scrollY + bounds.top;
       const documentBottom = documentTop + bounds.height;
-      const scrollStart = documentTop - viewportHeight * 0.78;
-      const scrollEnd = documentBottom - viewportHeight * 0.35;
-      const progress = (window.scrollY - scrollStart) / Math.max(scrollEnd - scrollStart, 1);
-      const requestedTime = getScrollVideoTime(progress, videoDuration);
-
-      if (Math.abs(requestedTime - lastRequestedTime) < 0.025 || video.readyState < 1) return;
-
-      lastRequestedTime = requestedTime;
-      video.currentTime = requestedTime;
-    };
-
-    const requestUpdate = () => {
-      if (animationFrame) return;
-      animationFrame = window.requestAnimationFrame(updateVideoTime);
+      scrollStart = documentTop - viewportHeight * 0.78;
+      scrollRange = Math.max(documentBottom - viewportHeight * 0.35 - scrollStart, 1);
+      requestTargetUpdate();
     };
 
     const handleMetadata = () => {
@@ -55,19 +83,29 @@ export function ScrollVideoBackground() {
 
       video.pause();
       video.currentTime = 0;
-      requestUpdate();
+      updateTimelineBounds();
     };
 
+    const timeline = document.querySelector<HTMLElement>("[data-scroll-video-timeline]");
+    const resizeObserver = timeline ? new ResizeObserver(updateTimelineBounds) : null;
+
+    if (timeline) resizeObserver?.observe(timeline);
     video.addEventListener("loadedmetadata", handleMetadata);
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    window.addEventListener("resize", requestUpdate);
-    requestUpdate();
+    video.addEventListener("loadeddata", requestSeek);
+    video.addEventListener("seeked", handleSeeked);
+    window.addEventListener("scroll", requestTargetUpdate, { passive: true });
+    window.addEventListener("resize", updateTimelineBounds);
+    updateTimelineBounds();
 
     return () => {
+      resizeObserver?.disconnect();
       video.removeEventListener("loadedmetadata", handleMetadata);
-      window.removeEventListener("scroll", requestUpdate);
-      window.removeEventListener("resize", requestUpdate);
-      window.cancelAnimationFrame(animationFrame);
+      video.removeEventListener("loadeddata", requestSeek);
+      video.removeEventListener("seeked", handleSeeked);
+      window.removeEventListener("scroll", requestTargetUpdate);
+      window.removeEventListener("resize", updateTimelineBounds);
+      window.cancelAnimationFrame(scrollAnimationFrame);
+      window.cancelAnimationFrame(seekAnimationFrame);
     };
   }, []);
 
@@ -83,6 +121,11 @@ export function ScrollVideoBackground() {
         tabIndex={-1}
         className="h-full w-full object-cover"
       >
+        <source
+          src="/videos/join-scroll-background-mobile.mp4"
+          type="video/mp4"
+          media="(max-width: 767px)"
+        />
         <source src="/videos/join-scroll-background.mp4" type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-slate-950/58" />
