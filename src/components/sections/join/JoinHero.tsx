@@ -6,7 +6,7 @@ export function JoinHero() {
       <div className="relative z-10 mx-auto flex min-h-svh max-w-7xl flex-col justify-center px-6 pb-24 pt-20">
         <Reveal direction="up">
           <h1 className="mt-5 max-w-2xl text-4xl font-bold tracking-tight text-white sm:text-6xl">
-            Join the community that ships.
+            Join our community!
           </h1>
 
           <p className="mt-5 max-w-lg text-lg text-white/85 leading-relaxed">
@@ -14,7 +14,9 @@ export function JoinHero() {
             with you.
           </p>
           <p className="mt-3 max-w-lg text-sm text-white/70 leading-relaxed">
-            Fill in your info and we will contact you! Name and email required.
+            Fill in your info and we will contact you!
+            <br></br>
+            Name and email required.
           </p>
         </Reveal>
 

@@ -19,7 +19,7 @@ export function SuccessPanel({ fullName, email, onReset }: SuccessPanelProps) {
         </h2>
 
         <p className="mt-4 max-w-xl text-muted-foreground leading-relaxed">
-          Someone on the team reads every application — expect a reply at{" "}
+          Someone on the team reads every application. Expect a reply at{" "}
           {email ? <span className="text-primary">{email}</span> : "your email"} within about a
           week.
         </p>

@@ -21,7 +21,7 @@ export function Field({ label, optional, required, htmlFor, hint, children }: Fi
       <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-medium text-foreground">
         {label}
         {required && <span className="text-primary"> *</span>}
-        {optional && <span className="text-muted-foreground font-normal"> — optional</span>}
+        {optional && <span className="text-muted-foreground font-normal"> (optional)</span>}
       </label>
       {children}
       {hint && <p className="mt-1.5 text-xs text-muted-foreground">{hint}</p>}

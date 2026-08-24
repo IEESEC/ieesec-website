@@ -21,9 +21,9 @@ export const INTEREST_AREAS: InterestArea[] = [
 export const EXPERIENCE_LEVELS: ExperienceLevel[] = ["Beginner", "Some projects", "Comfortable"];
 
 export const AVAILABILITY_OPTIONS: AvailabilityOption[] = [
-  { value: "casual", label: "Casual — workshops now and then" },
-  { value: "active", label: "Active — a few hours a week" },
-  { value: "core", label: "Core team — I want to help run things" },
+  { value: "casual", label: "Casual (workshops now and then)" },
+  { value: "active", label: "Active (a few hours a week)" },
+  { value: "core", label: "Core team (I want to help run things)" },
 ];
 
 export const EMPTY_JOIN_FORM: JoinFormData = {
@@ -35,7 +35,6 @@ export const EMPTY_JOIN_FORM: JoinFormData = {
   gitlab: "",
   linkedin: "",
   discord: "",
-  instagram: "",
   interests: [],
   experience: null,
   availability: null,

@@ -443,7 +443,7 @@ export function JoinForm() {
                 id={`${ids}-name`}
                 type="text"
                 required
-                placeholder="Maria Papadopoulou"
+                placeholder="Giorgos Giorgopoulos"
                 value={form.fullName}
                 onChange={(e) => setForm((f) => ({ ...f, fullName: e.target.value }))}
                 className={fieldInputClass}
@@ -509,7 +509,7 @@ export function JoinForm() {
             step="02"
             eyebrow="Your online trail"
             title="Your links"
-            description="So we can see your work and reach you. All optional — a repository is not a requirement."
+            description="So we can see your work and reach you. Everything here is optional. A repository is not required."
           >
             <Field label="GitHub" optional htmlFor={`${ids}-github`}>
               <input
@@ -554,18 +554,6 @@ export function JoinForm() {
                 className={fieldInputClass}
               />
             </Field>
-
-            <Field label="Instagram" optional htmlFor={`${ids}-instagram`}>
-              <input
-                id={`${ids}-instagram`}
-                type="text"
-                placeholder="instagram.com/username"
-                value={form.instagram}
-                onChange={(e) => setForm((f) => ({ ...f, instagram: e.target.value }))}
-                className={fieldInputClass}
-              />
-            </Field>
-
             <ContinueButton onClick={() => attemptNavigation(1)} />
           </FormSection>
         </FormStepScreen>
@@ -664,7 +652,7 @@ export function JoinForm() {
                 id={`${ids}-built`}
                 rows={3}
                 maxLength={MAX_TEXTAREA_LENGTH}
-                placeholder="A course project, a bot, a website for a friend, a Minecraft mod — all count."
+                placeholder="A course project, a bot, a website for a friend, or a Minecraft mod."
                 value={form.builtSomething}
                 onChange={(e) => setForm((f) => ({ ...f, builtSomething: e.target.value }))}
                 className={cn(fieldInputClass, "resize-none")}
@@ -691,7 +679,7 @@ export function JoinForm() {
                   "flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed px-4 py-8 text-center transition-colors",
                   isDragging
                     ? "border-primary bg-primary/5"
-                    : "border-border hover:border-primary/50",
+                    : "border-primary/40 hover:border-primary/60",
                 )}
               >
                 <p className="text-sm font-medium text-foreground">

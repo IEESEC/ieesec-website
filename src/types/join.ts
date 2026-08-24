@@ -26,7 +26,6 @@ export interface JoinFormData {
   gitlab: string;
   linkedin: string;
   discord: string;
-  instagram: string;
   interests: InterestArea[];
   experience: ExperienceLevel | null;
   availability: string | null;

@@ -36,7 +36,6 @@ export function isJoinFormDirty(form: JoinFormData): boolean {
     form.gitlab.trim().length > 0 ||
     form.linkedin.trim().length > 0 ||
     form.discord.trim().length > 0 ||
-    form.instagram.trim().length > 0 ||
     form.interests.length > 0 ||
     form.experience !== null ||
     form.availability !== null ||
