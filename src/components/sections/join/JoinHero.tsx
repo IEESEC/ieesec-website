@@ -1,23 +1,9 @@
-import Image from "next/image";
 import { Reveal } from "@/components/ui/animations/fade-up";
 
 export function JoinHero() {
   return (
-    <section className="relative w-full h-[520px] sm:h-[600px] overflow-hidden">
-      <Image
-        src="/images/hero/campus1.jpg"
-        alt="International Hellenic University, Alexandria Campus"
-        fill
-        priority
-        className="object-cover"
-        sizes="100vw"
-      />
-
-      <div className="absolute inset-0 hero-overlay opacity-60" />
-      <div className="absolute inset-0 hero-vignette" />
-      <div className="absolute inset-0 hero-fade" />
-
-      <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-center px-6">
+    <section className="relative min-h-[78svh] w-full overflow-hidden">
+      <div className="relative z-10 mx-auto flex min-h-[78svh] max-w-7xl flex-col justify-center px-6">
         <Reveal direction="up">
           <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm border border-white/10">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
@@ -35,6 +21,11 @@ export function JoinHero() {
           <p className="mt-3 max-w-lg text-sm text-white/70 leading-relaxed">
             Fill in your info and we will contact you! Name and email required.
           </p>
+
+          <div className="mt-12 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.18em] text-white/65">
+            <span className="h-px w-10 bg-white/40" />
+            Scroll to move through campus
+          </div>
         </Reveal>
       </div>
     </section>

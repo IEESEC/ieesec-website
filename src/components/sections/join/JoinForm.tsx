@@ -75,8 +75,12 @@ export function JoinForm() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 w-full py-20">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+    <div className="mx-auto w-full max-w-4xl px-5 py-24 sm:px-6 sm:py-32">
+      <form
+        data-scroll-video-timeline
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-20 sm:gap-28"
+      >
         <Reveal direction="up">
           <FormSection
             step="01"

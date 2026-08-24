@@ -10,7 +10,11 @@ interface FormSectionProps {
 
 export function FormSection({ step, eyebrow, title, description, children }: FormSectionProps) {
   return (
-    <Card className="rounded-4xl p-6 sm:p-8">
+    <Card
+      id={`join-step-${step}`}
+      data-scroll-video-section
+      className="scroll-mt-24 rounded-4xl border-white/15 bg-card/92 p-6 shadow-2xl shadow-slate-950/20 backdrop-blur-xl sm:p-8"
+    >
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-primary/70">
