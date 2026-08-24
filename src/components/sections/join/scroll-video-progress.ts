@@ -1,5 +1,11 @@
+const FINAL_SCREEN_VIDEO_PROGRESS = 0.82;
+
 export function getScrollVideoTime(progress: number, duration: number): number {
   const clampedProgress = Math.min(Math.max(progress, 0), 1);
+
+  if (clampedProgress === 1) {
+    return duration * FINAL_SCREEN_VIDEO_PROGRESS;
+  }
 
   return clampedProgress * duration;
 }

@@ -13,8 +13,8 @@ describe("getScrollVideoTime", () => {
     assert.equal(getScrollVideoTime(0.5, 13.37), 6.685);
   });
 
-  it("holds the final frame after the last section", () => {
-    assert.equal(getScrollVideoTime(1.4, 13.37), 13.37);
+  it("holds a visible late frame after the last section", () => {
+    assert.ok(Math.abs(getScrollVideoTime(1.4, 13.37) - 10.9634) < 0.000001);
   });
 });
 

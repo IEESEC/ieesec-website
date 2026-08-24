@@ -22,8 +22,6 @@ export function ScrollVideoBackground() {
     let scrollAnimationFrame = 0;
     let seekAnimationFrame = 0;
     let videoDuration = ENCODED_VIDEO_DURATION;
-    let scrollStart = 0;
-    let scrollRange = 1;
     let targetTime = 0;
 
     const seekTowardsTarget = () => {
@@ -51,7 +49,12 @@ export function ScrollVideoBackground() {
 
     const updateTargetTime = () => {
       scrollAnimationFrame = 0;
-      const progress = (window.scrollY - scrollStart) / scrollRange;
+      const timeline = document.querySelector<HTMLElement>("[data-scroll-video-timeline]");
+
+      if (!timeline) return;
+
+      const scrollRange = Math.max(timeline.scrollHeight - timeline.clientHeight, 1);
+      const progress = timeline.scrollTop / scrollRange;
       targetTime = getScrollVideoTime(progress, videoDuration);
       requestSeek();
     };
@@ -63,16 +66,6 @@ export function ScrollVideoBackground() {
     };
 
     const updateTimelineBounds = () => {
-      const timeline = document.querySelector<HTMLElement>("[data-scroll-video-timeline]");
-
-      if (!timeline) return;
-
-      const bounds = timeline.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const documentTop = window.scrollY + bounds.top;
-      const documentBottom = documentTop + bounds.height;
-      scrollStart = documentTop - viewportHeight * 0.78;
-      scrollRange = Math.max(documentBottom - viewportHeight * 0.35 - scrollStart, 1);
       requestTargetUpdate();
     };
 
@@ -93,6 +86,7 @@ export function ScrollVideoBackground() {
     video.addEventListener("loadedmetadata", handleMetadata);
     video.addEventListener("loadeddata", requestSeek);
     video.addEventListener("seeked", handleSeeked);
+    timeline?.addEventListener("scroll", requestTargetUpdate, { passive: true });
     window.addEventListener("scroll", requestTargetUpdate, { passive: true });
     window.addEventListener("resize", updateTimelineBounds);
     updateTimelineBounds();
@@ -102,6 +96,7 @@ export function ScrollVideoBackground() {
       video.removeEventListener("loadedmetadata", handleMetadata);
       video.removeEventListener("loadeddata", requestSeek);
       video.removeEventListener("seeked", handleSeeked);
+      timeline?.removeEventListener("scroll", requestTargetUpdate);
       window.removeEventListener("scroll", requestTargetUpdate);
       window.removeEventListener("resize", updateTimelineBounds);
       window.cancelAnimationFrame(scrollAnimationFrame);

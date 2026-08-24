@@ -2,14 +2,9 @@ import { Reveal } from "@/components/ui/animations/fade-up";
 
 export function JoinHero() {
   return (
-    <section className="relative min-h-[78svh] w-full overflow-hidden">
-      <div className="relative z-10 mx-auto flex min-h-[78svh] max-w-7xl flex-col justify-center px-6">
+    <section className="relative min-h-svh w-full overflow-hidden">
+      <div className="relative z-10 mx-auto flex min-h-svh max-w-7xl flex-col justify-center px-6 pb-24 pt-20">
         <Reveal direction="up">
-          <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm border border-white/10">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            Applications open
-          </span>
-
           <h1 className="mt-5 max-w-2xl text-4xl font-bold tracking-tight text-white sm:text-6xl">
             Join the community that ships.
           </h1>
@@ -21,12 +16,17 @@ export function JoinHero() {
           <p className="mt-3 max-w-lg text-sm text-white/70 leading-relaxed">
             Fill in your info and we will contact you! Name and email required.
           </p>
-
-          <div className="mt-12 flex items-center gap-3 text-xs font-medium uppercase tracking-[0.18em] text-white/65">
-            <span className="h-px w-10 bg-white/40" />
-            Scroll to move through campus
-          </div>
         </Reveal>
+
+        <a
+          href="#join-application"
+          className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-center text-[0.68rem] font-medium uppercase tracking-[0.18em] text-white/70 transition-colors hover:text-white focus-visible:text-white focus-visible:outline-none sm:bottom-10"
+        >
+          <span className="whitespace-nowrap">Scroll to get started</span>
+          <span aria-hidden className="animate-bounce text-xl leading-none">
+            ↓
+          </span>
+        </a>
       </div>
     </section>
   );
