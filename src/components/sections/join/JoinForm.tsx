@@ -96,7 +96,8 @@ export function JoinForm() {
 
   formStateRef.current = form;
 
-  const canSubmit = isJoinStepComplete(0, form) && isJoinStepComplete(4, form);
+  const canSubmit =
+    isJoinStepComplete(0, form) && isJoinStepComplete(1, form) && isJoinStepComplete(4, form);
   const progress = ((activeStep + 1) / JOIN_FORM_STEP_COUNT) * 100;
 
   useLayoutEffect(() => {
@@ -139,7 +140,9 @@ export function JoinForm() {
     setBlockedMessage(
       step === 0
         ? "Add your name and a valid email to continue."
-        : "Complete the required field before continuing.",
+        : step === 1
+          ? "Add your GitHub and Discord details to continue."
+          : "Complete the required field before continuing.",
     );
   }, []);
 
@@ -414,7 +417,7 @@ export function JoinForm() {
             step="01"
             eyebrow="Start with the basics"
             title="Who's applying"
-            description="The only two required fields in the whole form live here."
+            description="Start with your contact details so we know who is applying."
           >
             <Field label="Full name" required htmlFor={`${ids}-name`}>
               <input
@@ -487,15 +490,28 @@ export function JoinForm() {
             step="02"
             eyebrow="Your online trail"
             title="Your links"
-            description="So we can see your work and reach you. Everything here is optional. A repository is not required."
+            description="Share your GitHub and Discord so we can see your work and reach you. LinkedIn is optional."
           >
-            <Field label="GitHub" optional htmlFor={`${ids}-github`}>
+            <Field label="GitHub" required htmlFor={`${ids}-github`}>
               <input
                 id={`${ids}-github`}
                 type="text"
+                required
                 placeholder="github.com/username"
                 value={form.github}
                 onChange={(e) => setForm((f) => ({ ...f, github: e.target.value }))}
+                className={fieldInputClass}
+              />
+            </Field>
+
+            <Field label="Discord" required htmlFor={`${ids}-discord`}>
+              <input
+                id={`${ids}-discord`}
+                type="text"
+                required
+                placeholder="username"
+                value={form.discord}
+                onChange={(e) => setForm((f) => ({ ...f, discord: e.target.value }))}
                 className={fieldInputClass}
               />
             </Field>
@@ -511,17 +527,10 @@ export function JoinForm() {
               />
             </Field>
 
-            <Field label="Discord" optional htmlFor={`${ids}-discord`}>
-              <input
-                id={`${ids}-discord`}
-                type="text"
-                placeholder="username"
-                value={form.discord}
-                onChange={(e) => setForm((f) => ({ ...f, discord: e.target.value }))}
-                className={fieldInputClass}
-              />
-            </Field>
-            <ContinueButton onClick={() => attemptNavigation(1)} />
+            <ContinueButton
+              disabled={!isJoinStepComplete(1, form)}
+              onClick={() => attemptNavigation(1)}
+            />
           </FormSection>
         </FormStepScreen>
 
@@ -667,7 +676,9 @@ export function JoinForm() {
                 Submit application →
               </Button>
               <p className="text-xs text-muted-foreground">
-                {canSubmit ? "You're all set." : "Name, email and consent unlock this."}
+                {canSubmit
+                  ? "You're all set."
+                  : "Name, email, GitHub, Discord and consent unlock this."}
               </p>
             </div>
           </FormSection>
