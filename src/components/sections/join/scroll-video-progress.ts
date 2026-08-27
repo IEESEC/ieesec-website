@@ -1,14 +1,8 @@
-const FINAL_SCREEN_VIDEO_PROGRESS = 0.82;
-const FINAL_SCREEN_PROGRESS_THRESHOLD = 0.98;
+const VISIBLE_VIDEO_END_PROGRESS = 0.82;
 
 export function getScrollVideoTime(progress: number, duration: number): number {
   const clampedProgress = Math.min(Math.max(progress, 0), 1);
-
-  if (clampedProgress >= FINAL_SCREEN_PROGRESS_THRESHOLD) {
-    return duration * FINAL_SCREEN_VIDEO_PROGRESS;
-  }
-
-  return clampedProgress * duration;
+  return clampedProgress * duration * VISIBLE_VIDEO_END_PROGRESS;
 }
 
 const SMOOTHING_FACTOR = 0.5;
