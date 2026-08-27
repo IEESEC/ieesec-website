@@ -92,6 +92,8 @@ export function JoinForm() {
   const formStateRef = useRef(form);
   const navigationLockRef = useRef(false);
   const navigationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const yearSliderRef = useRef<HTMLDivElement>(null);
+  const yearDraggingRef = useRef(false);
   const ids = useId();
 
   formStateRef.current = form;
@@ -99,6 +101,36 @@ export function JoinForm() {
   const canSubmit =
     isJoinStepComplete(0, form) && isJoinStepComplete(1, form) && isJoinStepComplete(4, form);
   const progress = ((activeStep + 1) / JOIN_FORM_STEP_COUNT) * 100;
+  const yearIndex = Math.max(YEAR_OPTIONS.indexOf(form.year), 0);
+
+  const setYearFromPointer = useCallback((clientX: number) => {
+    const slider = yearSliderRef.current;
+
+    if (!slider) return;
+
+    const bounds = slider.getBoundingClientRect();
+    const position = Math.min(Math.max((clientX - bounds.left) / bounds.width, 0), 1);
+    const nextYearIndex = Math.round(position * (YEAR_OPTIONS.length - 1));
+
+    setForm((currentForm) => ({ ...currentForm, year: YEAR_OPTIONS[nextYearIndex] }));
+  }, []);
+
+  const handleYearPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    yearDraggingRef.current = true;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setYearFromPointer(event.clientX);
+  };
+
+  const handleYearPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (yearDraggingRef.current) setYearFromPointer(event.clientX);
+  };
+
+  const handleYearPointerEnd = (event: React.PointerEvent<HTMLDivElement>) => {
+    yearDraggingRef.current = false;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
 
   useLayoutEffect(() => {
     const previousScrollRestoration = window.history.scrollRestoration;
@@ -436,7 +468,7 @@ export function JoinForm() {
                 id={`${ids}-email`}
                 type="email"
                 required
-                placeholder="student@ihu.gr"
+                placeholder="giorgos@mail.com"
                 value={form.email}
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                 className={fieldInputClass}
@@ -445,35 +477,65 @@ export function JoinForm() {
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <Field label="Year" optional htmlFor={`${ids}-year`}>
-                <select
-                  id={`${ids}-year`}
-                  value={form.year}
-                  onChange={(e) => setForm((f) => ({ ...f, year: e.target.value }))}
-                  className={cn(fieldInputClass, "cursor-pointer")}
+                <div
+                  ref={yearSliderRef}
+                  onPointerDown={handleYearPointerDown}
+                  onPointerMove={handleYearPointerMove}
+                  onPointerUp={handleYearPointerEnd}
+                  onPointerCancel={handleYearPointerEnd}
+                  className="relative touch-none select-none py-1"
                 >
-                  {YEAR_OPTIONS.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="Status" optional>
-                <div className="flex flex-wrap gap-2">
-                  {STATUS_OPTIONS.map((status) => (
-                    <Pill
-                      key={status}
-                      label={status}
-                      selected={form.status === status}
-                      onClick={() =>
-                        setForm((f) => ({
-                          ...f,
-                          status: f.status === status ? null : status,
-                        }))
-                      }
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-x-6 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-white/20"
+                  >
+                    <div
+                      className="h-full rounded-full bg-primary transition-[width] duration-200 motion-reduce:transition-none"
+                      style={{
+                        width: `${
+                          (yearIndex / (YEAR_OPTIONS.length - 1)) * 100
+                        }%`,
+                      }}
                     />
-                  ))}
+                  </div>
+                  <input
+                    id={`${ids}-year`}
+                    type="range"
+                    min={0}
+                    max={YEAR_OPTIONS.length - 1}
+                    step={1}
+                    value={yearIndex}
+                    aria-label="Year of study"
+                    aria-valuetext={form.year}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, year: YEAR_OPTIONS[Number(e.target.value)] }))
+                    }
+                    className="sr-only"
+                  />
+                  <div className="pointer-events-none relative z-10 grid h-14 grid-cols-5 items-center">
+                    {YEAR_OPTIONS.map((year, index) => {
+                      const selected = form.year === year;
+                      const label = selected ? year.replace(" year", "") : String(index + 1);
+
+                      return (
+                        <button
+                          key={year}
+                          type="button"
+                          aria-label={`Select ${year}`}
+                          aria-pressed={selected}
+                          onClick={() => setForm((f) => ({ ...f, year }))}
+                          className={cn(
+                            "pointer-events-auto mx-auto flex h-12 w-12 items-center justify-center rounded-full border text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-3 focus-visible:ring-primary/20",
+                            selected
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-foreground",
+                          )}
+                        >
+                          {label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </Field>
             </div>
