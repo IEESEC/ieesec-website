@@ -32,7 +32,6 @@ export const EMPTY_JOIN_FORM: JoinFormData = {
   year: YEAR_OPTIONS[0],
   status: null,
   github: "",
-  gitlab: "",
   linkedin: "",
   discord: "",
   interests: [],
@@ -40,9 +39,7 @@ export const EMPTY_JOIN_FORM: JoinFormData = {
   availability: null,
   motivation: "",
   builtSomething: "",
-  cv: null,
   consent: false,
 };
 
-export const MAX_CV_SIZE_BYTES = 5 * 1024 * 1024;
 export const MAX_TEXTAREA_LENGTH = 300;

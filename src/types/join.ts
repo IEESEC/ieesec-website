@@ -23,7 +23,6 @@ export interface JoinFormData {
   year: string;
   status: ApplicantStatus | null;
   github: string;
-  gitlab: string;
   linkedin: string;
   discord: string;
   interests: InterestArea[];
@@ -31,6 +30,5 @@ export interface JoinFormData {
   availability: string | null;
   motivation: string;
   builtSomething: string;
-  cv: File | null;
   consent: boolean;
 }

@@ -10,7 +10,6 @@ import {
   EMPTY_JOIN_FORM,
   EXPERIENCE_LEVELS,
   INTEREST_AREAS,
-  MAX_CV_SIZE_BYTES,
   MAX_TEXTAREA_LENGTH,
   STATUS_OPTIONS,
   YEAR_OPTIONS,
@@ -86,8 +85,6 @@ function ContinueButton({ disabled = false, onClick }: ContinueButtonProps) {
 export function JoinForm() {
   const [form, setForm] = useState<JoinFormData>(EMPTY_JOIN_FORM);
   const [submitted, setSubmitted] = useState(false);
-  const [cvError, setCvError] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [blockedMessage, setBlockedMessage] = useState<string | null>(null);
   const scrollerRef = useRef<HTMLFormElement>(null);
@@ -355,29 +352,10 @@ export function JoinForm() {
 
   const resetForm = () => {
     setForm(EMPTY_JOIN_FORM);
-    setCvError(null);
     setSubmitted(false);
     activeStepRef.current = 0;
     setActiveStep(0);
     window.requestAnimationFrame(() => scrollToStep(0));
-  };
-
-  const validateAndSetFile = (file: File | null) => {
-    if (!file) {
-      setCvError(null);
-      setForm((f) => ({ ...f, cv: null }));
-      return;
-    }
-    if (file.type !== "application/pdf") {
-      setCvError("PDF files only.");
-      return;
-    }
-    if (file.size > MAX_CV_SIZE_BYTES) {
-      setCvError("Max file size is 5 MB.");
-      return;
-    }
-    setCvError(null);
-    setForm((f) => ({ ...f, cv: file }));
   };
 
   const motivationCount = useMemo(() => form.motivation.length, [form.motivation]);
@@ -522,17 +500,6 @@ export function JoinForm() {
               />
             </Field>
 
-            <Field label="GitLab" optional htmlFor={`${ids}-gitlab`}>
-              <input
-                id={`${ids}-gitlab`}
-                type="text"
-                placeholder="gitlab.com/username"
-                value={form.gitlab}
-                onChange={(e) => setForm((f) => ({ ...f, gitlab: e.target.value }))}
-                className={fieldInputClass}
-              />
-            </Field>
-
             <Field label="LinkedIn" optional htmlFor={`${ids}-linkedin`}>
               <input
                 id={`${ids}-linkedin`}
@@ -660,40 +627,6 @@ export function JoinForm() {
               <p className="mt-1 text-right text-xs text-muted-foreground/70">
                 {builtCount} / {MAX_TEXTAREA_LENGTH}
               </p>
-            </Field>
-
-            <Field label="CV" optional hint="PDF only · max 5 MB.">
-              <label
-                htmlFor={`${ids}-cv`}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setIsDragging(true);
-                }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  setIsDragging(false);
-                  validateAndSetFile(e.dataTransfer.files?.[0] ?? null);
-                }}
-                className={cn(
-                  "flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed px-4 py-8 text-center transition-colors",
-                  isDragging
-                    ? "border-primary bg-primary/5"
-                    : "border-primary/40 hover:border-primary/60",
-                )}
-              >
-                <p className="text-sm font-medium text-foreground">
-                  {form.cv ? form.cv.name : "Drop a PDF here, or click to choose"}
-                </p>
-                <input
-                  id={`${ids}-cv`}
-                  type="file"
-                  accept="application/pdf"
-                  className="sr-only"
-                  onChange={(e) => validateAndSetFile(e.target.files?.[0] ?? null)}
-                />
-              </label>
-              {cvError && <p className="mt-1.5 text-xs text-destructive">{cvError}</p>}
             </Field>
 
             <ContinueButton onClick={() => attemptNavigation(1)} />

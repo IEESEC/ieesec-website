@@ -10,6 +10,10 @@ export function isJoinStepComplete(step: number, form: JoinFormData): boolean {
     return form.fullName.trim().length > 0 && EMAIL_PATTERN.test(form.email.trim());
   }
 
+  if (step === 1) {
+    return form.github.trim().length > 0 && form.discord.trim().length > 0;
+  }
+
   if (step === JOIN_FORM_STEP_COUNT - 1) return form.consent;
 
   return true;
@@ -33,7 +37,6 @@ export function isJoinFormDirty(form: JoinFormData): boolean {
     form.year !== DEFAULT_YEAR ||
     form.status !== null ||
     form.github.trim().length > 0 ||
-    form.gitlab.trim().length > 0 ||
     form.linkedin.trim().length > 0 ||
     form.discord.trim().length > 0 ||
     form.interests.length > 0 ||
@@ -41,7 +44,6 @@ export function isJoinFormDirty(form: JoinFormData): boolean {
     form.availability !== null ||
     form.motivation.trim().length > 0 ||
     form.builtSomething.trim().length > 0 ||
-    form.cv !== null ||
     form.consent
   );
 }
