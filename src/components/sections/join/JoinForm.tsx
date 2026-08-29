@@ -1,21 +1,40 @@
 "use client";
 
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import type {
+  ExperienceLevel,
+  InterestArea,
+  JoinFormData,
+  ParticipationPreference,
+  ParticipationRating,
+} from "@/types/join";
+import {
+  BrainCircuit,
+  Cloud,
+  Code2,
+  Cpu,
+  Gamepad2,
+  GitFork,
+  Link2,
+  MessageCircle,
+  Network,
+  Smartphone,
+  TestTubeDiagonal,
+  type LucideIcon,
+} from "lucide-react";
 import { Reveal } from "@/components/ui/animations/fade-up";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { JoinFormData } from "@/types/join";
 import {
-  AVAILABILITY_OPTIONS,
   EMPTY_JOIN_FORM,
   EXPERIENCE_LEVELS,
   INTEREST_AREAS,
-  MAX_CV_SIZE_BYTES,
   MAX_TEXTAREA_LENGTH,
-  STATUS_OPTIONS,
+  PARTICIPATION_RATINGS,
+  PARTICIPATION_ROWS,
   YEAR_OPTIONS,
 } from "./data";
-import { Field, OptionRow, Pill, fieldInputClass } from "./FormField";
+import { Field, fieldInputClass } from "./FormField";
 import { FormSection } from "./FormSection";
 import {
   getNextJoinStep,
@@ -59,6 +78,207 @@ function canScrollWithin(element: HTMLElement, direction: -1 | 1): boolean {
   return element.scrollTop > 1;
 }
 
+const INTEREST_ICONS: Record<InterestArea, LucideIcon> = {
+  "Web Development (Frontend/Backend)": Code2,
+  "Mobile Development (iOS/Android)": Smartphone,
+  "Data Science / Machine Learning / AI": BrainCircuit,
+  "Embedded Systems / IoT Software": Cpu,
+  "Game Development": Gamepad2,
+  "Software Testing / Quality Assurance": TestTubeDiagonal,
+  "DevOps / Cloud Computing": Cloud,
+  DSA: Network,
+};
+
+interface IconTextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  icon: LucideIcon;
+}
+
+function IconTextInput({ icon: Icon, className, ...props }: IconTextInputProps) {
+  return (
+    <div className="relative">
+      <Icon
+        aria-hidden
+        className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+      />
+      <input {...props} className={cn(fieldInputClass, "pl-10", className)} />
+    </div>
+  );
+}
+
+interface YearSliderProps {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function YearSlider({ id, value, onChange }: YearSliderProps) {
+  const selectedIndex = Math.max(YEAR_OPTIONS.indexOf(value), 0);
+
+  return (
+    <div className="rounded-2xl border border-border bg-background/70 px-4 py-4">
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-sm font-medium text-foreground">{YEAR_OPTIONS[selectedIndex]}</span>
+        <span className="text-xs text-muted-foreground">Drag to select</span>
+      </div>
+      <input
+        id={id}
+        type="range"
+        min={0}
+        max={YEAR_OPTIONS.length - 1}
+        step={1}
+        value={selectedIndex}
+        onChange={(event) => onChange(YEAR_OPTIONS[Number(event.target.value)])}
+        aria-valuetext={YEAR_OPTIONS[selectedIndex]}
+        className="mt-4 h-2 w-full cursor-grab appearance-none rounded-full bg-muted accent-primary active:cursor-grabbing"
+      />
+      <div className="mt-3 grid grid-cols-5 gap-1 text-center text-[0.68rem] font-medium text-muted-foreground">
+        {YEAR_OPTIONS.map((year, index) => (
+          <button
+            key={year}
+            type="button"
+            onClick={() => onChange(year)}
+            className={cn(
+              "rounded-md px-1 py-1 transition-colors cursor-pointer",
+              selectedIndex === index && "bg-primary/10 text-primary",
+            )}
+          >
+            {year.replace(" year", "")}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface InterestCardProps {
+  area: InterestArea;
+  selected: boolean;
+  onClick: () => void;
+}
+
+function InterestCard({ area, selected, onClick }: InterestCardProps) {
+  const Icon = INTEREST_ICONS[area];
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={cn(
+        "group flex min-h-16 items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-xs font-semibold transition-all cursor-pointer",
+        selected
+          ? "border-primary bg-primary text-primary-foreground shadow-sm"
+          : "border-border bg-background/70 text-foreground hover:border-primary/60 hover:bg-primary/5",
+      )}
+    >
+      <span
+        className={cn(
+          "flex size-8 shrink-0 items-center justify-center rounded-md transition-colors",
+          selected ? "bg-white/18" : "bg-primary/10 text-primary group-hover:bg-primary/15",
+        )}
+      >
+        <Icon aria-hidden className="size-4" />
+      </span>
+      <span className="leading-snug">{area}</span>
+    </button>
+  );
+}
+
+interface ExperienceScaleProps {
+  value: ExperienceLevel | null;
+  onChange: (value: ExperienceLevel) => void;
+}
+
+function ExperienceScale({ value, onChange }: ExperienceScaleProps) {
+  return (
+    <div
+      role="radiogroup"
+      aria-label="Programming experience level"
+      className="rounded-2xl border border-border bg-background/70 p-4"
+    >
+      <div className="grid grid-cols-5 gap-2 text-center text-sm font-medium text-foreground">
+        {EXPERIENCE_LEVELS.map((level) => (
+          <span key={level}>{level}</span>
+        ))}
+      </div>
+      <div className="mt-3 grid grid-cols-5 gap-2">
+        {EXPERIENCE_LEVELS.map((level) => (
+          <button
+            key={level}
+            type="button"
+            role="radio"
+            aria-checked={value === level}
+            onClick={() => onChange(level)}
+            className={cn(
+              "mx-auto size-5 rounded-full border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25",
+              value === level
+                ? "border-primary bg-primary ring-4 ring-primary/15"
+                : "border-muted-foreground/55 bg-background hover:border-primary",
+            )}
+          >
+            <span className="sr-only">Experience level {level}</span>
+          </button>
+        ))}
+      </div>
+      <div className="mt-4 flex justify-between gap-4 text-xs text-muted-foreground">
+        <span className="max-w-40 leading-snug">Beginner: I know the basics.</span>
+        <span className="max-w-56 text-right leading-snug">
+          Advanced: I feel comfortable with real projects, frameworks, and Git.
+        </span>
+      </div>
+    </div>
+  );
+}
+
+interface ParticipationMatrixProps {
+  values: Record<ParticipationPreference, ParticipationRating | null>;
+  onChange: (preference: ParticipationPreference, rating: ParticipationRating) => void;
+}
+
+function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-border bg-background/70">
+      <div className="grid grid-cols-[minmax(5.8rem,1fr)_repeat(4,minmax(2.7rem,0.55fr))] border-b border-border px-2 py-2 text-center text-[0.62rem] font-semibold text-muted-foreground sm:grid-cols-[minmax(7.5rem,1.1fr)_repeat(4,minmax(3.6rem,0.7fr))] sm:px-3 sm:text-[0.68rem]">
+        <span className="text-left">Preference</span>
+        {PARTICIPATION_RATINGS.map((rating) => (
+          <span key={rating.value} className="leading-tight">
+            {rating.label}
+          </span>
+        ))}
+      </div>
+      {PARTICIPATION_ROWS.map((row) => (
+        <div
+          key={row.value}
+          className="grid grid-cols-[minmax(5.8rem,1fr)_repeat(4,minmax(2.7rem,0.55fr))] items-center border-b border-border/80 px-2 py-3 last:border-b-0 sm:grid-cols-[minmax(7.5rem,1.1fr)_repeat(4,minmax(3.6rem,0.7fr))] sm:px-3"
+        >
+          <p className="pr-3 text-xs font-semibold leading-snug text-foreground">{row.label}</p>
+          {PARTICIPATION_RATINGS.map((rating) => (
+            <button
+              key={rating.value}
+              type="button"
+              role="radio"
+              aria-checked={values[row.value] === rating.value}
+              aria-label={`${row.label}: ${rating.label}`}
+              onClick={() => onChange(row.value, rating.value)}
+              className="mx-auto flex size-5 items-center justify-center rounded-full border border-muted-foreground/45 bg-background transition-all cursor-pointer hover:border-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25"
+            >
+              <span
+                aria-hidden
+                className={cn(
+                  "size-2.5 rounded-full transition-transform",
+                  values[row.value] === rating.value
+                    ? "scale-100 bg-primary"
+                    : "scale-0 bg-transparent",
+                )}
+              />
+            </button>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 interface ContinueButtonProps {
   disabled?: boolean;
   onClick: () => void;
@@ -86,8 +306,6 @@ function ContinueButton({ disabled = false, onClick }: ContinueButtonProps) {
 export function JoinForm() {
   const [form, setForm] = useState<JoinFormData>(EMPTY_JOIN_FORM);
   const [submitted, setSubmitted] = useState(false);
-  const [cvError, setCvError] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [blockedMessage, setBlockedMessage] = useState<string | null>(null);
   const scrollerRef = useRef<HTMLFormElement>(null);
@@ -99,7 +317,9 @@ export function JoinForm() {
 
   formStateRef.current = form;
 
-  const canSubmit = isJoinStepComplete(0, form) && isJoinStepComplete(4, form);
+  const canSubmit = Array.from({ length: JOIN_FORM_STEP_COUNT }, (_, step) =>
+    isJoinStepComplete(step, form),
+  ).every(Boolean);
   const progress = ((activeStep + 1) / JOIN_FORM_STEP_COUNT) * 100;
 
   useLayoutEffect(() => {
@@ -139,11 +359,15 @@ export function JoinForm() {
 
     invalidField?.reportValidity();
     invalidField?.focus({ preventScroll: true });
-    setBlockedMessage(
-      step === 0
-        ? "Add your name and a valid email to continue."
-        : "Complete the required field before continuing.",
-    );
+    const messages = [
+      "Add your name and a valid email to continue.",
+      "Add your GitHub and Discord to continue.",
+      "Choose an interest, your experience level, and every participation preference.",
+      "Complete the required field before continuing.",
+      "Consent is required before submitting.",
+    ];
+
+    setBlockedMessage(messages[step] ?? "Complete the required fields before continuing.");
   }, []);
 
   const attemptNavigation = useCallback(
@@ -195,14 +419,17 @@ export function JoinForm() {
     let touchStartY = 0;
     let touchCurrentY = 0;
     let touchTarget: HTMLElement | null = null;
-    const formDocumentTop = window.scrollY + scroller.getBoundingClientRect().top;
+    const getFormDocumentTop = () => window.scrollY + scroller.getBoundingClientRect().top;
+    const alignWindowToForm = () => {
+      window.scrollTo({ top: getFormDocumentTop(), behavior: "auto" });
+    };
 
     const lockNavigation = () => {
       navigationLockRef.current = true;
       if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
       navigationTimeoutRef.current = setTimeout(() => {
         navigationLockRef.current = false;
-      }, 650);
+      }, 320);
     };
 
     const handleWheel = (event: WheelEvent) => {
@@ -214,10 +441,7 @@ export function JoinForm() {
 
       if (direction > 0 && scroller.getBoundingClientRect().top > 1) {
         event.preventDefault();
-        window.scrollTo({
-          top: window.scrollY + scroller.getBoundingClientRect().top,
-          behavior: "smooth",
-        });
+        alignWindowToForm();
         return;
       }
 
@@ -276,10 +500,7 @@ export function JoinForm() {
       const stepContent = touchTarget?.closest<HTMLElement>("[data-join-step-scroll]");
 
       if (direction > 0 && scroller.getBoundingClientRect().top > 1) {
-        window.scrollTo({
-          top: window.scrollY + scroller.getBoundingClientRect().top,
-          behavior: "smooth",
-        });
+        alignWindowToForm();
         return;
       }
 
@@ -302,6 +523,7 @@ export function JoinForm() {
     };
 
     const keepFormViewportAligned = () => {
+      const formDocumentTop = getFormDocumentTop();
       const hasOvershotForm = window.scrollY > formDocumentTop + 1;
       const leftActiveForm =
         activeStepRef.current > 0 && Math.abs(window.scrollY - formDocumentTop) > 1;
@@ -353,33 +575,6 @@ export function JoinForm() {
     setSubmitted(true);
   };
 
-  const resetForm = () => {
-    setForm(EMPTY_JOIN_FORM);
-    setCvError(null);
-    setSubmitted(false);
-    activeStepRef.current = 0;
-    setActiveStep(0);
-    window.requestAnimationFrame(() => scrollToStep(0));
-  };
-
-  const validateAndSetFile = (file: File | null) => {
-    if (!file) {
-      setCvError(null);
-      setForm((f) => ({ ...f, cv: null }));
-      return;
-    }
-    if (file.type !== "application/pdf") {
-      setCvError("PDF files only.");
-      return;
-    }
-    if (file.size > MAX_CV_SIZE_BYTES) {
-      setCvError("Max file size is 5 MB.");
-      return;
-    }
-    setCvError(null);
-    setForm((f) => ({ ...f, cv: file }));
-  };
-
   const motivationCount = useMemo(() => form.motivation.length, [form.motivation]);
   const builtCount = useMemo(() => form.builtSomething.length, [form.builtSomething]);
 
@@ -389,7 +584,7 @@ export function JoinForm() {
         id="join-application"
         className="mx-auto flex min-h-svh w-full max-w-3xl items-center px-6 py-24"
       >
-        <SuccessPanel fullName={form.fullName} email={form.email} onReset={resetForm} />
+        <SuccessPanel fullName={form.fullName} email={form.email} />
       </section>
     );
   }
@@ -436,7 +631,7 @@ export function JoinForm() {
             step="01"
             eyebrow="Start with the basics"
             title="Who's applying"
-            description="The only two required fields in the whole form live here."
+            description="Tell us who you are and where you are in your studies."
           >
             <Field label="Full name" required htmlFor={`${ids}-name`}>
               <input
@@ -462,38 +657,13 @@ export function JoinForm() {
               />
             </Field>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <Field label="Year" optional htmlFor={`${ids}-year`}>
-                <select
+            <div className="grid grid-cols-1 gap-5">
+              <Field label="Year" required htmlFor={`${ids}-year`}>
+                <YearSlider
                   id={`${ids}-year`}
                   value={form.year}
-                  onChange={(e) => setForm((f) => ({ ...f, year: e.target.value }))}
-                  className={cn(fieldInputClass, "cursor-pointer")}
-                >
-                  {YEAR_OPTIONS.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="Status" optional>
-                <div className="flex flex-wrap gap-2">
-                  {STATUS_OPTIONS.map((status) => (
-                    <Pill
-                      key={status}
-                      label={status}
-                      selected={form.status === status}
-                      onClick={() =>
-                        setForm((f) => ({
-                          ...f,
-                          status: f.status === status ? null : status,
-                        }))
-                      }
-                    />
-                  ))}
-                </div>
+                  onChange={(year) => setForm((f) => ({ ...f, year }))}
+                />
               </Field>
             </div>
 
@@ -509,52 +679,46 @@ export function JoinForm() {
             step="02"
             eyebrow="Your online trail"
             title="Your links"
-            description="So we can see your work and reach you. Everything here is optional. A repository is not required."
+            description="GitHub helps us see your work. Discord helps us reach you quickly."
           >
-            <Field label="GitHub" optional htmlFor={`${ids}-github`}>
-              <input
+            <Field label="GitHub" required htmlFor={`${ids}-github`}>
+              <IconTextInput
                 id={`${ids}-github`}
                 type="text"
+                required
+                icon={GitFork}
                 placeholder="github.com/username"
                 value={form.github}
                 onChange={(e) => setForm((f) => ({ ...f, github: e.target.value }))}
-                className={fieldInputClass}
               />
             </Field>
 
-            <Field label="GitLab" optional htmlFor={`${ids}-gitlab`}>
-              <input
-                id={`${ids}-gitlab`}
+            <Field label="Discord" required htmlFor={`${ids}-discord`}>
+              <IconTextInput
+                id={`${ids}-discord`}
                 type="text"
-                placeholder="gitlab.com/username"
-                value={form.gitlab}
-                onChange={(e) => setForm((f) => ({ ...f, gitlab: e.target.value }))}
-                className={fieldInputClass}
+                required
+                icon={MessageCircle}
+                placeholder="username"
+                value={form.discord}
+                onChange={(e) => setForm((f) => ({ ...f, discord: e.target.value }))}
               />
             </Field>
 
             <Field label="LinkedIn" optional htmlFor={`${ids}-linkedin`}>
-              <input
+              <IconTextInput
                 id={`${ids}-linkedin`}
                 type="text"
+                icon={Link2}
                 placeholder="linkedin.com/in/username"
                 value={form.linkedin}
                 onChange={(e) => setForm((f) => ({ ...f, linkedin: e.target.value }))}
-                className={fieldInputClass}
               />
             </Field>
-
-            <Field label="Discord" optional htmlFor={`${ids}-discord`}>
-              <input
-                id={`${ids}-discord`}
-                type="text"
-                placeholder="username"
-                value={form.discord}
-                onChange={(e) => setForm((f) => ({ ...f, discord: e.target.value }))}
-                className={fieldInputClass}
-              />
-            </Field>
-            <ContinueButton onClick={() => attemptNavigation(1)} />
+            <ContinueButton
+              disabled={!isJoinStepComplete(1, form)}
+              onClick={() => attemptNavigation(1)}
+            />
           </FormSection>
         </FormStepScreen>
 
@@ -563,15 +727,14 @@ export function JoinForm() {
             step="03"
             eyebrow="What pulls you in"
             title="What you want to build"
-            description="Signals, not commitments. They help us place you on a project you'll enjoy."
+            description="Pick the areas and team activities that sound worth your time."
           >
-            <Field label="Areas of interest" optional hint="pick any, or none">
-              <div className="flex flex-wrap gap-2">
+            <Field label="Areas of interest" required hint="Pick at least one.">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {INTEREST_AREAS.map((area) => (
-                  <Pill
+                  <InterestCard
                     key={area}
-                    label={area}
-                    prefix="✓"
+                    area={area}
                     selected={form.interests.includes(area)}
                     onClick={() =>
                       setForm((f) => ({ ...f, interests: toggleInArray(f.interests, area) }))
@@ -583,45 +746,38 @@ export function JoinForm() {
 
             <Field
               label="Experience level"
-              optional
-              hint="Beginner is the most common answer here. Really."
+              required
+              hint="Choose the point that feels closest today."
             >
-              <div className="flex flex-wrap gap-2">
-                {EXPERIENCE_LEVELS.map((level) => (
-                  <Pill
-                    key={level}
-                    label={level}
-                    selected={form.experience === level}
-                    onClick={() =>
-                      setForm((f) => ({
-                        ...f,
-                        experience: f.experience === level ? null : level,
-                      }))
-                    }
-                  />
-                ))}
-              </div>
+              <ExperienceScale
+                value={form.experience}
+                onChange={(experience) => setForm((f) => ({ ...f, experience }))}
+              />
             </Field>
 
-            <Field label="Availability" optional>
-              <div className="flex flex-col gap-2">
-                {AVAILABILITY_OPTIONS.map((option) => (
-                  <OptionRow
-                    key={option.value}
-                    label={option.label}
-                    selected={form.availability === option.value}
-                    onClick={() =>
-                      setForm((f) => ({
-                        ...f,
-                        availability: f.availability === option.value ? null : option.value,
-                      }))
-                    }
-                  />
-                ))}
-              </div>
+            <Field
+              label="How much would you like to participate in these parts of the team?"
+              required
+              hint="Select one option per row."
+            >
+              <ParticipationMatrix
+                values={form.participationPreferences}
+                onChange={(preference, rating) =>
+                  setForm((f) => ({
+                    ...f,
+                    participationPreferences: {
+                      ...f.participationPreferences,
+                      [preference]: rating,
+                    },
+                  }))
+                }
+              />
             </Field>
 
-            <ContinueButton onClick={() => attemptNavigation(1)} />
+            <ContinueButton
+              disabled={!isJoinStepComplete(2, form)}
+              onClick={() => attemptNavigation(1)}
+            />
           </FormSection>
         </FormStepScreen>
 
@@ -632,12 +788,16 @@ export function JoinForm() {
             title="In your words"
             description="A couple of sentences is plenty."
           >
-            <Field label="Why do you want to join IEESEC?" optional htmlFor={`${ids}-motivation`}>
+            <Field
+              label="Do you have a specific idea for a project or an initiative that you'd like us to carry out together?"
+              optional
+              htmlFor={`${ids}-motivation`}
+            >
               <textarea
                 id={`${ids}-motivation`}
                 rows={3}
                 maxLength={MAX_TEXTAREA_LENGTH}
-                placeholder={' "I want to learn Git properly", "I have a project idea",... '}
+                placeholder="A workshop, an open-source tool, a campus app, a research idea..."
                 value={form.motivation}
                 onChange={(e) => setForm((f) => ({ ...f, motivation: e.target.value }))}
                 className={cn(fieldInputClass, "resize-none")}
@@ -647,12 +807,16 @@ export function JoinForm() {
               </p>
             </Field>
 
-            <Field label="Tell us about something you've built" optional htmlFor={`${ids}-built`}>
+            <Field
+              label="Share links to the projects you're most proud of"
+              optional
+              htmlFor={`${ids}-built`}
+            >
               <textarea
                 id={`${ids}-built`}
                 rows={3}
                 maxLength={MAX_TEXTAREA_LENGTH}
-                placeholder="A course project, a bot, a website for a friend, or a Minecraft mod."
+                placeholder="GitHub repos, demos, write-ups, apps, bots, notebooks, videos..."
                 value={form.builtSomething}
                 onChange={(e) => setForm((f) => ({ ...f, builtSomething: e.target.value }))}
                 className={cn(fieldInputClass, "resize-none")}
@@ -660,40 +824,6 @@ export function JoinForm() {
               <p className="mt-1 text-right text-xs text-muted-foreground/70">
                 {builtCount} / {MAX_TEXTAREA_LENGTH}
               </p>
-            </Field>
-
-            <Field label="CV" optional hint="PDF only · max 5 MB.">
-              <label
-                htmlFor={`${ids}-cv`}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setIsDragging(true);
-                }}
-                onDragLeave={() => setIsDragging(false)}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  setIsDragging(false);
-                  validateAndSetFile(e.dataTransfer.files?.[0] ?? null);
-                }}
-                className={cn(
-                  "flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed px-4 py-8 text-center transition-colors",
-                  isDragging
-                    ? "border-primary bg-primary/5"
-                    : "border-primary/40 hover:border-primary/60",
-                )}
-              >
-                <p className="text-sm font-medium text-foreground">
-                  {form.cv ? form.cv.name : "Drop a PDF here, or click to choose"}
-                </p>
-                <input
-                  id={`${ids}-cv`}
-                  type="file"
-                  accept="application/pdf"
-                  className="sr-only"
-                  onChange={(e) => validateAndSetFile(e.target.files?.[0] ?? null)}
-                />
-              </label>
-              {cvError && <p className="mt-1.5 text-xs text-destructive">{cvError}</p>}
             </Field>
 
             <ContinueButton onClick={() => attemptNavigation(1)} />
@@ -734,7 +864,7 @@ export function JoinForm() {
                 Submit application →
               </Button>
               <p className="text-xs text-muted-foreground">
-                {canSubmit ? "You're all set." : "Name, email and consent unlock this."}
+                {canSubmit ? "You're all set." : "Complete the required form steps to unlock this."}
               </p>
             </div>
           </FormSection>

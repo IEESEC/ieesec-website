@@ -5,10 +5,9 @@ import { ArrowUpRight } from "lucide-react";
 interface SuccessPanelProps {
   fullName: string;
   email: string;
-  onReset: () => void;
 }
 
-export function SuccessPanel({ fullName, email, onReset }: SuccessPanelProps) {
+export function SuccessPanel({ fullName, email }: SuccessPanelProps) {
   const firstName = fullName.trim().split(/\s+/)[0] || "there";
 
   return (

@@ -6,7 +6,7 @@ import { ScrollVideoBackground } from "@/components/sections/join/ScrollVideoBac
 export const metadata: Metadata = {
   title: "Join Us",
   description:
-    "Apply to join IEESEC, the Software Engineering student team of IHU. Only your name and email are required. Everything else is optional.",
+    "Apply to join IEESEC, the Software Engineering student team of IHU. Share your links, interests, and how you would like to participate.",
 };
 
 export default function JoinPage() {
