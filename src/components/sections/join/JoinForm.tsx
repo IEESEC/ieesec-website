@@ -9,6 +9,7 @@ import type {
   ParticipationRating,
 } from "@/types/join";
 import {
+  AlertTriangle,
   BrainCircuit,
   Cloud,
   Code2,
@@ -306,6 +307,7 @@ function ContinueButton({ disabled = false, onClick }: ContinueButtonProps) {
 export function JoinForm() {
   const [form, setForm] = useState<JoinFormData>(EMPTY_JOIN_FORM);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [blockedMessage, setBlockedMessage] = useState<string | null>(null);
   const scrollerRef = useRef<HTMLFormElement>(null);
@@ -568,11 +570,31 @@ export function JoinForm() {
     if (direction && attemptNavigation(direction)) event.preventDefault();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
+    if (!canSubmit || isSubmitting) return;
+
+    setIsSubmitting(true);
     setBlockedMessage(null);
-    setSubmitted(true);
+
+    try {
+      const response = await fetch("/api/join-application", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        setBlockedMessage("Application could not be submitted. Please try again in a moment.");
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setBlockedMessage("Application could not be submitted. Please try again in a moment.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const motivationCount = useMemo(() => form.motivation.length, [form.motivation]);
@@ -605,6 +627,13 @@ export function JoinForm() {
             style={{ transform: `scaleX(${progress / 100})` }}
           />
         </div>
+      </div>
+
+      <div className="pointer-events-none fixed right-5 top-6 z-50 sm:right-6">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/45 bg-amber-400/14 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-amber-100 shadow-sm backdrop-blur-md">
+          <AlertTriangle aria-hidden className="size-3.5" />
+          Experimental feature
+        </span>
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 top-[5.35rem] z-30 px-5 sm:px-6">
@@ -858,7 +887,7 @@ export function JoinForm() {
               <Button
                 type="submit"
                 size="lg"
-                disabled={!canSubmit}
+                disabled={!canSubmit || isSubmitting}
                 className="rounded-full disabled:cursor-not-allowed"
               >
                 Submit application →
