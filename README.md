@@ -33,4 +33,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
+Set `DISCORD_JOIN_WEBHOOK_URL` in Vercel project environment variables so join applications can be delivered to Discord. Do not prefix it with `NEXT_PUBLIC_`, and do not commit the real webhook URL.
+
+Join submissions are protected by a server-side in-memory rate limit before Discord forwarding. This reduces casual spam without storing raw applicant details, but Vercel WAF, CAPTCHA, or an external rate-limit store should be added if the public form is abused heavily.
+
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
