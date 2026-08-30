@@ -40,6 +40,16 @@ test("logos use the supplied SVG artwork", async ({ page }) => {
   );
 });
 
+test("footer keeps the original opaque surface", async ({ page }) => {
+  const footer = page.locator("footer");
+
+  const backgroundColor = await footer.evaluate(
+    (element) => getComputedStyle(element).backgroundColor,
+  );
+
+  expect(backgroundColor).not.toMatch(/transparent|rgba?\(0,\s*0,\s*0(?:,|\s*\/).*0\)/);
+});
+
 test("mobile wizard stays in normal document flow", async ({ page }, testInfo) => {
   test.skip(!isMobileProject(testInfo.project.name));
 

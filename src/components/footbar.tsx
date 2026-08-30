@@ -11,8 +11,7 @@ const quickLinks = [
 
 export function Footbar() {
   return (
-    <footer className="relative z-10 w-full overflow-hidden">
-      <div className="absolute inset-0 bg-linear-to-b from-background via-black/10 to-black/30 -z-20" />
+    <footer className="relative z-10 w-full bg-background">
       <div className="mx-auto max-w-7xl px-6 pt-20 pb-12">
         {/* Diaxoristiki grammi */}
         <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent" />
