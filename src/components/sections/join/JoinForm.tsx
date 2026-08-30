@@ -585,14 +585,6 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
     }
   };
 
-  const resetForm = () => {
-    setForm(EMPTY_JOIN_FORM);
-    setSubmitted(false);
-    activeStepRef.current = 0;
-    setActiveStep(0);
-    window.requestAnimationFrame(() => scrollToStep(0));
-  };
-
   const motivationCount = useMemo(() => form.motivation.length, [form.motivation]);
   const builtCount = useMemo(() => form.builtSomething.length, [form.builtSomething]);
 
@@ -602,7 +594,7 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
         id="join-application"
         className="mx-auto flex min-h-svh w-full max-w-3xl items-center px-6 py-24"
       >
-        <SuccessPanel fullName={form.fullName} email={form.email} onReset={resetForm} />
+        <SuccessPanel fullName={form.fullName} email={form.email} />
       </section>
     );
   }

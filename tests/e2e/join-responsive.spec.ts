@@ -154,6 +154,7 @@ test("mobile wizard completes all five steps", async ({ page }, testInfo) => {
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Submit application" }).click();
   await expect(page.getByRole("heading", { name: /Thanks, Test/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Submit another application" })).toHaveCount(0);
 });
 
 test("reduced motion keeps the background on its poster frame", async ({ page }, testInfo) => {

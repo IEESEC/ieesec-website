@@ -5,10 +5,9 @@ import { ArrowUpRight } from "lucide-react";
 interface SuccessPanelProps {
   fullName: string;
   email: string;
-  onReset: () => void;
 }
 
-export function SuccessPanel({ fullName, email, onReset }: SuccessPanelProps) {
+export function SuccessPanel({ fullName, email }: SuccessPanelProps) {
   const firstName = fullName.trim().split(/\s+/)[0] || "there";
 
   return (
@@ -34,9 +33,6 @@ export function SuccessPanel({ fullName, email, onReset }: SuccessPanelProps) {
               Join us on Discord
               <ArrowUpRight className="size-4" />
             </a>
-          </Button>
-          <Button type="button" size="lg" variant="outline" onClick={onReset}>
-            Submit another application
           </Button>
         </div>
       </div>
