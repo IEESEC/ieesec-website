@@ -8,12 +8,12 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
 
 const navItems = [
-  { label: "Home", href: "#home" },
-  { label: "Team", href: "#team" },
-  { label: "Projects", href: "#projects" },
-  { label: "Tech Stack", href: "#tech-stack" },
-  { label: "Events", href: "#events" },
-  { label: "Blog", href: "#blog" },
+  { label: "Home", href: "/#home", sectionId: "home" },
+  { label: "Team", href: "/#team", sectionId: "team" },
+  { label: "Projects", href: "/#projects", sectionId: "projects" },
+  { label: "Stack", href: "/#tech-stack", sectionId: "tech-stack" },
+  { label: "Events", href: "/#events", sectionId: "events" },
+  { label: "Blog", href: "/#blog", sectionId: "blog" },
 ];
 
 export function Navbar() {
@@ -24,7 +24,7 @@ export function Navbar() {
 
   // Scroll Observer gia na kanei highlight to active section.
   useEffect(() => {
-    const sectionIds = navItems.map((item) => item.href.slice(1));
+    const sectionIds = navItems.map((item) => item.sectionId);
     const observers: IntersectionObserver[] = [];
 
     const handleIntersect = (id: string) => (entries: IntersectionObserverEntry[]) => {
@@ -59,19 +59,22 @@ export function Navbar() {
     };
   }, []);
 
-  const scrollTo = useCallback((href: string) => {
-    if (href === "#home") {
+  const scrollTo = useCallback((sectionId: string) => {
+    if (sectionId === "home") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      const el = document.getElementById(href.slice(1));
+      const el = document.getElementById(sectionId);
       el?.scrollIntoView({ behavior: "smooth" });
     }
   }, []);
 
   const handleNavClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+      // Let the root hash URL navigate from secondary pages such as /join.
+      if (window.location.pathname !== "/") return;
+
       e.preventDefault();
-      scrollTo(href);
+      scrollTo(sectionId);
     },
     [scrollTo],
   );
@@ -84,8 +87,8 @@ export function Navbar() {
             <div className="absolute -bottom-px left-1/2 -translate-x-1/2 w-1/2 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
             {/* Logo */}
             <a
-              href="#home"
-              onClick={(e) => handleNavClick(e, "#home")}
+              href="/#home"
+              onClick={(e) => handleNavClick(e, "home")}
               className="flex items-center gap-3 group"
             >
               <span className="text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
@@ -99,10 +102,10 @@ export function Navbar() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
+                  onClick={(e) => handleNavClick(e, item.sectionId)}
                   className={cn(
                     "px-3.5 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200",
-                    activeSection === item.href.slice(1)
+                    activeSection === item.sectionId
                       ? "text-primary-foreground bg-primary"
                       : "text-foreground/70 hover:text-primary hover:bg-primary/25",
                   )}
@@ -115,8 +118,11 @@ export function Navbar() {
             {/* Desktop actions */}
             <div className="hidden md:flex items-center gap-2">
               <ThemeToggle />
-              <Button className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/85 transition-colors">
-                Join Us
+              <Button
+                asChild
+                className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/85 transition-colors"
+              >
+                <Link href="/join">Join Us</Link>
               </Button>
             </div>
 
@@ -170,12 +176,12 @@ export function Navbar() {
               key={item.label}
               href={item.href}
               onClick={(e) => {
-                handleNavClick(e, item.href);
+                handleNavClick(e, item.sectionId);
                 toggleSidebar();
               }}
               className={cn(
                 "px-4 py-3 text-base font-medium rounded-xl transition-colors",
-                activeSection === item.href.slice(1)
+                activeSection === item.sectionId
                   ? "text-primary-foreground bg-primary"
                   : "text-muted-foreground hover:text-primary hover:bg-primary/15",
               )}
@@ -184,8 +190,13 @@ export function Navbar() {
             </Link>
           ))}
           <div className="mt-6 px-4">
-            <Button className="w-full h-10 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/85 transition-colors">
-              Join Us
+            <Button
+              asChild
+              className="w-full h-10 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/85 transition-colors"
+            >
+              <Link href="/join" onClick={toggleSidebar}>
+                Join Us
+              </Link>
             </Button>
           </div>
         </nav>

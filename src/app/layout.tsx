@@ -99,6 +99,7 @@ export default function RootLayout({
   return (
     <html
       lang="el"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={cn(
         "h-full",
