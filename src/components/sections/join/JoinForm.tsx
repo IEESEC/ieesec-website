@@ -315,6 +315,8 @@ export function JoinForm() {
   const formStateRef = useRef(form);
   const navigationLockRef = useRef(false);
   const navigationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const yearSliderRef = useRef<HTMLDivElement>(null);
+  const yearDraggingRef = useRef(false);
   const ids = useId();
 
   formStateRef.current = form;
@@ -323,6 +325,36 @@ export function JoinForm() {
     isJoinStepComplete(step, form),
   ).every(Boolean);
   const progress = ((activeStep + 1) / JOIN_FORM_STEP_COUNT) * 100;
+  const yearIndex = Math.max(YEAR_OPTIONS.indexOf(form.year), 0);
+
+  const setYearFromPointer = useCallback((clientX: number) => {
+    const slider = yearSliderRef.current;
+
+    if (!slider) return;
+
+    const bounds = slider.getBoundingClientRect();
+    const position = Math.min(Math.max((clientX - bounds.left) / bounds.width, 0), 1);
+    const nextYearIndex = Math.round(position * (YEAR_OPTIONS.length - 1));
+
+    setForm((currentForm) => ({ ...currentForm, year: YEAR_OPTIONS[nextYearIndex] }));
+  }, []);
+
+  const handleYearPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    yearDraggingRef.current = true;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setYearFromPointer(event.clientX);
+  };
+
+  const handleYearPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (yearDraggingRef.current) setYearFromPointer(event.clientX);
+  };
+
+  const handleYearPointerEnd = (event: React.PointerEvent<HTMLDivElement>) => {
+    yearDraggingRef.current = false;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+  };
 
   useLayoutEffect(() => {
     const previousScrollRestoration = window.history.scrollRestoration;
@@ -679,7 +711,7 @@ export function JoinForm() {
                 id={`${ids}-email`}
                 type="email"
                 required
-                placeholder="student@ihu.gr"
+                placeholder="giorgos@mail.com"
                 value={form.email}
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                 className={fieldInputClass}
