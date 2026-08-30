@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 
 export const fieldInputClass = cn(
-  "w-full rounded-2xl border border-border bg-background px-4 py-2.5 text-sm text-foreground",
-  "placeholder:text-muted-foreground/60 transition-colors",
-  "focus:border-primary focus:outline-none focus:ring-3 focus:ring-primary/20",
+  "min-h-11 w-full rounded-xl border border-border bg-background px-4 py-2.5 text-base text-foreground md:min-h-0 md:text-sm",
+  "placeholder:text-muted-foreground/75 transition-colors",
+  "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25",
 );
 
 interface FieldProps {
