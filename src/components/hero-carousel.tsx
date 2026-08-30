@@ -137,7 +137,7 @@ export function HeroCarousel() {
               <div className="absolute inset-0 hero-overlay opacity-60" />
               <div className="absolute inset-0 hero-vignette" />
               <div className="absolute inset-0 hero-content-wash" />
-              <div className="absolute inset-0 hero-fade" />
+              <div data-testid="hero-fade" className="absolute inset-0 hero-fade" />
             </div>
           ))}
         </div>

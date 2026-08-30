@@ -134,7 +134,7 @@ function YearSlider({ id, value, onChange }: YearSliderProps) {
         ))}
       </select>
 
-      <div className="join-year-desktop rounded-2xl border border-border bg-background/70 px-4 py-4">
+      <div className="join-year-desktop rounded-2xl border border-border bg-secondary/40 px-4 py-4 dark:bg-background/70">
         <div className="flex items-center justify-between gap-4">
           <span className="text-sm font-medium text-foreground">{YEAR_OPTIONS[selectedIndex]}</span>
           <span className="text-xs text-muted-foreground">Drag to select</span>
@@ -189,7 +189,7 @@ function InterestCard({ area, selected, onClick }: InterestCardProps) {
         "group flex min-h-16 items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-xs font-semibold transition-all cursor-pointer",
         selected
           ? "border-primary bg-primary text-primary-foreground shadow-sm"
-          : "border-border bg-background/70 text-foreground hover:border-primary/60 hover:bg-primary/5",
+          : "border-border bg-background text-foreground hover:border-primary/60 hover:bg-primary/5 dark:bg-background/70",
       )}
     >
       <span
@@ -215,7 +215,7 @@ function ExperienceScale({ value, onChange }: ExperienceScaleProps) {
     <div
       role="radiogroup"
       aria-label="Programming experience level"
-      className="rounded-2xl border border-border bg-background/70 p-4"
+      className="rounded-2xl border border-border bg-secondary/40 p-4 dark:bg-background/70"
     >
       <div className="grid grid-cols-5 gap-2 text-center text-sm font-medium text-foreground">
         {EXPERIENCE_LEVELS.map((level) => (
@@ -234,7 +234,7 @@ function ExperienceScale({ value, onChange }: ExperienceScaleProps) {
               "mx-auto size-5 rounded-full border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25",
               value === level
                 ? "border-primary bg-primary ring-4 ring-primary/15"
-                : "border-muted-foreground/55 bg-background hover:border-primary",
+                : "border-input bg-background hover:border-primary",
             )}
           >
             <span className="sr-only">Experience level {level}</span>
@@ -258,7 +258,7 @@ interface ParticipationMatrixProps {
 
 function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-background/70">
+    <div className="overflow-hidden rounded-2xl border border-border bg-background dark:bg-background/70">
       <div className="grid grid-cols-[minmax(5.8rem,1fr)_repeat(4,minmax(2.7rem,0.55fr))] border-b border-border px-2 py-2 text-center text-[0.62rem] font-semibold text-muted-foreground sm:grid-cols-[minmax(7.5rem,1.1fr)_repeat(4,minmax(3.6rem,0.7fr))] sm:px-3 sm:text-[0.68rem]">
         <span className="text-left">Preference</span>
         {PARTICIPATION_RATINGS.map((rating) => (
@@ -281,7 +281,7 @@ function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
               aria-checked={values[row.value] === rating.value}
               aria-label={`${row.label}: ${rating.label}`}
               onClick={() => onChange(row.value, rating.value)}
-              className="mx-auto flex size-5 items-center justify-center rounded-full border border-muted-foreground/45 bg-background transition-all cursor-pointer hover:border-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25"
+              className="mx-auto flex size-5 cursor-pointer items-center justify-center rounded-full border border-input bg-background transition-all hover:border-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25"
             >
               <span
                 aria-hidden
@@ -827,7 +827,7 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
                 onChange={(e) => setForm((f) => ({ ...f, motivation: e.target.value }))}
                 className={cn(fieldInputClass, "resize-none")}
               />
-              <p className="mt-1 text-right text-xs text-muted-foreground/70">
+              <p className="mt-1 text-right text-xs text-muted-foreground">
                 {motivationCount} / {MAX_TEXTAREA_LENGTH}
               </p>
             </Field>
@@ -846,7 +846,7 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
                 onChange={(e) => setForm((f) => ({ ...f, builtSomething: e.target.value }))}
                 className={cn(fieldInputClass, "resize-none")}
               />
-              <p className="mt-1 text-right text-xs text-muted-foreground/70">
+              <p className="mt-1 text-right text-xs text-muted-foreground">
                 {builtCount} / {MAX_TEXTAREA_LENGTH}
               </p>
             </Field>

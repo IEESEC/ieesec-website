@@ -20,7 +20,7 @@ function SocialLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="flex size-11 items-center justify-center rounded-full border border-white/20 bg-card/90 text-card-foreground shadow-sm backdrop-blur-sm transition-[color,background-color,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transform-none"
+      className="flex size-11 items-center justify-center rounded-full border border-border/80 bg-card text-card-foreground shadow-sm transition-[color,background-color,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transform-none dark:border-white/20 dark:bg-card/90 dark:backdrop-blur-sm"
     >
       {children}
     </a>
@@ -34,7 +34,7 @@ export default function MemberCard({ member }: { member: Member }) {
   const specializationLabel = specialization.replace(/\s+developer$/i, "");
 
   return (
-    <Card className="group relative isolate mx-auto h-full w-full max-w-sm gap-0 overflow-hidden rounded-3xl border border-border/80 bg-card p-0 shadow-sm transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10 focus-within:border-primary/50 motion-reduce:transform-none">
+    <Card className="group relative isolate mx-auto h-full w-full max-w-sm gap-0 overflow-hidden rounded-3xl border border-border/80 bg-card p-0 shadow-sm transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-sm focus-within:border-primary/50 motion-reduce:transform-none dark:hover:shadow-xl dark:hover:shadow-primary/10">
       <div className="relative aspect-video overflow-hidden bg-muted">
         <Image
           src={member.image}
@@ -118,7 +118,7 @@ export default function MemberCard({ member }: { member: Member }) {
           </p>
         </div>
         {specializationLabel ? (
-          <span className="mt-2.5 inline-flex w-fit items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-primary">
+          <span className="mt-2.5 inline-flex w-fit items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-foreground">
             {specializationLabel}
           </span>
         ) : null}

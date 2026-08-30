@@ -44,7 +44,7 @@ export function Footbar() {
               The Software Engineering Student Team of&nbsp;
               <Link
                 href="https://iee.ihu.gr"
-                className="text-primary/70 hover:text-primary transition-colors"
+                className="font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
               >
                 Informatics and Electronics Engineering Department
               </Link>
@@ -54,7 +54,7 @@ export function Footbar() {
 
           {/* Quick Links Subcontainer */}
           <div>
-            <h4 className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
+            <h4 className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Quick Links
             </h4>
             <ul className="space-y-2.5 flex flex-col">
@@ -70,7 +70,7 @@ export function Footbar() {
 
           {/* Location Subcontainer */}
           <div>
-            <h4 className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
+            <h4 className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               Location
             </h4>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
@@ -78,7 +78,7 @@ export function Footbar() {
               <li>Sindos Campus</li>
               <li>Sindos 574 00</li>
               <li>
-                <Link href="mailto:ieesec.ihu@gmail.com" className="text-primary/70">
+                <Link href="mailto:ieesec.ihu@gmail.com" className="font-medium text-foreground">
                   ieesec.ihu@gmail.com
                 </Link>
               </li>
@@ -90,7 +90,7 @@ export function Footbar() {
         <div className="mt-16 flex flex-col items-center">
           {/* Diaxoristiki grammi */}
           <div className="w-full max-w-xl h-px bg-linear-to-r from-transparent via-primary/20 to-transparent mb-8" />
-          <p className="text-xs text-muted-foreground/60">
+          <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()}&nbsp;IEESEC &middot; All rights reserved.
           </p>
         </div>

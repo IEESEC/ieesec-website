@@ -101,7 +101,10 @@ export function Navbar() {
     <>
       <header className="fixed top-0 left-0 right-0 z-40 w-full max-w-full overflow-x-clip">
         <div className="mx-auto max-w-7xl px-4 pt-3">
-          <div className="relative flex h-14 items-center justify-between rounded-2xl bg-background/20 dark:bg-background/30 backdrop-blur-md border border-primary/10 px-5 shadow-lg shadow-black/3 dark:shadow-black/20">
+          <div
+            data-testid="navbar-surface"
+            className="relative flex h-14 items-center justify-between rounded-2xl border border-border/80 bg-background/92 px-5 shadow-sm backdrop-blur-sm dark:border-primary/10 dark:bg-background/30 dark:shadow-lg dark:shadow-black/20 dark:backdrop-blur-md"
+          >
             <div className="absolute -bottom-px left-1/2 -translate-x-1/2 w-1/2 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
             {/* Logo */}
             <a
@@ -129,7 +132,7 @@ export function Navbar() {
                     "px-3.5 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200",
                     activeSection === item.sectionId
                       ? "text-primary-foreground bg-primary"
-                      : "text-foreground/70 hover:text-primary hover:bg-primary/25",
+                      : "text-foreground/80 hover:text-primary hover:bg-primary/25",
                   )}
                 >
                   {item.label}

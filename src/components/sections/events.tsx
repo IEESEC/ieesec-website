@@ -9,7 +9,7 @@ export function EventsSection() {
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
               Events
             </h1>
-            <p className="mt-4 text-lg text-primary/70 max-w-2xl">
+            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce fringilla.
             </p>
           </Reveal>

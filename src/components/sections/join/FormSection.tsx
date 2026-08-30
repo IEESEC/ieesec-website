@@ -14,7 +14,7 @@ export function FormSection({ step, eyebrow, title, description, children }: For
       id={`join-step-${step}`}
       data-join-step-scroll
       data-testid="join-form-card"
-      className="join-form-card w-full scroll-mt-24 overflow-visible rounded-2xl border-white/15 bg-card/95 p-5 shadow-sm backdrop-blur-md md:rounded-3xl md:p-8"
+      className="join-form-card w-full scroll-mt-24 overflow-visible rounded-2xl border-border/80 bg-card p-5 shadow-sm md:rounded-3xl md:p-8 dark:border-white/15 dark:bg-card/95 dark:backdrop-blur-md"
     >
       <div className="grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] md:gap-8">
         <header>

@@ -98,13 +98,13 @@ test("light hero and navbar use artifact-free terminal surfaces", async ({ page 
   const [, , , navbarAlpha] = await renderedColor(navbar, "backgroundColor");
   expect(navbarAlpha / 255).toBeGreaterThanOrEqual(0.9);
 
-  const gradient = await page.locator(".hero-fade").evaluate((element) => {
+  const fadeProbe = page.locator(".hero-fade").first();
+  const gradient = await fadeProbe.evaluate((element) => {
     const value = getComputedStyle(element).backgroundImage;
     return value.match(/,\s*([^,]+)\s+100%\)$/)?.[1] ?? "";
   });
   expect(gradient).not.toBe("");
 
-  const fadeProbe = page.locator(".hero-fade");
   const fadeLuminance = await fadeProbe.evaluate((element, terminalColor) => {
     const canvas = document.createElement("canvas");
     canvas.width = 1;
@@ -131,7 +131,7 @@ test("light theme supporting text and controls meet WCAG AA", async ({ page }, t
   const textSamples = [
     page.locator("#team p").first(),
     page.locator("#tech-stack p").first(),
-    page.locator("#blog article p").first(),
+    page.locator("#blog p.text-muted-foreground").first(),
     page.locator("footer p").first(),
     page.locator("footer h4").first(),
   ];
@@ -150,4 +150,3 @@ test("light theme supporting text and controls meet WCAG AA", async ({ page }, t
   const inputBorder = await renderedColor(nameInput, "borderTopColor");
   expect(inputBackground).not.toEqual(inputBorder);
 });
-

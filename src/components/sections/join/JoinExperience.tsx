@@ -9,7 +9,7 @@ export function JoinExperience() {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <main className="relative isolate flex flex-1 flex-col bg-slate-950/10">
+    <main className="relative isolate flex flex-1 flex-col bg-background dark:bg-slate-950/10">
       <ScrollVideoBackground activeStep={activeStep} />
       <JoinHero />
       <JoinForm onActiveStepChange={setActiveStep} />
