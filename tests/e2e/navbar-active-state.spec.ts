@@ -12,10 +12,10 @@ test("updates the active section after returning from the join page", async ({
   const homeLink = page.getByRole("link", { name: "Home", exact: true });
   const teamLink = page.getByRole("link", { name: "Team", exact: true });
 
-  await expect(homeLink).toHaveClass(/bg-primary/);
+  await expect(homeLink).not.toHaveClass(/(?:^|\s)bg-primary(?:\s|$)/);
   await teamLink.click();
 
   await expect(page).toHaveURL(/\/#team$/);
-  await expect(teamLink).toHaveClass(/bg-primary/);
-  await expect(homeLink).not.toHaveClass(/bg-primary/);
+  await expect(teamLink).toHaveClass(/(?:^|\s)bg-primary(?:\s|$)/);
+  await expect(homeLink).not.toHaveClass(/(?:^|\s)bg-primary(?:\s|$)/);
 });

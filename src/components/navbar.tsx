@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -17,13 +18,25 @@ const navItems = [
 ];
 
 export function Navbar() {
+  const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
-  // Scroll Observer gia na kanei highlight to active section.
   useEffect(() => {
+    if (pathname !== "/") {
+      setActiveSection("");
+      return;
+    }
+
+    const getActiveSectionFromHash = () => {
+      const sectionId = window.location.hash.slice(1);
+      return navItems.some((item) => item.sectionId === sectionId) ? sectionId : "home";
+    };
+
+    setActiveSection(getActiveSectionFromHash());
+
     const sectionIds = navItems.map((item) => item.sectionId);
     const observers: IntersectionObserver[] = [];
 
@@ -47,17 +60,21 @@ export function Navbar() {
     });
 
     const handleScroll = () => {
-      if (window.scrollY < window.innerHeight * 0.5) {
+      if (!window.location.hash && window.scrollY < window.innerHeight * 0.5) {
         setActiveSection("home");
       }
     };
+    const handleHashChange = () => setActiveSection(getActiveSectionFromHash());
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("hashchange", handleHashChange);
 
     return () => {
       observers.forEach((o) => o.disconnect());
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("hashchange", handleHashChange);
     };
-  }, []);
+  }, [pathname]);
 
   const scrollTo = useCallback((sectionId: string) => {
     if (sectionId === "home") {
@@ -74,6 +91,7 @@ export function Navbar() {
       if (window.location.pathname !== "/") return;
 
       e.preventDefault();
+      setActiveSection(sectionId);
       scrollTo(sectionId);
     },
     [scrollTo],
