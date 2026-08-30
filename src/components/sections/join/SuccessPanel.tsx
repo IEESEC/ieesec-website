@@ -35,6 +35,9 @@ export function SuccessPanel({ fullName, email, onReset }: SuccessPanelProps) {
               <ArrowUpRight className="size-4" />
             </a>
           </Button>
+          <Button type="button" size="lg" variant="outline" onClick={onReset}>
+            Submit another application
+          </Button>
         </div>
       </div>
     </Reveal>

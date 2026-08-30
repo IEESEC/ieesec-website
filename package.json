@@ -8,7 +8,7 @@
     "start": "next start",
     "test": "playwright test",
     "test:unit": "playwright test --project=unit",
-    "test:e2e": "playwright test tests/e2e",
+    "test:e2e": "playwright test join-responsive",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "format": "oxfmt",

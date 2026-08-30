@@ -91,9 +91,13 @@ export function Navbar() {
               onClick={(e) => handleNavClick(e, "home")}
               className="flex items-center gap-3 group"
             >
-              <span className="text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
-                IEEESEC
-              </span>
+              <img
+                src="/images/brand/ieesec-navbar.svg"
+                alt="IEESEC"
+                width={178}
+                height={44}
+                className="h-7 w-auto brightness-0 transition-opacity group-hover:opacity-80 dark:brightness-100"
+              />
             </a>
 
             {/* Desktop nav */}

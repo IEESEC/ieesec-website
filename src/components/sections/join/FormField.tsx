@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 
 export const fieldInputClass = cn(
-  "w-full rounded-2xl border border-border bg-background px-4 py-2.5 text-sm text-foreground",
-  "placeholder:text-muted-foreground/60 transition-colors",
-  "focus:border-primary focus:outline-none focus:ring-3 focus:ring-primary/20",
+  "min-h-11 w-full rounded-xl border border-border bg-background px-4 py-2.5 text-base text-foreground md:min-h-0 md:text-sm",
+  "placeholder:text-muted-foreground/75 transition-colors",
+  "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25",
 );
 
 interface FieldProps {
@@ -43,7 +43,7 @@ export function Pill({ label, selected, onClick, prefix }: PillProps) {
       onClick={onClick}
       aria-pressed={selected}
       className={cn(
-        "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors cursor-pointer",
+        "min-h-11 rounded-full border px-4 py-2 text-sm font-medium transition-colors cursor-pointer md:min-h-0 md:py-1.5",
         selected
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground",
@@ -67,7 +67,7 @@ export function OptionRow({ label, selected, onClick }: OptionRowProps) {
       onClick={onClick}
       aria-pressed={selected}
       className={cn(
-        "w-full rounded-2xl border px-4 py-2.5 text-left text-sm font-medium transition-colors cursor-pointer",
+        "min-h-11 w-full rounded-xl border px-4 py-2.5 text-left text-sm font-medium transition-colors cursor-pointer",
         selected
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground",

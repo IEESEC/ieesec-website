@@ -13,9 +13,10 @@ export function FormSection({ step, eyebrow, title, description, children }: For
     <Card
       id={`join-step-${step}`}
       data-join-step-scroll
-      className="max-h-[calc(100svh-8rem)] w-full scroll-mt-24 overflow-y-auto overscroll-contain rounded-4xl border-white/15 bg-card/92 p-6 shadow-2xl shadow-slate-950/20 backdrop-blur-xl sm:max-h-[calc(100svh-10rem)] sm:p-8"
+      data-testid="join-form-card"
+      className="join-form-card w-full scroll-mt-24 overflow-visible rounded-2xl border-white/15 bg-card/95 p-5 shadow-sm backdrop-blur-md md:rounded-3xl md:p-8"
     >
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] md:gap-8">
         <header>
           <div className="flex items-center gap-3 text-muted-foreground">
             <span className="font-mono text-[0.7rem] tabular-nums leading-none text-primary">
@@ -24,7 +25,9 @@ export function FormSection({ step, eyebrow, title, description, children }: For
             <span aria-hidden className="h-px w-8 bg-primary/45" />
             <p className="text-[0.72rem] font-medium leading-none tracking-[0.08em]">{eyebrow}</p>
           </div>
-          <h2 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">{title}</h2>
+          <h2 className="mt-5 text-2xl font-semibold tracking-tight text-foreground text-balance">
+            {title}
+          </h2>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{description}</p>
         </header>
 

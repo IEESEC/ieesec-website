@@ -328,3 +328,56 @@
     animation: none;
   }
 }
+
+/* The join form uses scroll snapping only on desktop-class, fine-pointer devices. */
+@media (min-width: 768px) and (pointer: fine) {
+  .join-form-shell {
+    height: 100svh;
+    scroll-margin-top: 0;
+  }
+
+  .join-form-progress {
+    position: absolute;
+    top: 0;
+    z-index: 50;
+    background: transparent;
+    backdrop-filter: none;
+    pointer-events: none;
+  }
+
+  .join-form-progress-meta {
+    position: absolute;
+    inset-inline: 0;
+    top: 5.35rem;
+    padding-block: 0;
+  }
+
+  .join-form-timeline {
+    height: 100svh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+  }
+
+  .join-form-timeline::-webkit-scrollbar {
+    display: none;
+  }
+
+  .join-form-step,
+  .join-form-step[aria-hidden="true"] {
+    display: flex !important;
+    height: 100svh;
+    min-height: 0;
+    align-items: center;
+    padding-top: 8rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .join-form-card {
+    max-height: calc(100svh - 10rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}

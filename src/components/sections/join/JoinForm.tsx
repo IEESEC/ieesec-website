@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Reveal } from "@/components/ui/animations/fade-up";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,6 @@ import {
   EXPERIENCE_LEVELS,
   INTEREST_AREAS,
   MAX_TEXTAREA_LENGTH,
-  STATUS_OPTIONS,
   YEAR_OPTIONS,
 } from "./data";
 import { Field, OptionRow, Pill, fieldInputClass } from "./FormField";
@@ -41,7 +40,10 @@ function FormStepScreen({ active, children, delay = 0 }: FormStepScreenProps) {
       data-scroll-video-section
       aria-hidden={!active}
       inert={!active}
-      className="flex h-svh snap-start snap-always items-center px-5 pb-8 pt-28 sm:px-6 sm:pb-10 sm:pt-32"
+      className={cn(
+        "join-form-step min-h-[calc(100svh-7.25rem)] items-start px-4 pb-8 pt-4 md:px-6 md:pb-10",
+        active ? "flex" : "hidden",
+      )}
     >
       <Reveal direction="up" delay={delay} className="mx-auto w-full max-w-4xl">
         {children}
@@ -59,30 +61,48 @@ function canScrollWithin(element: HTMLElement, direction: -1 | 1): boolean {
 }
 
 interface ContinueButtonProps {
+  onBack?: () => void;
   disabled?: boolean;
   onClick: () => void;
 }
 
-function ContinueButton({ disabled = false, onClick }: ContinueButtonProps) {
+function ContinueButton({ onBack, disabled = false, onClick }: ContinueButtonProps) {
   return (
     <div className="flex flex-wrap items-center gap-3 pt-1">
+      {onBack && (
+        <Button
+          type="button"
+          size="lg"
+          variant="outline"
+          onClick={onBack}
+          className="min-h-11 flex-1 rounded-full sm:flex-none"
+        >
+          Back
+        </Button>
+      )}
       <Button
         type="button"
         size="lg"
         disabled={disabled}
         onClick={onClick}
-        className="rounded-full disabled:cursor-not-allowed"
+        className="min-h-11 flex-1 rounded-full disabled:cursor-not-allowed sm:flex-none"
       >
-        Continue →
+        Continue
       </Button>
       {disabled && (
-        <p className="text-xs text-muted-foreground">Complete the required fields to continue.</p>
+        <p className="basis-full text-xs text-muted-foreground">
+          Complete the required fields to continue.
+        </p>
       )}
     </div>
   );
 }
 
-export function JoinForm() {
+interface JoinFormProps {
+  onActiveStepChange?: (step: number) => void;
+}
+
+export function JoinForm({ onActiveStepChange }: JoinFormProps) {
   const [form, setForm] = useState<JoinFormData>(EMPTY_JOIN_FORM);
   const [submitted, setSubmitted] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
@@ -92,6 +112,8 @@ export function JoinForm() {
   const formStateRef = useRef(form);
   const navigationLockRef = useRef(false);
   const navigationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const applicationRef = useRef<HTMLDivElement>(null);
+  const desktopScrollModeRef = useRef(false);
   const yearSliderRef = useRef<HTMLDivElement>(null);
   const yearDraggingRef = useRef(false);
   const ids = useId();
@@ -132,18 +154,19 @@ export function JoinForm() {
     }
   };
 
-  useLayoutEffect(() => {
-    const previousScrollRestoration = window.history.scrollRestoration;
+  useEffect(() => {
+    onActiveStepChange?.(activeStep);
+  }, [activeStep, onActiveStepChange]);
 
-    window.history.scrollRestoration = "manual";
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    scrollerRef.current?.scrollTo({ top: 0, left: 0, behavior: "auto" });
-    activeStepRef.current = 0;
-    setActiveStep(0);
-
-    return () => {
-      window.history.scrollRestoration = previousScrollRestoration;
+  useEffect(() => {
+    const desktopScrollMode = window.matchMedia("(min-width: 768px) and (pointer: fine)");
+    const updateMode = () => {
+      desktopScrollModeRef.current = desktopScrollMode.matches;
     };
+
+    updateMode();
+    desktopScrollMode.addEventListener("change", updateMode);
+    return () => desktopScrollMode.removeEventListener("change", updateMode);
   }, []);
 
   const scrollToStep = useCallback((step: number) => {
@@ -154,9 +177,17 @@ export function JoinForm() {
     activeStepRef.current = step;
     setActiveStep(step);
     setBlockedMessage(null);
-    scroller.scrollTo({
-      top: step * scroller.clientHeight,
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth";
+
+    if (desktopScrollModeRef.current) {
+      scroller.scrollTo({ top: step * scroller.clientHeight, behavior });
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      applicationRef.current?.scrollIntoView({ block: "start", behavior });
     });
   }, []);
 
@@ -168,7 +199,10 @@ export function JoinForm() {
     >(":invalid");
 
     invalidField?.reportValidity();
-    invalidField?.focus({ preventScroll: true });
+    invalidField?.focus({ preventScroll: desktopScrollModeRef.current });
+    if (!desktopScrollModeRef.current) {
+      invalidField?.scrollIntoView({ block: "center", behavior: "smooth" });
+    }
     setBlockedMessage(
       step === 0
         ? "Add your name and a valid email to continue."
@@ -222,147 +256,81 @@ export function JoinForm() {
     const scroller = scrollerRef.current;
 
     if (!scroller) return;
+    const desktopScrollMode = window.matchMedia("(min-width: 768px) and (pointer: fine)");
+    let removeDesktopHandlers = () => undefined;
 
-    let accumulatedWheelDelta = 0;
-    let touchStartY = 0;
-    let touchCurrentY = 0;
-    let touchTarget: HTMLElement | null = null;
-    const formDocumentTop = window.scrollY + scroller.getBoundingClientRect().top;
+    const configureDesktopHandlers = () => {
+      removeDesktopHandlers();
+      desktopScrollModeRef.current = desktopScrollMode.matches;
 
-    const lockNavigation = () => {
-      navigationLockRef.current = true;
-      if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
-      navigationTimeoutRef.current = setTimeout(() => {
-        navigationLockRef.current = false;
-      }, 650);
-    };
+      if (!desktopScrollMode.matches) return;
 
-    const handleWheel = (event: WheelEvent) => {
-      if (event.deltaY === 0) return;
+      let accumulatedWheelDelta = 0;
 
-      const direction: -1 | 1 = event.deltaY > 0 ? 1 : -1;
-      const target = event.target instanceof Element ? event.target : null;
-      const stepContent = target?.closest<HTMLElement>("[data-join-step-scroll]");
+      const lockNavigation = () => {
+        navigationLockRef.current = true;
+        if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
+        navigationTimeoutRef.current = setTimeout(() => {
+          navigationLockRef.current = false;
+        }, 650);
+      };
 
-      if (direction > 0 && scroller.getBoundingClientRect().top > 1) {
+      const handleWheel = (event: WheelEvent) => {
+        if (event.deltaY === 0) return;
+
+        const direction: -1 | 1 = event.deltaY > 0 ? 1 : -1;
+        const target = event.target instanceof Element ? event.target : null;
+        const stepContent = target?.closest<HTMLElement>("[data-join-step-scroll]");
+
+        if (direction > 0 && scroller.getBoundingClientRect().top > 1) {
+          event.preventDefault();
+          applicationRef.current?.scrollIntoView({ block: "start", behavior: "smooth" });
+          return;
+        }
+
+        if (stepContent && canScrollWithin(stepContent, direction)) {
+          accumulatedWheelDelta = 0;
+          return;
+        }
+
+        if (direction < 0 && activeStepRef.current === 0) return;
+
         event.preventDefault();
-        window.scrollTo({
-          top: window.scrollY + scroller.getBoundingClientRect().top,
-          behavior: "smooth",
-        });
-        return;
-      }
+        accumulatedWheelDelta += event.deltaY;
 
-      if (stepContent && canScrollWithin(stepContent, direction)) {
+        if (Math.abs(accumulatedWheelDelta) < 24 || navigationLockRef.current) return;
+
+        const accumulatedDirection: -1 | 1 = accumulatedWheelDelta > 0 ? 1 : -1;
         accumulatedWheelDelta = 0;
-        return;
-      }
+        attemptNavigation(accumulatedDirection);
+        lockNavigation();
+      };
 
-      if (direction < 0 && activeStepRef.current === 0) {
-        event.preventDefault();
-        window.scrollBy({ top: event.deltaY, behavior: "auto" });
-        return;
-      }
+      const keepCurrentStepAligned = () => {
+        scroller.scrollTo({ top: activeStepRef.current * scroller.clientHeight, behavior: "auto" });
+      };
 
-      event.preventDefault();
-      accumulatedWheelDelta += event.deltaY;
+      scroller.addEventListener("wheel", handleWheel, { passive: false });
+      window.addEventListener("resize", keepCurrentStepAligned);
 
-      if (Math.abs(accumulatedWheelDelta) < 24 || navigationLockRef.current) return;
-
-      const accumulatedDirection: -1 | 1 = accumulatedWheelDelta > 0 ? 1 : -1;
-      accumulatedWheelDelta = 0;
-      attemptNavigation(accumulatedDirection);
-      lockNavigation();
+      removeDesktopHandlers = () => {
+        scroller.removeEventListener("wheel", handleWheel);
+        window.removeEventListener("resize", keepCurrentStepAligned);
+      };
     };
 
-    const handleTouchStart = (event: TouchEvent) => {
-      touchStartY = event.touches[0]?.clientY ?? 0;
-      touchCurrentY = touchStartY;
-      touchTarget = event.target instanceof HTMLElement ? event.target : null;
-    };
-
-    const handleTouchMove = (event: TouchEvent) => {
-      touchCurrentY = event.touches[0]?.clientY ?? touchCurrentY;
-      const distance = touchStartY - touchCurrentY;
-
-      if (Math.abs(distance) < 8) return;
-
-      const direction: -1 | 1 = distance > 0 ? 1 : -1;
-      const stepContent = touchTarget?.closest<HTMLElement>("[data-join-step-scroll]");
-
-      if (stepContent && canScrollWithin(stepContent, direction)) return;
-      if (direction < 0 && activeStepRef.current === 0) {
-        event.preventDefault();
-        return;
-      }
-
-      event.preventDefault();
-    };
-
-    const handleTouchEnd = () => {
-      const distance = touchStartY - touchCurrentY;
-
-      if (Math.abs(distance) < 48 || navigationLockRef.current) return;
-
-      const direction: -1 | 1 = distance > 0 ? 1 : -1;
-      const stepContent = touchTarget?.closest<HTMLElement>("[data-join-step-scroll]");
-
-      if (direction > 0 && scroller.getBoundingClientRect().top > 1) {
-        window.scrollTo({
-          top: window.scrollY + scroller.getBoundingClientRect().top,
-          behavior: "smooth",
-        });
-        return;
-      }
-
-      if (direction < 0 && activeStepRef.current === 0) {
-        window.scrollTo({
-          top: Math.max(window.scrollY - Math.abs(distance), 0),
-          behavior: "smooth",
-        });
-        return;
-      }
-
-      if (stepContent && canScrollWithin(stepContent, direction)) return;
-      if (!attemptNavigation(direction)) return;
-
-      lockNavigation();
-    };
-
-    const keepCurrentStepAligned = () => {
-      scroller.scrollTo({ top: activeStepRef.current * scroller.clientHeight, behavior: "auto" });
-    };
-
-    const keepFormViewportAligned = () => {
-      const hasOvershotForm = window.scrollY > formDocumentTop + 1;
-      const leftActiveForm =
-        activeStepRef.current > 0 && Math.abs(window.scrollY - formDocumentTop) > 1;
-
-      if (hasOvershotForm || leftActiveForm) {
-        window.scrollTo({ top: formDocumentTop, behavior: "auto" });
-      }
-    };
-
-    scroller.addEventListener("wheel", handleWheel, { passive: false });
-    scroller.addEventListener("touchstart", handleTouchStart, { passive: true });
-    scroller.addEventListener("touchmove", handleTouchMove, { passive: false });
-    scroller.addEventListener("touchend", handleTouchEnd, { passive: true });
-    window.addEventListener("scroll", keepFormViewportAligned, { passive: true });
-    window.addEventListener("resize", keepCurrentStepAligned);
+    configureDesktopHandlers();
+    desktopScrollMode.addEventListener("change", configureDesktopHandlers);
 
     return () => {
-      scroller.removeEventListener("wheel", handleWheel);
-      scroller.removeEventListener("touchstart", handleTouchStart);
-      scroller.removeEventListener("touchmove", handleTouchMove);
-      scroller.removeEventListener("touchend", handleTouchEnd);
-      window.removeEventListener("scroll", keepFormViewportAligned);
-      window.removeEventListener("resize", keepCurrentStepAligned);
+      removeDesktopHandlers();
+      desktopScrollMode.removeEventListener("change", configureDesktopHandlers);
       if (navigationTimeoutRef.current) clearTimeout(navigationTimeoutRef.current);
     };
   }, [attemptNavigation]);
 
   const handleStepKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
-    if (event.repeat) return;
+    if (event.repeat || !desktopScrollModeRef.current) return;
 
     const target = event.target as HTMLElement;
     const isFormControl = target.matches("input, textarea, select, button");
@@ -408,8 +376,16 @@ export function JoinForm() {
   }
 
   return (
-    <div id="join-application" className="relative h-svh w-full scroll-mt-0">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-50">
+    <div
+      ref={applicationRef}
+      id="join-application"
+      data-testid="join-form-shell"
+      className="join-form-shell relative min-h-svh w-full scroll-mt-[4.25rem]"
+    >
+      <div
+        data-testid="join-progress"
+        className="join-form-progress sticky inset-x-0 top-[4.25rem] z-30 bg-slate-950/80 backdrop-blur-md"
+      >
         <div
           role="progressbar"
           aria-label="Application progress"
@@ -423,17 +399,16 @@ export function JoinForm() {
             style={{ transform: `scaleX(${progress / 100})` }}
           />
         </div>
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 top-[5.35rem] z-30 px-5 sm:px-6">
-        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 text-xs text-white/75">
-          <p aria-live="polite" className="min-h-5 font-medium text-white">
-            {blockedMessage}
-          </p>
-          <p className="shrink-0 font-mono tabular-nums">
-            {String(activeStep + 1).padStart(2, "0")} /{" "}
-            {String(JOIN_FORM_STEP_COUNT).padStart(2, "0")}
-          </p>
+        <div className="join-form-progress-meta px-4 py-2.5 md:px-6">
+          <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 text-xs text-white/80">
+            <p aria-live="polite" className="min-h-5 font-medium text-white">
+              {blockedMessage}
+            </p>
+            <p className="shrink-0 font-mono tabular-nums">
+              {String(activeStep + 1).padStart(2, "0")} /{" "}
+              {String(JOIN_FORM_STEP_COUNT).padStart(2, "0")}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -442,7 +417,7 @@ export function JoinForm() {
         data-scroll-video-timeline
         onSubmit={handleSubmit}
         onKeyDown={handleStepKeyDown}
-        className="h-svh snap-y snap-mandatory overflow-y-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="join-form-timeline overflow-visible"
       >
         <FormStepScreen active={activeStep === 0}>
           <FormSection
@@ -476,14 +451,29 @@ export function JoinForm() {
             </Field>
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <Field label="Year" optional htmlFor={`${ids}-year`}>
+              <Field label="Year" optional>
+                <select
+                  id={`${ids}-year-mobile`}
+                  aria-label="Year of study"
+                  value={form.year}
+                  onChange={(event) =>
+                    setForm((currentForm) => ({ ...currentForm, year: event.target.value }))
+                  }
+                  className={cn(fieldInputClass, "md:hidden")}
+                >
+                  {YEAR_OPTIONS.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
                 <div
                   ref={yearSliderRef}
                   onPointerDown={handleYearPointerDown}
                   onPointerMove={handleYearPointerMove}
                   onPointerUp={handleYearPointerEnd}
                   onPointerCancel={handleYearPointerEnd}
-                  className="relative touch-none select-none py-1"
+                  className="relative hidden touch-none select-none py-1 md:block"
                 >
                   <div
                     aria-hidden="true"
@@ -492,9 +482,7 @@ export function JoinForm() {
                     <div
                       className="h-full rounded-full bg-primary transition-[width] duration-200 motion-reduce:transition-none"
                       style={{
-                        width: `${
-                          (yearIndex / (YEAR_OPTIONS.length - 1)) * 100
-                        }%`,
+                        width: `${(yearIndex / (YEAR_OPTIONS.length - 1)) * 100}%`,
                       }}
                     />
                   </div>
@@ -590,6 +578,7 @@ export function JoinForm() {
             </Field>
 
             <ContinueButton
+              onBack={() => attemptNavigation(-1)}
               disabled={!isJoinStepComplete(1, form)}
               onClick={() => attemptNavigation(1)}
             />
@@ -659,7 +648,10 @@ export function JoinForm() {
               </div>
             </Field>
 
-            <ContinueButton onClick={() => attemptNavigation(1)} />
+            <ContinueButton
+              onBack={() => attemptNavigation(-1)}
+              onClick={() => attemptNavigation(1)}
+            />
           </FormSection>
         </FormStepScreen>
 
@@ -700,7 +692,10 @@ export function JoinForm() {
               </p>
             </Field>
 
-            <ContinueButton onClick={() => attemptNavigation(1)} />
+            <ContinueButton
+              onBack={() => attemptNavigation(-1)}
+              onClick={() => attemptNavigation(1)}
+            />
           </FormSection>
         </FormStepScreen>
 
@@ -728,16 +723,25 @@ export function JoinForm() {
               </span>
             </label>
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <Button
+                type="button"
+                size="lg"
+                variant="outline"
+                onClick={() => attemptNavigation(-1)}
+                className="min-h-11 flex-1 rounded-full sm:flex-none"
+              >
+                Back
+              </Button>
               <Button
                 type="submit"
                 size="lg"
                 disabled={!canSubmit}
-                className="rounded-full disabled:cursor-not-allowed"
+                className="min-h-11 flex-1 rounded-full disabled:cursor-not-allowed sm:flex-none"
               >
-                Submit application →
+                Submit application
               </Button>
-              <p className="text-xs text-muted-foreground">
+              <p className="basis-full text-xs text-muted-foreground">
                 {canSubmit
                   ? "You're all set."
                   : "Name, email, GitHub, Discord and consent unlock this."}

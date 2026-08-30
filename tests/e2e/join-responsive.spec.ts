@@ -46,7 +46,6 @@ test("mobile wizard stays in normal document flow", async ({ page }, testInfo) =
   await page.getByRole("link", { name: "Scroll to get started" }).click();
 
   const shell = page.getByTestId("join-form-shell");
-  const card = page.getByTestId("join-form-card");
   await expect(shell).toBeInViewport();
   await expect(page.getByRole("heading", { name: "Who's applying" })).toBeVisible();
 
@@ -85,7 +84,7 @@ test("mobile wizard advances, goes back, and retains values", async ({ page }, t
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page.getByRole("heading", { name: "What you want to build" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Back" }).click();
+  await page.getByRole("button", { name: "Back", exact: true }).click();
   await expect(page.getByLabel("GitHub")).toHaveValue("github.com/test-user");
   await expect(page.getByLabel("Discord")).toHaveValue("test-user");
 });
@@ -97,4 +96,43 @@ test("desktop keeps scroll snapping and validation", async ({ page }, testInfo) 
   const timeline = page.locator("[data-scroll-video-timeline]");
   await expect(timeline).toHaveCSS("scroll-snap-type", /y mandatory/);
   await expect(page.getByRole("button", { name: "Continue" })).toBeDisabled();
+});
+
+test("mobile wizard completes all five steps", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "mobile-standard");
+
+  await page.getByRole("link", { name: "Scroll to get started" }).click();
+  await page.getByLabel("Full name").fill("Test User");
+  await page.getByLabel("Email address").fill("test@example.com");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+
+  await page.getByLabel("GitHub").fill("github.com/test-user");
+  await page.getByLabel("Discord").fill("test-user");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+
+  await expect(page.getByRole("heading", { name: "In your words" })).toBeVisible();
+  await page.getByLabel("Why do you want to join IEESEC?").fill("To build with the team.");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+
+  await expect(page.getByRole("heading", { name: "Send it" })).toBeVisible();
+  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Submit application" }).click();
+  await expect(page.getByRole("heading", { name: /Thanks, Test/ })).toBeVisible();
+});
+
+test("reduced motion keeps the background on its poster frame", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  await page.getByRole("link", { name: "Scroll to get started" }).click();
+  await page.getByLabel("Full name").fill("Test User");
+  await page.getByLabel("Email address").fill("test@example.com");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+
+  const currentTime = await page
+    .locator("video")
+    .evaluate((element: HTMLVideoElement) => element.currentTime);
+  expect(currentTime).toBeLessThan(0.05);
 });

@@ -22,8 +22,24 @@ export function Footbar() {
           {/* Description Subcontainer */}
           <div className="col-span-2">
             <div className="flex items-center gap-3 mb-3">
-              {/*edw tha exei kai to logo*/}
-              <span className="text-xl font-bold tracking-tight text-primary">IEESEC</span>
+              <img
+                data-testid="footer-logo-black"
+                src="/images/brand/ieesec-logo-black.svg"
+                alt="IEESEC"
+                width={366}
+                height={322}
+                loading="lazy"
+                className="h-auto w-24 dark:hidden"
+              />
+              <img
+                data-testid="footer-logo-white"
+                src="/images/brand/ieesec-logo-white.svg"
+                alt="IEESEC"
+                width={366}
+                height={322}
+                loading="lazy"
+                className="hidden h-auto w-24 dark:block"
+              />
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
               The Software Engineering Student Team of&nbsp;
