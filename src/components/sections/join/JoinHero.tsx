@@ -16,7 +16,7 @@ export function JoinHero() {
           <p className="mt-3 max-w-lg text-sm text-white/80 leading-relaxed">
             Fill in your info and we will contact you!
             <br></br>
-            Name, email, GitHub and Discord required.
+            Required fields are marked as you go.
           </p>
         </Reveal>
 

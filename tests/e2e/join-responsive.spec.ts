@@ -95,11 +95,24 @@ test("desktop keeps scroll snapping and validation", async ({ page }, testInfo) 
   await page.getByRole("link", { name: "Scroll to get started" }).click();
   const timeline = page.locator("[data-scroll-video-timeline]");
   await expect(timeline).toHaveCSS("scroll-snap-type", /y mandatory/);
+  await expect(page.getByRole("slider", { name: "Year of study" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Continue" })).toBeDisabled();
+});
+
+test("touch layouts use the native year selector", async ({ page }, testInfo) => {
+  test.skip(!isMobileProject(testInfo.project.name));
+
+  await page.getByRole("link", { name: "Scroll to get started" }).click();
+  await expect(page.getByRole("combobox", { name: "Year of study" })).toBeVisible();
+  await expect(page.getByRole("slider", { name: "Year of study" })).toBeHidden();
 });
 
 test("mobile wizard completes all five steps", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile-standard");
+
+  await page.route("**/api/join-application", (route) =>
+    route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true}' }),
+  );
 
   await page.getByRole("link", { name: "Scroll to get started" }).click();
   await page.getByLabel("Full name").fill("Test User");
@@ -109,10 +122,22 @@ test("mobile wizard completes all five steps", async ({ page }, testInfo) => {
   await page.getByLabel("GitHub").fill("github.com/test-user");
   await page.getByLabel("Discord").fill("test-user");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
+
+  await page
+    .getByRole("button", { name: "Web Development (Frontend/Backend)", exact: true })
+    .click();
+  await page.getByRole("radio", { name: "Experience level 3" }).click();
+  await page.getByRole("radio", { name: "Participate as a regular member: Moderately" }).click();
+  await page.getByRole("radio", { name: "Help organize events: A little" }).click();
+  await page.getByRole("radio", { name: "Volunteer or present workshops: Not at all" }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
 
   await expect(page.getByRole("heading", { name: "In your words" })).toBeVisible();
-  await page.getByLabel("Why do you want to join IEESEC?").fill("To build with the team.");
+  await page
+    .getByLabel(
+      "Do you have a specific idea for a project or an initiative that you'd like us to carry out together?",
+    )
+    .fill("To build with the team.");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
 
   await expect(page.getByRole("heading", { name: "Send it" })).toBeVisible();

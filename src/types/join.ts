@@ -1,33 +1,31 @@
-export type ApplicantStatus = "Student" | "Alumnus" | "Other";
-
 export type InterestArea =
-  | "Frontend"
-  | "Backend"
-  | "DevOps"
-  | "Design/UX"
-  | "Mobile"
-  | "AI/ML"
-  | "Cybersecurity"
-  | "Not sure yet";
+  | "Web Development (Frontend/Backend)"
+  | "Mobile Development (iOS/Android)"
+  | "Data Science / Machine Learning / AI"
+  | "Embedded Systems / IoT Software"
+  | "Game Development"
+  | "Software Testing / Quality Assurance"
+  | "DevOps / Cloud Computing"
+  | "DSA";
 
-export type ExperienceLevel = "Beginner" | "Some projects" | "Comfortable";
+export type ExperienceLevel = 1 | 2 | 3 | 4 | 5;
 
-export interface AvailabilityOption {
-  value: string;
-  label: string;
-}
+export type ParticipationPreference = "regularMember" | "eventOrganizer" | "workshopVolunteer";
+
+export type ParticipationRating = "none" | "low" | "medium" | "high";
+
+export type ParticipationPreferences = Record<ParticipationPreference, ParticipationRating | null>;
 
 export interface JoinFormData {
   fullName: string;
   email: string;
   year: string;
-  status: ApplicantStatus | null;
   github: string;
   linkedin: string;
   discord: string;
   interests: InterestArea[];
   experience: ExperienceLevel | null;
-  availability: string | null;
+  participationPreferences: ParticipationPreferences;
   motivation: string;
   builtSomething: string;
   consent: boolean;

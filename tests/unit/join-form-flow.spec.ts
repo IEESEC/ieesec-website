@@ -11,13 +11,16 @@ const completeForm: JoinFormData = {
   fullName: "Test User",
   email: "test@example.com",
   year: "1st year",
-  status: null,
   github: "github.com/test-user",
   linkedin: "",
   discord: "test-user",
-  interests: [],
-  experience: null,
-  availability: null,
+  interests: ["Web Development (Frontend/Backend)"],
+  experience: 3,
+  participationPreferences: {
+    regularMember: "high",
+    eventOrganizer: "medium",
+    workshopVolunteer: "low",
+  },
   motivation: "",
   builtSomething: "",
   consent: true,
@@ -34,6 +37,16 @@ test("required steps block forward navigation until complete", () => {
 test("back navigation clamps to the first step", () => {
   expect(getNextJoinStep(0, -1, completeForm)).toBe(0);
   expect(getNextJoinStep(3, -1, completeForm)).toBe(2);
+});
+
+test("interests, experience, and participation choices gate the third step", () => {
+  expect(isJoinStepComplete(2, completeForm)).toBe(true);
+  expect(
+    isJoinStepComplete(2, {
+      ...completeForm,
+      participationPreferences: { ...completeForm.participationPreferences, eventOrganizer: null },
+    }),
+  ).toBe(false);
 });
 
 test("step progress is clamped and reaches one on the final step", () => {

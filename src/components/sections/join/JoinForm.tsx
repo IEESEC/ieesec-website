@@ -1,19 +1,41 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import type {
+  ExperienceLevel,
+  InterestArea,
+  JoinFormData,
+  ParticipationPreference,
+  ParticipationRating,
+} from "@/types/join";
+import {
+  AlertTriangle,
+  BrainCircuit,
+  Cloud,
+  Code2,
+  Cpu,
+  Gamepad2,
+  GitFork,
+  Link2,
+  MessageCircle,
+  Network,
+  Smartphone,
+  TestTubeDiagonal,
+  type LucideIcon,
+} from "lucide-react";
 import { Reveal } from "@/components/ui/animations/fade-up";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { JoinFormData } from "@/types/join";
 import {
-  AVAILABILITY_OPTIONS,
   EMPTY_JOIN_FORM,
   EXPERIENCE_LEVELS,
   INTEREST_AREAS,
   MAX_TEXTAREA_LENGTH,
+  PARTICIPATION_RATINGS,
+  PARTICIPATION_ROWS,
   YEAR_OPTIONS,
 } from "./data";
-import { Field, OptionRow, Pill, fieldInputClass } from "./FormField";
+import { Field, fieldInputClass } from "./FormField";
 import { FormSection } from "./FormSection";
 import {
   getNextJoinStep,
@@ -58,6 +80,224 @@ function canScrollWithin(element: HTMLElement, direction: -1 | 1): boolean {
   }
 
   return element.scrollTop > 1;
+}
+
+const INTEREST_ICONS: Record<InterestArea, LucideIcon> = {
+  "Web Development (Frontend/Backend)": Code2,
+  "Mobile Development (iOS/Android)": Smartphone,
+  "Data Science / Machine Learning / AI": BrainCircuit,
+  "Embedded Systems / IoT Software": Cpu,
+  "Game Development": Gamepad2,
+  "Software Testing / Quality Assurance": TestTubeDiagonal,
+  "DevOps / Cloud Computing": Cloud,
+  DSA: Network,
+};
+
+interface IconTextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  icon: LucideIcon;
+}
+
+function IconTextInput({ icon: Icon, className, ...props }: IconTextInputProps) {
+  return (
+    <div className="relative">
+      <Icon
+        aria-hidden
+        className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+      />
+      <input {...props} className={cn(fieldInputClass, "pl-10", className)} />
+    </div>
+  );
+}
+
+interface YearSliderProps {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function YearSlider({ id, value, onChange }: YearSliderProps) {
+  const selectedIndex = Math.max(YEAR_OPTIONS.indexOf(value), 0);
+
+  return (
+    <>
+      <select
+        id={`${id}-mobile`}
+        aria-label="Year of study"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className={cn(fieldInputClass, "join-year-mobile")}
+      >
+        {YEAR_OPTIONS.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </select>
+
+      <div className="join-year-desktop rounded-2xl border border-border bg-background/70 px-4 py-4">
+        <div className="flex items-center justify-between gap-4">
+          <span className="text-sm font-medium text-foreground">{YEAR_OPTIONS[selectedIndex]}</span>
+          <span className="text-xs text-muted-foreground">Drag to select</span>
+        </div>
+        <input
+          id={id}
+          type="range"
+          min={0}
+          max={YEAR_OPTIONS.length - 1}
+          step={1}
+          value={selectedIndex}
+          onChange={(event) => onChange(YEAR_OPTIONS[Number(event.target.value)])}
+          aria-label="Year of study"
+          aria-valuetext={YEAR_OPTIONS[selectedIndex]}
+          className="mt-4 h-2 w-full cursor-grab appearance-none rounded-full bg-muted accent-primary active:cursor-grabbing"
+        />
+        <div className="mt-3 grid grid-cols-5 gap-1 text-center text-[0.68rem] font-medium text-muted-foreground">
+          {YEAR_OPTIONS.map((year, index) => (
+            <button
+              key={year}
+              type="button"
+              onClick={() => onChange(year)}
+              className={cn(
+                "min-h-11 rounded-md px-1 py-1 transition-colors cursor-pointer",
+                selectedIndex === index && "bg-primary/10 text-primary",
+              )}
+            >
+              {year.replace(" year", "")}
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+interface InterestCardProps {
+  area: InterestArea;
+  selected: boolean;
+  onClick: () => void;
+}
+
+function InterestCard({ area, selected, onClick }: InterestCardProps) {
+  const Icon = INTEREST_ICONS[area];
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={selected}
+      className={cn(
+        "group flex min-h-16 items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-xs font-semibold transition-all cursor-pointer",
+        selected
+          ? "border-primary bg-primary text-primary-foreground shadow-sm"
+          : "border-border bg-background/70 text-foreground hover:border-primary/60 hover:bg-primary/5",
+      )}
+    >
+      <span
+        className={cn(
+          "flex size-8 shrink-0 items-center justify-center rounded-md transition-colors",
+          selected ? "bg-white/18" : "bg-primary/10 text-primary group-hover:bg-primary/15",
+        )}
+      >
+        <Icon aria-hidden className="size-4" />
+      </span>
+      <span className="leading-snug">{area}</span>
+    </button>
+  );
+}
+
+interface ExperienceScaleProps {
+  value: ExperienceLevel | null;
+  onChange: (value: ExperienceLevel) => void;
+}
+
+function ExperienceScale({ value, onChange }: ExperienceScaleProps) {
+  return (
+    <div
+      role="radiogroup"
+      aria-label="Programming experience level"
+      className="rounded-2xl border border-border bg-background/70 p-4"
+    >
+      <div className="grid grid-cols-5 gap-2 text-center text-sm font-medium text-foreground">
+        {EXPERIENCE_LEVELS.map((level) => (
+          <span key={level}>{level}</span>
+        ))}
+      </div>
+      <div className="mt-3 grid grid-cols-5 gap-2">
+        {EXPERIENCE_LEVELS.map((level) => (
+          <button
+            key={level}
+            type="button"
+            role="radio"
+            aria-checked={value === level}
+            onClick={() => onChange(level)}
+            className={cn(
+              "mx-auto size-5 rounded-full border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25",
+              value === level
+                ? "border-primary bg-primary ring-4 ring-primary/15"
+                : "border-muted-foreground/55 bg-background hover:border-primary",
+            )}
+          >
+            <span className="sr-only">Experience level {level}</span>
+          </button>
+        ))}
+      </div>
+      <div className="mt-4 flex justify-between gap-4 text-xs text-muted-foreground">
+        <span className="max-w-40 leading-snug">Beginner: I know the basics.</span>
+        <span className="max-w-56 text-right leading-snug">
+          Advanced: I feel comfortable with real projects, frameworks, and Git.
+        </span>
+      </div>
+    </div>
+  );
+}
+
+interface ParticipationMatrixProps {
+  values: Record<ParticipationPreference, ParticipationRating | null>;
+  onChange: (preference: ParticipationPreference, rating: ParticipationRating) => void;
+}
+
+function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-border bg-background/70">
+      <div className="grid grid-cols-[minmax(5.8rem,1fr)_repeat(4,minmax(2.7rem,0.55fr))] border-b border-border px-2 py-2 text-center text-[0.62rem] font-semibold text-muted-foreground sm:grid-cols-[minmax(7.5rem,1.1fr)_repeat(4,minmax(3.6rem,0.7fr))] sm:px-3 sm:text-[0.68rem]">
+        <span className="text-left">Preference</span>
+        {PARTICIPATION_RATINGS.map((rating) => (
+          <span key={rating.value} className="leading-tight">
+            {rating.label}
+          </span>
+        ))}
+      </div>
+      {PARTICIPATION_ROWS.map((row) => (
+        <div
+          key={row.value}
+          className="grid grid-cols-[minmax(5.8rem,1fr)_repeat(4,minmax(2.7rem,0.55fr))] items-center border-b border-border/80 px-2 py-3 last:border-b-0 sm:grid-cols-[minmax(7.5rem,1.1fr)_repeat(4,minmax(3.6rem,0.7fr))] sm:px-3"
+        >
+          <p className="pr-3 text-xs font-semibold leading-snug text-foreground">{row.label}</p>
+          {PARTICIPATION_RATINGS.map((rating) => (
+            <button
+              key={rating.value}
+              type="button"
+              role="radio"
+              aria-checked={values[row.value] === rating.value}
+              aria-label={`${row.label}: ${rating.label}`}
+              onClick={() => onChange(row.value, rating.value)}
+              className="mx-auto flex size-5 items-center justify-center rounded-full border border-muted-foreground/45 bg-background transition-all cursor-pointer hover:border-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25"
+            >
+              <span
+                aria-hidden
+                className={cn(
+                  "size-2.5 rounded-full transition-transform",
+                  values[row.value] === rating.value
+                    ? "scale-100 bg-primary"
+                    : "scale-0 bg-transparent",
+                )}
+              />
+            </button>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 interface ContinueButtonProps {
@@ -105,6 +345,7 @@ interface JoinFormProps {
 export function JoinForm({ onActiveStepChange }: JoinFormProps) {
   const [form, setForm] = useState<JoinFormData>(EMPTY_JOIN_FORM);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [blockedMessage, setBlockedMessage] = useState<string | null>(null);
   const scrollerRef = useRef<HTMLFormElement>(null);
@@ -114,45 +355,14 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
   const navigationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const applicationRef = useRef<HTMLDivElement>(null);
   const desktopScrollModeRef = useRef(false);
-  const yearSliderRef = useRef<HTMLDivElement>(null);
-  const yearDraggingRef = useRef(false);
   const ids = useId();
 
   formStateRef.current = form;
 
-  const canSubmit =
-    isJoinStepComplete(0, form) && isJoinStepComplete(1, form) && isJoinStepComplete(4, form);
+  const canSubmit = Array.from({ length: JOIN_FORM_STEP_COUNT }, (_, step) =>
+    isJoinStepComplete(step, form),
+  ).every(Boolean);
   const progress = ((activeStep + 1) / JOIN_FORM_STEP_COUNT) * 100;
-  const yearIndex = Math.max(YEAR_OPTIONS.indexOf(form.year), 0);
-
-  const setYearFromPointer = useCallback((clientX: number) => {
-    const slider = yearSliderRef.current;
-
-    if (!slider) return;
-
-    const bounds = slider.getBoundingClientRect();
-    const position = Math.min(Math.max((clientX - bounds.left) / bounds.width, 0), 1);
-    const nextYearIndex = Math.round(position * (YEAR_OPTIONS.length - 1));
-
-    setForm((currentForm) => ({ ...currentForm, year: YEAR_OPTIONS[nextYearIndex] }));
-  }, []);
-
-  const handleYearPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    yearDraggingRef.current = true;
-    event.currentTarget.setPointerCapture(event.pointerId);
-    setYearFromPointer(event.clientX);
-  };
-
-  const handleYearPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (yearDraggingRef.current) setYearFromPointer(event.clientX);
-  };
-
-  const handleYearPointerEnd = (event: React.PointerEvent<HTMLDivElement>) => {
-    yearDraggingRef.current = false;
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-  };
 
   useEffect(() => {
     onActiveStepChange?.(activeStep);
@@ -203,13 +413,15 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
     if (!desktopScrollModeRef.current) {
       invalidField?.scrollIntoView({ block: "center", behavior: "smooth" });
     }
-    setBlockedMessage(
-      step === 0
-        ? "Add your name and a valid email to continue."
-        : step === 1
-          ? "Add your GitHub and Discord details to continue."
-          : "Complete the required field before continuing.",
-    );
+    const messages = [
+      "Add your name and a valid email to continue.",
+      "Add your GitHub and Discord to continue.",
+      "Choose an interest, your experience level, and every participation preference.",
+      "Complete the required field before continuing.",
+      "Consent is required before submitting.",
+    ];
+
+    setBlockedMessage(messages[step] ?? "Complete the required fields before continuing.");
   }, []);
 
   const attemptNavigation = useCallback(
@@ -346,11 +558,31 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
     if (direction && attemptNavigation(direction)) event.preventDefault();
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
+    if (!canSubmit || isSubmitting) return;
+
+    setIsSubmitting(true);
     setBlockedMessage(null);
-    setSubmitted(true);
+
+    try {
+      const response = await fetch("/api/join-application", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        setBlockedMessage("Application could not be submitted. Please try again in a moment.");
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setBlockedMessage("Application could not be submitted. Please try again in a moment.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetForm = () => {
@@ -404,10 +636,16 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
             <p aria-live="polite" className="min-h-5 font-medium text-white">
               {blockedMessage}
             </p>
-            <p className="shrink-0 font-mono tabular-nums">
-              {String(activeStep + 1).padStart(2, "0")} /{" "}
-              {String(JOIN_FORM_STEP_COUNT).padStart(2, "0")}
-            </p>
+            <div className="flex shrink-0 items-center gap-3">
+              <span className="hidden items-center gap-1.5 rounded-full border border-amber-300/45 bg-amber-400/14 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-amber-100 sm:inline-flex">
+                <AlertTriangle aria-hidden className="size-3" />
+                Experimental feature
+              </span>
+              <p className="font-mono tabular-nums">
+                {String(activeStep + 1).padStart(2, "0")} /{" "}
+                {String(JOIN_FORM_STEP_COUNT).padStart(2, "0")}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -424,7 +662,7 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
             step="01"
             eyebrow="Start with the basics"
             title="Who's applying"
-            description="Start with your contact details so we know who is applying."
+            description="Tell us who you are and where you are in your studies."
           >
             <Field label="Full name" required htmlFor={`${ids}-name`}>
               <input
@@ -450,81 +688,13 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
               />
             </Field>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <Field label="Year" optional>
-                <select
-                  id={`${ids}-year-mobile`}
-                  aria-label="Year of study"
+            <div className="grid grid-cols-1 gap-5">
+              <Field label="Year" required>
+                <YearSlider
+                  id={`${ids}-year`}
                   value={form.year}
-                  onChange={(event) =>
-                    setForm((currentForm) => ({ ...currentForm, year: event.target.value }))
-                  }
-                  className={cn(fieldInputClass, "md:hidden")}
-                >
-                  {YEAR_OPTIONS.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-                <div
-                  ref={yearSliderRef}
-                  onPointerDown={handleYearPointerDown}
-                  onPointerMove={handleYearPointerMove}
-                  onPointerUp={handleYearPointerEnd}
-                  onPointerCancel={handleYearPointerEnd}
-                  className="relative hidden touch-none select-none py-1 md:block"
-                >
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-x-6 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-white/20"
-                  >
-                    <div
-                      className="h-full rounded-full bg-primary transition-[width] duration-200 motion-reduce:transition-none"
-                      style={{
-                        width: `${(yearIndex / (YEAR_OPTIONS.length - 1)) * 100}%`,
-                      }}
-                    />
-                  </div>
-                  <input
-                    id={`${ids}-year`}
-                    type="range"
-                    min={0}
-                    max={YEAR_OPTIONS.length - 1}
-                    step={1}
-                    value={yearIndex}
-                    aria-label="Year of study"
-                    aria-valuetext={form.year}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, year: YEAR_OPTIONS[Number(e.target.value)] }))
-                    }
-                    className="sr-only"
-                  />
-                  <div className="pointer-events-none relative z-10 grid h-14 grid-cols-5 items-center">
-                    {YEAR_OPTIONS.map((year, index) => {
-                      const selected = form.year === year;
-                      const label = selected ? year.replace(" year", "") : String(index + 1);
-
-                      return (
-                        <button
-                          key={year}
-                          type="button"
-                          aria-label={`Select ${year}`}
-                          aria-pressed={selected}
-                          onClick={() => setForm((f) => ({ ...f, year }))}
-                          className={cn(
-                            "pointer-events-auto mx-auto flex h-12 w-12 items-center justify-center rounded-full border text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-3 focus-visible:ring-primary/20",
-                            selected
-                              ? "border-primary bg-primary text-primary-foreground"
-                              : "border-border bg-card text-muted-foreground hover:border-primary/50 hover:text-foreground",
-                          )}
-                        >
-                          {label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+                  onChange={(year) => setForm((f) => ({ ...f, year }))}
+                />
               </Field>
             </div>
 
@@ -540,43 +710,42 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
             step="02"
             eyebrow="Your online trail"
             title="Your links"
-            description="Share your GitHub and Discord so we can see your work and reach you. LinkedIn is optional."
+            description="GitHub helps us see your work. Discord helps us reach you quickly."
           >
             <Field label="GitHub" required htmlFor={`${ids}-github`}>
-              <input
+              <IconTextInput
                 id={`${ids}-github`}
                 type="text"
                 required
+                icon={GitFork}
                 placeholder="github.com/username"
                 value={form.github}
                 onChange={(e) => setForm((f) => ({ ...f, github: e.target.value }))}
-                className={fieldInputClass}
               />
             </Field>
 
             <Field label="Discord" required htmlFor={`${ids}-discord`}>
-              <input
+              <IconTextInput
                 id={`${ids}-discord`}
                 type="text"
                 required
+                icon={MessageCircle}
                 placeholder="username"
                 value={form.discord}
                 onChange={(e) => setForm((f) => ({ ...f, discord: e.target.value }))}
-                className={fieldInputClass}
               />
             </Field>
 
             <Field label="LinkedIn" optional htmlFor={`${ids}-linkedin`}>
-              <input
+              <IconTextInput
                 id={`${ids}-linkedin`}
                 type="text"
+                icon={Link2}
                 placeholder="linkedin.com/in/username"
                 value={form.linkedin}
                 onChange={(e) => setForm((f) => ({ ...f, linkedin: e.target.value }))}
-                className={fieldInputClass}
               />
             </Field>
-
             <ContinueButton
               onBack={() => attemptNavigation(-1)}
               disabled={!isJoinStepComplete(1, form)}
@@ -590,15 +759,14 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
             step="03"
             eyebrow="What pulls you in"
             title="What you want to build"
-            description="Signals, not commitments. They help us place you on a project you'll enjoy."
+            description="Pick the areas and team activities that sound worth your time."
           >
-            <Field label="Areas of interest" optional hint="pick any, or none">
-              <div className="flex flex-wrap gap-2">
+            <Field label="Areas of interest" required hint="Pick at least one.">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {INTEREST_AREAS.map((area) => (
-                  <Pill
+                  <InterestCard
                     key={area}
-                    label={area}
-                    prefix="✓"
+                    area={area}
                     selected={form.interests.includes(area)}
                     onClick={() =>
                       setForm((f) => ({ ...f, interests: toggleInArray(f.interests, area) }))
@@ -610,46 +778,37 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
 
             <Field
               label="Experience level"
-              optional
-              hint="Beginner is the most common answer here. Really."
+              required
+              hint="Choose the point that feels closest today."
             >
-              <div className="flex flex-wrap gap-2">
-                {EXPERIENCE_LEVELS.map((level) => (
-                  <Pill
-                    key={level}
-                    label={level}
-                    selected={form.experience === level}
-                    onClick={() =>
-                      setForm((f) => ({
-                        ...f,
-                        experience: f.experience === level ? null : level,
-                      }))
-                    }
-                  />
-                ))}
-              </div>
+              <ExperienceScale
+                value={form.experience}
+                onChange={(experience) => setForm((f) => ({ ...f, experience }))}
+              />
             </Field>
 
-            <Field label="Availability" optional>
-              <div className="flex flex-col gap-2">
-                {AVAILABILITY_OPTIONS.map((option) => (
-                  <OptionRow
-                    key={option.value}
-                    label={option.label}
-                    selected={form.availability === option.value}
-                    onClick={() =>
-                      setForm((f) => ({
-                        ...f,
-                        availability: f.availability === option.value ? null : option.value,
-                      }))
-                    }
-                  />
-                ))}
-              </div>
+            <Field
+              label="How much would you like to participate in these parts of the team?"
+              required
+              hint="Select one option per row."
+            >
+              <ParticipationMatrix
+                values={form.participationPreferences}
+                onChange={(preference, rating) =>
+                  setForm((f) => ({
+                    ...f,
+                    participationPreferences: {
+                      ...f.participationPreferences,
+                      [preference]: rating,
+                    },
+                  }))
+                }
+              />
             </Field>
 
             <ContinueButton
               onBack={() => attemptNavigation(-1)}
+              disabled={!isJoinStepComplete(2, form)}
               onClick={() => attemptNavigation(1)}
             />
           </FormSection>
@@ -662,12 +821,16 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
             title="In your words"
             description="A couple of sentences is plenty."
           >
-            <Field label="Why do you want to join IEESEC?" optional htmlFor={`${ids}-motivation`}>
+            <Field
+              label="Do you have a specific idea for a project or an initiative that you'd like us to carry out together?"
+              optional
+              htmlFor={`${ids}-motivation`}
+            >
               <textarea
                 id={`${ids}-motivation`}
                 rows={3}
                 maxLength={MAX_TEXTAREA_LENGTH}
-                placeholder={' "I want to learn Git properly", "I have a project idea",... '}
+                placeholder="A workshop, an open-source tool, a campus app, a research idea..."
                 value={form.motivation}
                 onChange={(e) => setForm((f) => ({ ...f, motivation: e.target.value }))}
                 className={cn(fieldInputClass, "resize-none")}
@@ -677,12 +840,16 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
               </p>
             </Field>
 
-            <Field label="Tell us about something you've built" optional htmlFor={`${ids}-built`}>
+            <Field
+              label="Share links to the projects you're most proud of"
+              optional
+              htmlFor={`${ids}-built`}
+            >
               <textarea
                 id={`${ids}-built`}
                 rows={3}
                 maxLength={MAX_TEXTAREA_LENGTH}
-                placeholder="A course project, a bot, a website for a friend, or a Minecraft mod."
+                placeholder="GitHub repos, demos, write-ups, apps, bots, notebooks, videos..."
                 value={form.builtSomething}
                 onChange={(e) => setForm((f) => ({ ...f, builtSomething: e.target.value }))}
                 className={cn(fieldInputClass, "resize-none")}
@@ -736,15 +903,13 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
               <Button
                 type="submit"
                 size="lg"
-                disabled={!canSubmit}
+                disabled={!canSubmit || isSubmitting}
                 className="min-h-11 flex-1 rounded-full disabled:cursor-not-allowed sm:flex-none"
               >
-                Submit application
+                {isSubmitting ? "Submitting…" : "Submit application"}
               </Button>
               <p className="basis-full text-xs text-muted-foreground">
-                {canSubmit
-                  ? "You're all set."
-                  : "Name, email, GitHub, Discord and consent unlock this."}
+                {canSubmit ? "You're all set." : "Complete the required form steps to unlock this."}
               </p>
             </div>
           </FormSection>

@@ -330,7 +330,19 @@
 }
 
 /* The join form uses scroll snapping only on desktop-class, fine-pointer devices. */
+.join-year-desktop {
+  display: none;
+}
+
 @media (min-width: 768px) and (pointer: fine) {
+  .join-year-mobile {
+    display: none;
+  }
+
+  .join-year-desktop {
+    display: block;
+  }
+
   .join-form-shell {
     height: 100svh;
     scroll-margin-top: 0;

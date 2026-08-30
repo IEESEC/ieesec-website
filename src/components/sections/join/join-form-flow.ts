@@ -12,6 +12,10 @@ export function getJoinStepProgress(step: number): number {
   return clampedStep / finalStep;
 }
 
+function hasAllParticipationPreferences(form: JoinFormData): boolean {
+  return Object.values(form.participationPreferences).every(Boolean);
+}
+
 export function isJoinStepComplete(step: number, form: JoinFormData): boolean {
   if (step === 0) {
     return form.fullName.trim().length > 0 && EMAIL_PATTERN.test(form.email.trim());
@@ -19,6 +23,12 @@ export function isJoinStepComplete(step: number, form: JoinFormData): boolean {
 
   if (step === 1) {
     return form.github.trim().length > 0 && form.discord.trim().length > 0;
+  }
+
+  if (step === 2) {
+    return (
+      form.interests.length > 0 && form.experience !== null && hasAllParticipationPreferences(form)
+    );
   }
 
   if (step === JOIN_FORM_STEP_COUNT - 1) return form.consent;
@@ -42,13 +52,12 @@ export function isJoinFormDirty(form: JoinFormData): boolean {
     form.fullName.trim().length > 0 ||
     form.email.trim().length > 0 ||
     form.year !== DEFAULT_YEAR ||
-    form.status !== null ||
     form.github.trim().length > 0 ||
     form.linkedin.trim().length > 0 ||
     form.discord.trim().length > 0 ||
     form.interests.length > 0 ||
     form.experience !== null ||
-    form.availability !== null ||
+    Object.values(form.participationPreferences).some(Boolean) ||
     form.motivation.trim().length > 0 ||
     form.builtSomething.trim().length > 0 ||
     form.consent
