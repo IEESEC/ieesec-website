@@ -24,10 +24,10 @@ test("selects a responsive, seek-friendly video tier", async ({ page }, testInfo
 });
 
 test("logos use the supplied SVG artwork", async ({ page }) => {
-  await expect(page.getByRole("img", { name: "IEESEC" }).first()).toHaveAttribute(
-    "src",
-    "/images/brand/ieesec-navbar.svg",
-  );
+  const navbarLogo = page.getByRole("img", { name: "IEESEC" }).first();
+  await expect(navbarLogo).toHaveAttribute("src", "/images/brand/ieesec-navbar.svg");
+  await expect(navbarLogo).toHaveAttribute("fetchpriority", "high");
+  await expect(navbarLogo).toHaveAttribute("decoding", "sync");
 
   await page.locator("footer").scrollIntoViewIfNeeded();
   await expect(page.getByTestId("footer-logo-black")).toHaveAttribute(

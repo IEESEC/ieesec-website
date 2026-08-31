@@ -110,14 +110,18 @@ export function Navbar() {
             <a
               href="/#home"
               onClick={(e) => handleNavClick(e, "home")}
-              className="flex items-center gap-3 group"
+              aria-label="IEESEC home"
+              className="group flex items-center gap-3"
             >
               <img
                 src="/images/brand/ieesec-navbar.svg"
                 alt="IEESEC"
                 width={178}
                 height={44}
-                className="h-7 w-auto brightness-0 transition-opacity group-hover:opacity-80 dark:brightness-100"
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
+                className="h-7 w-auto text-transparent brightness-0 transition-opacity group-hover:opacity-80 dark:brightness-100"
               />
             </a>
 
