@@ -1,24 +1,26 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
+import { LanguageToggle } from "./language-toggle";
+import { Link, usePathname } from "@/i18n/navigation";
 
 const navItems = [
-  { label: "Home", href: "/#home", sectionId: "home" },
-  { label: "Team", href: "/#team", sectionId: "team" },
-  { label: "Projects", href: "/#projects", sectionId: "projects" },
-  { label: "Stack", href: "/#tech-stack", sectionId: "tech-stack" },
-  { label: "Events", href: "/#events", sectionId: "events" },
-  { label: "Blog", href: "/#blog", sectionId: "blog" },
-];
+  { labelKey: "home", href: "/#home", sectionId: "home" },
+  { labelKey: "team", href: "/#team", sectionId: "team" },
+  { labelKey: "projects", href: "/#projects", sectionId: "projects" },
+  { labelKey: "stack", href: "/#tech-stack", sectionId: "tech-stack" },
+  { labelKey: "events", href: "/#events", sectionId: "events" },
+  { labelKey: "blog", href: "/#blog", sectionId: "blog" },
+] as const;
 
 export function Navbar() {
   const pathname = usePathname();
+  const t = useTranslations("navigation");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
@@ -88,13 +90,13 @@ export function Navbar() {
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
       // Let the root hash URL navigate from secondary pages such as /join.
-      if (window.location.pathname !== "/") return;
+      if (pathname !== "/") return;
 
       e.preventDefault();
       setActiveSection(sectionId);
       scrollTo(sectionId);
     },
-    [scrollTo],
+    [pathname, scrollTo],
   );
 
   return (
@@ -110,7 +112,7 @@ export function Navbar() {
             <a
               href="/#home"
               onClick={(e) => handleNavClick(e, "home")}
-              aria-label="IEESEC home"
+              aria-label={t("homeLabel")}
               className="group flex items-center gap-3"
             >
               <img
@@ -129,7 +131,7 @@ export function Navbar() {
             <nav className="hidden md:flex items-center gap-0.5">
               {navItems.map((item) => (
                 <Link
-                  key={item.label}
+                  key={item.sectionId}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.sectionId)}
                   className={cn(
@@ -139,19 +141,20 @@ export function Navbar() {
                       : "text-foreground/80 hover:text-primary hover:bg-primary/25",
                   )}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </Link>
               ))}
             </nav>
 
             {/* Desktop actions */}
             <div className="hidden md:flex items-center gap-2">
+              <LanguageToggle />
               <ThemeToggle />
               <Button
                 asChild
                 className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/85 transition-colors"
               >
-                <Link href="/join">Join Us</Link>
+                <Link href="/join">{t("join")}</Link>
               </Button>
             </div>
 
@@ -160,7 +163,7 @@ export function Navbar() {
               <button
                 className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground hover:bg-muted cursor-pointer"
                 onClick={toggleSidebar}
-                aria-label="Open menu"
+                aria-label={t("openMenu")}
                 aria-controls="mobile-navigation"
                 aria-expanded={isSidebarOpen}
               >
@@ -192,17 +195,20 @@ export function Navbar() {
           <button
             onClick={toggleSidebar}
             className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
-            aria-label="Close menu"
+            aria-label={t("closeMenu")}
           >
             <X className="h-5 w-5" />
           </button>
-          <ThemeToggle />
+          <div className="flex items-center gap-1">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
         </div>
 
         <nav className="flex flex-col gap-1">
           {navItems.map((item) => (
             <Link
-              key={item.label}
+              key={item.sectionId}
               href={item.href}
               onClick={(e) => {
                 handleNavClick(e, item.sectionId);
@@ -215,7 +221,7 @@ export function Navbar() {
                   : "text-muted-foreground hover:text-primary hover:bg-primary/15",
               )}
             >
-              {item.label}
+              {t(item.labelKey)}
             </Link>
           ))}
           <div className="mt-6 px-4">
@@ -224,7 +230,7 @@ export function Navbar() {
               className="w-full h-10 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/85 transition-colors"
             >
               <Link href="/join" onClick={toggleSidebar}>
-                Join Us
+                {t("join")}
               </Link>
             </Button>
           </div>

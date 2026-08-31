@@ -6,12 +6,14 @@ import { cn } from "@/lib/utils";
 import type { TechCategory } from "@/types/tech";
 import { techStack } from "./tech-stack/data";
 import { TechCard } from "./tech-stack/TechCard";
+import { useTranslations } from "next-intl";
 
 const CATEGORIES: TechCategory[] = ["Frontend", "Backend", "DevOps", "Tools", "Languages"];
 
 type Filter = TechCategory | "All";
 
 export function TechStackSection() {
+  const t = useTranslations("sections");
   const [filter, setFilter] = useState<Filter>("All");
 
   const filtered = useMemo(
@@ -25,11 +27,9 @@ export function TechStackSection() {
         <div className="mb-12">
           <Reveal direction="left">
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-              Our Tech Stack
+              {t("techTitle")}
             </h1>
-            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              The languages, frameworks, and tools we use to build and ship our projects.
-            </p>
+            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("techDescription")}</p>
           </Reveal>
 
           <Reveal direction="right" className="mt-8">
@@ -47,7 +47,7 @@ export function TechStackSection() {
                       : "border-border text-muted-foreground hover:border-accent/50 hover:text-foreground",
                   )}
                 >
-                  {category}
+                  {category === "All" ? t("filters.all") : t(`filters.${category}`)}
                 </button>
               ))}
             </div>

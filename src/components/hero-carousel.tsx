@@ -6,48 +6,48 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 type HeroSlide = {
   image: string;
-  alt: string;
+  altKey: "campus1" | "campus2" | "campus3";
 };
 
 const slides: HeroSlide[] = [
   {
     image: "/images/hero/campus3.jpg",
-    alt: "International Hellenic University campus viewed from the surrounding grounds",
+    altKey: "campus3",
   },
   {
     image: "/images/hero/campus2.jpg",
-    alt: "International Hellenic University campus building",
+    altKey: "campus2",
   },
   {
     image: "/images/hero/campus1.jpg",
-    alt: "International Hellenic University campus exterior",
+    altKey: "campus1",
   },
 ];
 
-const headline = "Turn theory into working software.";
-
 function TypingHeadline() {
+  const t = useTranslations("hero");
   return (
     <h1
-      aria-label={headline}
+      aria-label={t("headlineLabel")}
       className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(2.35rem,12vw,3.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_30px_rgb(255,255,255,0.35)] dark:text-white dark:drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)] sm:text-7xl lg:text-8xl"
     >
       <span aria-hidden="true" className="hero-typewriter block">
-        <span className="hero-typewriter-line" data-text="Turn theory">
-          <span className="hero-typewriter-reveal">Turn theory</span>
+        <span className="hero-typewriter-line" data-text={t("line1")}>
+          <span className="hero-typewriter-reveal">{t("line1")}</span>
           <span aria-hidden="true" className="hero-typewriter-caret" />
         </span>
-        <span className="hero-typewriter-line" data-text="into working">
+        <span className="hero-typewriter-line" data-text={`${t("line2Start")} ${t("line2Accent")}`}>
           <span className="hero-typewriter-reveal">
-            into <span className="text-primary">working</span>
+            {t("line2Start")} <span className="text-primary">{t("line2Accent")}</span>
           </span>
           <span aria-hidden="true" className="hero-typewriter-caret" />
         </span>
-        <span className="hero-typewriter-line text-primary" data-text="software.">
-          <span className="hero-typewriter-reveal">software.</span>
+        <span className="hero-typewriter-line text-primary" data-text={t("line3")}>
+          <span className="hero-typewriter-reveal">{t("line3")}</span>
           <span aria-hidden="true" className="hero-typewriter-caret" />
         </span>
       </span>
@@ -56,6 +56,8 @@ function TypingHeadline() {
 }
 
 export function HeroCarousel() {
+  const t = useTranslations("hero");
+  const controls = useTranslations("controls");
   const autoplayPlugin = React.useRef(
     Autoplay({
       delay: 5000,
@@ -107,7 +109,7 @@ export function HeroCarousel() {
 
   return (
     <section
-      aria-label="IEESEC introduction"
+      aria-label={t("regionLabel")}
       aria-roledescription="carousel"
       className="relative isolate min-h-dvh w-full min-w-0 max-w-full overflow-hidden"
       role="region"
@@ -118,7 +120,7 @@ export function HeroCarousel() {
             <div
               key={slide.image}
               aria-hidden={selectedIndex !== index}
-              aria-label={`Slide ${index + 1} of ${slides.length}`}
+              aria-label={t("slide", { current: index + 1, total: slides.length })}
               aria-roledescription="slide"
               className="relative min-h-dvh min-w-0 shrink-0 grow-0 basis-full"
               role="group"
@@ -126,7 +128,7 @@ export function HeroCarousel() {
               {/* Background image */}
               <Image
                 src={slide.image}
-                alt={slide.alt}
+                alt={t(`images.${slide.altKey}`)}
                 fill
                 className="object-cover"
                 loading="eager"
@@ -149,22 +151,21 @@ export function HeroCarousel() {
           <div className="pointer-events-auto max-w-3xl">
             <TypingHeadline />
             <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-foreground/80 drop-shadow-[0_2px_10px_rgb(255,255,255,0.35)] dark:text-white/80 dark:drop-shadow-[0_2px_10px_rgb(0,0,0,0.5)] sm:text-lg">
-              From curiosity to shipped projects, shared knowledge, and a community that keeps
-              moving with you.
+              {t("description")}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 sm:gap-x-6 sm:gap-y-4">
               <a
                 href="#projects"
                 className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-lg shadow-accent/20 transition-[background-color,transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-accent/30 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
               >
-                Explore projects
+                {t("projectsCta")}
                 <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
               <a
                 href="#team"
                 className="group inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold text-foreground/85 transition-colors duration-300 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground dark:text-white/85 dark:hover:text-white dark:focus-visible:outline-white"
               >
-                Meet the team
+                {t("teamCta")}
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
             </div>
@@ -183,14 +184,14 @@ export function HeroCarousel() {
           </span>
           <div
             className="flex items-center gap-0.5 sm:gap-1.5"
-            aria-label="Choose background image"
+            aria-label={t("chooseImage")}
             role="group"
           >
             {slides.map((slide, index) => (
               <button
                 key={slide.image}
                 aria-current={selectedIndex === index ? "true" : undefined}
-                aria-label={`Show slide ${index + 1}`}
+                aria-label={t("showSlide", { number: index + 1 })}
                 onClick={() => scrollTo(index)}
                 className="group flex h-11 w-8 items-center justify-center rounded-full px-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground dark:focus-visible:outline-white"
               >
@@ -207,14 +208,14 @@ export function HeroCarousel() {
           </div>
           <div className="ml-0.5 flex items-center gap-0.5 border-l border-foreground/15 pl-0.5 sm:ml-1 sm:gap-1 sm:pl-1 dark:border-white/15">
             <button
-              aria-label="Previous slide"
+              aria-label={controls("previousSlide")}
               className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-200 hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:h-9 sm:w-9 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
               onClick={scrollPrev}
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
-              aria-label={isAutoplaying ? "Pause background carousel" : "Play background carousel"}
+              aria-label={isAutoplaying ? t("pause") : t("play")}
               aria-pressed={isAutoplaying}
               className="flex h-11 w-11 items-center justify-center rounded-full bg-foreground/10 text-foreground transition-colors duration-200 hover:bg-foreground/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:h-9 sm:w-9 dark:bg-white/10 dark:text-white dark:hover:bg-white/20 dark:focus-visible:outline-white"
               onClick={toggleAutoplay}
@@ -226,7 +227,7 @@ export function HeroCarousel() {
               )}
             </button>
             <button
-              aria-label="Next slide"
+              aria-label={controls("nextSlide")}
               className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-200 hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:h-9 sm:w-9 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
               onClick={scrollNext}
             >

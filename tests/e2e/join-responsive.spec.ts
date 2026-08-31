@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 const isMobileProject = (name: string) => name.startsWith("mobile-");
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/join");
+  await page.goto("/en/join");
 });
 
 test("selects a responsive, seek-friendly video tier", async ({ page }, testInfo) => {
@@ -121,7 +121,7 @@ test("mobile wizard stays in normal document flow", async ({ page }, testInfo) =
 
   const shell = page.getByTestId("join-form-shell");
   await expect(shell).toBeInViewport();
-  await expect(page.getByRole("heading", { name: "Who's applying" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Who is applying" })).toBeVisible();
 
   const layout = await page.evaluate(() => {
     const shellElement = document.querySelector<HTMLElement>('[data-testid="join-form-shell"]');
@@ -202,14 +202,14 @@ test("mobile wizard completes all five steps", async ({ page }, testInfo) => {
     .click();
   await page.getByRole("radio", { name: "Experience level 3" }).click();
   await page.getByRole("radio", { name: "Participate as a regular member: Moderately" }).click();
-  await page.getByRole("radio", { name: "Help organize events: A little" }).click();
+  await page.getByRole("radio", { name: "Help organise events: A little" }).click();
   await page.getByRole("radio", { name: "Volunteer or present workshops: Not at all" }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
 
   await expect(page.getByRole("heading", { name: "In your words" })).toBeVisible();
   await page
     .getByLabel(
-      "Do you have a specific idea for a project or an initiative that you'd like us to carry out together?",
+      "Do you have a specific idea for a project or an initiative that you would like us to carry out together?",
     )
     .fill("To build with the team.");
   await page.getByRole("button", { name: "Continue", exact: true }).click();

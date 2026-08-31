@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export const fieldInputClass = cn(
   "min-h-11 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-base text-foreground md:min-h-0 md:text-sm",
@@ -16,12 +17,13 @@ interface FieldProps {
 }
 
 export function Field({ label, optional, required, htmlFor, hint, children }: FieldProps) {
+  const t = useTranslations("join");
   return (
     <div>
       <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-medium text-foreground">
         {label}
         {required && <span className="text-primary"> *</span>}
-        {optional && <span className="text-muted-foreground font-normal"> (optional)</span>}
+        {optional && <span className="text-muted-foreground font-normal"> ({t("optional")})</span>}
       </label>
       {children}
       {hint && <p className="mt-1.5 text-xs text-muted-foreground">{hint}</p>}

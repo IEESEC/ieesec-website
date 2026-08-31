@@ -10,11 +10,11 @@ import {
 const completeForm: JoinFormData = {
   fullName: "Test User",
   email: "test@example.com",
-  year: "1st year",
+  year: "year1",
   github: "github.com/test-user",
   linkedin: "",
   discord: "test-user",
-  interests: ["Web Development (Frontend/Backend)"],
+  interests: ["web"],
   experience: 3,
   participationPreferences: {
     regularMember: "high",

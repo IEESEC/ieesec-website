@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Fragment, type ReactNode } from "react";
 import { Card } from "@/components/ui/card";
 import type { Member } from "./Member";
+import { useTranslations } from "next-intl";
 
 function SocialLink({
   href,
@@ -28,9 +29,11 @@ function SocialLink({
 }
 
 export default function MemberCard({ member }: { member: Member }) {
+  const t = useTranslations("team");
   const fullName = `${member.firstname} ${member.lastname}`;
   const nameParts = fullName.split(/\s+/);
-  const [role, specialization = ""] = member.role.split("|").map((value) => value.trim());
+  const translatedRole = t(`members.${member.id}.role`);
+  const [role, specialization = ""] = translatedRole.split("|").map((value) => value.trim());
   const specializationLabel = specialization.replace(/\s+developer$/i, "");
 
   return (
@@ -38,7 +41,7 @@ export default function MemberCard({ member }: { member: Member }) {
       <div className="relative aspect-video overflow-hidden bg-muted">
         <Image
           src={member.image}
-          alt=""
+          alt={fullName}
           fill
           sizes="(min-width: 1024px) 320px, (min-width: 640px) 384px, 100vw"
           className="object-cover grayscale-[15%] contrast-[1.04] transition-[filter] duration-700 ease-out group-hover:grayscale-0 motion-reduce:transition-none"
@@ -48,7 +51,10 @@ export default function MemberCard({ member }: { member: Member }) {
           className="absolute inset-0 bg-linear-to-t from-card via-transparent to-transparent opacity-70"
         />
         <div className="absolute right-4 bottom-4 z-10 flex gap-2">
-          <SocialLink href={member.socialLinks.linkedIn} label={`${fullName} on LinkedIn`}>
+          <SocialLink
+            href={member.socialLinks.linkedIn}
+            label={t("socialLabel", { name: fullName, network: "LinkedIn" })}
+          >
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -65,7 +71,10 @@ export default function MemberCard({ member }: { member: Member }) {
             </svg>
           </SocialLink>
 
-          <SocialLink href={member.socialLinks.github} label={`${fullName} on GitHub`}>
+          <SocialLink
+            href={member.socialLinks.github}
+            label={t("socialLabel", { name: fullName, network: "GitHub" })}
+          >
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -81,7 +90,10 @@ export default function MemberCard({ member }: { member: Member }) {
             </svg>
           </SocialLink>
 
-          <SocialLink href={member.socialLinks.twitter} label={`${fullName} on Twitter`}>
+          <SocialLink
+            href={member.socialLinks.twitter}
+            label={t("socialLabel", { name: fullName, network: "Twitter" })}
+          >
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -122,7 +134,9 @@ export default function MemberCard({ member }: { member: Member }) {
             {specializationLabel}
           </span>
         ) : null}
-        <p className="mt-3 text-sm leading-5 text-muted-foreground">{member.bio}</p>
+        <p className="mt-3 text-sm leading-5 text-muted-foreground">
+          {t(`members.${member.id}.bio`)}
+        </p>
       </div>
     </Card>
   );
