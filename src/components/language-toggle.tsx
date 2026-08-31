@@ -7,7 +7,12 @@ import { localizePathname, type Locale } from "@/i18n/routing";
 
 function GreekFlag() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 27 18" className="h-[15px] w-[22px] rounded-[2px]">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 27 18"
+      preserveAspectRatio="xMidYMid slice"
+      className="size-5 overflow-hidden rounded-full ring-1 ring-foreground/15"
+    >
       <rect width="27" height="18" fill="#0d5eaf" />
       <path d="M0 2h27v2H0zm0 4h27v2H0zm0 4h27v2H0zm0 4h27v2H0z" fill="#fff" />
       <rect width="10" height="10" fill="#0d5eaf" />
@@ -18,7 +23,12 @@ function GreekFlag() {
 
 function BritishFlag() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 60 36" className="h-[15px] w-[22px] rounded-[2px]">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 60 36"
+      preserveAspectRatio="xMidYMid slice"
+      className="size-5 overflow-hidden rounded-full ring-1 ring-foreground/15"
+    >
       <rect width="60" height="36" fill="#012169" />
       <path d="M0 0 60 36M60 0 0 36" stroke="#fff" strokeWidth="8" />
       <path d="M0 0 60 36M60 0 0 36" stroke="#c8102e" strokeWidth="4" />
