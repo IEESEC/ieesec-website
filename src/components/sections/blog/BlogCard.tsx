@@ -23,7 +23,7 @@ function formatDate(date: string) {
 export default function BlogCard({ post }: { post: BlogPost }) {
   return (
     <Link href={`/blog/${post.slug}`} className="group block h-full">
-      <Card className="h-full p-0 rounded-2xl border border-border bg-card overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary/60">
+      <Card className="h-full overflow-hidden rounded-2xl border border-border bg-card p-0 transition-all duration-300 hover:border-primary/60 hover:shadow-sm dark:hover:shadow-lg">
         <div className="relative aspect-video overflow-hidden">
           <Image
             src={post.image}
@@ -40,7 +40,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-block bg-secondary/10 text-secondary-foreground px-2 py-1 rounded-full text-xs"
+                  className="inline-block rounded-full bg-secondary px-2 py-1 text-xs text-secondary-foreground"
                 >
                   {tag}
                 </span>
@@ -49,15 +49,15 @@ export default function BlogCard({ post }: { post: BlogPost }) {
           )}
 
           <h2 className="text-lg font-semibold leading-snug">{post.title}</h2>
-          <p className="mt-2 text-sm text-primary/70 line-clamp-3">{post.excerpt}</p>
+          <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{post.excerpt}</p>
         </CardContent>
 
         <CardFooter className="pt-8 pb-6 mt-auto">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary/10 text-xs font-medium ring-1 ring-foreground/5">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-medium ring-1 ring-border">
               {initials(post.author)}
             </div>
-            <div className="text-xs text-primary/70">
+            <div className="text-xs text-muted-foreground">
               <p className="font-medium text-foreground">{post.author}</p>
               <p>
                 {formatDate(post.date)} · {post.readTimeMinutes} min read

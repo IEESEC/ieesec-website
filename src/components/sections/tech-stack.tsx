@@ -27,7 +27,7 @@ export function TechStackSection() {
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
               Our Tech Stack
             </h1>
-            <p className="mt-4 text-lg text-primary/70 max-w-2xl">
+            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
               The languages, frameworks, and tools we use to build and ship our projects.
             </p>
           </Reveal>

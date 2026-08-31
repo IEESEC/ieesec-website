@@ -11,7 +11,7 @@ export function TeamSection() {
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
               Meet our Team
             </h1>
-            <p className="mt-4 text-lg text-primary/70 max-w-2xl">
+            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
               Engineering with purpose. Building as one.
             </p>
           </Reveal>

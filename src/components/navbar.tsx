@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -17,13 +18,25 @@ const navItems = [
 ];
 
 export function Navbar() {
+  const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
-  // Scroll Observer gia na kanei highlight to active section.
   useEffect(() => {
+    if (pathname !== "/") {
+      setActiveSection("");
+      return;
+    }
+
+    const getActiveSectionFromHash = () => {
+      const sectionId = window.location.hash.slice(1);
+      return navItems.some((item) => item.sectionId === sectionId) ? sectionId : "home";
+    };
+
+    setActiveSection(getActiveSectionFromHash());
+
     const sectionIds = navItems.map((item) => item.sectionId);
     const observers: IntersectionObserver[] = [];
 
@@ -47,17 +60,21 @@ export function Navbar() {
     });
 
     const handleScroll = () => {
-      if (window.scrollY < window.innerHeight * 0.5) {
+      if (!window.location.hash && window.scrollY < window.innerHeight * 0.5) {
         setActiveSection("home");
       }
     };
+    const handleHashChange = () => setActiveSection(getActiveSectionFromHash());
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("hashchange", handleHashChange);
 
     return () => {
       observers.forEach((o) => o.disconnect());
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("hashchange", handleHashChange);
     };
-  }, []);
+  }, [pathname]);
 
   const scrollTo = useCallback((sectionId: string) => {
     if (sectionId === "home") {
@@ -74,6 +91,7 @@ export function Navbar() {
       if (window.location.pathname !== "/") return;
 
       e.preventDefault();
+      setActiveSection(sectionId);
       scrollTo(sectionId);
     },
     [scrollTo],
@@ -83,17 +101,28 @@ export function Navbar() {
     <>
       <header className="fixed top-0 left-0 right-0 z-40 w-full max-w-full overflow-x-clip">
         <div className="mx-auto max-w-7xl px-4 pt-3">
-          <div className="relative flex h-14 items-center justify-between rounded-2xl bg-background/20 dark:bg-background/30 backdrop-blur-md border border-primary/10 px-5 shadow-lg shadow-black/3 dark:shadow-black/20">
+          <div
+            data-testid="navbar-surface"
+            className="relative flex h-14 items-center justify-between rounded-2xl border border-foreground/15 bg-background/68 px-5 shadow-lg shadow-foreground/5 backdrop-blur-md backdrop-saturate-150 dark:border-primary/10 dark:bg-background/30 dark:shadow-lg dark:shadow-black/20 dark:backdrop-blur-md dark:backdrop-saturate-150"
+          >
             <div className="absolute -bottom-px left-1/2 -translate-x-1/2 w-1/2 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
             {/* Logo */}
             <a
               href="/#home"
               onClick={(e) => handleNavClick(e, "home")}
-              className="flex items-center gap-3 group"
+              aria-label="IEESEC home"
+              className="group flex items-center gap-3"
             >
-              <span className="text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
-                IEEESEC
-              </span>
+              <img
+                src="/images/brand/ieesec-navbar.svg"
+                alt="IEESEC"
+                width={178}
+                height={44}
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
+                className="h-7 w-auto text-transparent brightness-0 transition-opacity group-hover:opacity-80 dark:brightness-100"
+              />
             </a>
 
             {/* Desktop nav */}
@@ -107,7 +136,7 @@ export function Navbar() {
                     "px-3.5 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200",
                     activeSection === item.sectionId
                       ? "text-primary-foreground bg-primary"
-                      : "text-foreground/70 hover:text-primary hover:bg-primary/25",
+                      : "text-foreground/80 hover:text-primary hover:bg-primary/25",
                   )}
                 >
                   {item.label}

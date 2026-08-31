@@ -5,6 +5,13 @@ export const JOIN_FORM_STEP_COUNT = 5;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+$/;
 const DEFAULT_YEAR = "1st year";
 
+export function getJoinStepProgress(step: number): number {
+  const finalStep = JOIN_FORM_STEP_COUNT - 1;
+  const clampedStep = Math.min(Math.max(step, 0), finalStep);
+
+  return clampedStep / finalStep;
+}
+
 function hasAllParticipationPreferences(form: JoinFormData): boolean {
   return Object.values(form.participationPreferences).every(Boolean);
 }

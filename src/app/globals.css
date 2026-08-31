@@ -62,7 +62,6 @@
     min-width: 0;
     background-color: var(--background);
     color: var(--foreground);
-    transition: color 150ms ease;
 
     @apply font-sans antialiased bg-background text-foreground;
   }
@@ -73,9 +72,6 @@
   }
   * {
     @apply border-border outline-ring/50;
-    transition-property: background-color, border-color;
-    transition-duration: 250ms;
-    transition-timing-function: ease;
   }
   html {
     @apply font-sans;
@@ -93,18 +89,18 @@
   --popover-foreground: oklch(0.185 0.02 230);
   /* Primary = brand color #508CA4 */
   --primary: oklch(0.588 0.065 220);
-  --primary-foreground: oklch(0.99 0.002 220);
+  --primary-foreground: oklch(0.185 0.02 230);
   /* Secondary = desaturated cool slate */
   --secondary: oklch(0.94 0.012 230);
   --secondary-foreground: oklch(0.28 0.025 230);
   --muted: oklch(0.955 0.008 220);
-  --muted-foreground: oklch(0.48 0.02 230);
+  --muted-foreground: oklch(0.39 0.025 230);
   /* Accent = saturated cobalt blue, paired with the steel-blue primary */
   --accent: oklch(0.58 0.14 245);
-  --accent-foreground: oklch(0.99 0.002 220);
+  --accent-foreground: oklch(0.185 0.02 230);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.905 0.015 220);
-  --input: oklch(0.905 0.015 220);
+  --border: oklch(0.82 0.018 220);
+  --input: oklch(0.62 0.025 220);
   --ring: oklch(0.588 0.065 220);
   --chart-1: oklch(0.588 0.065 220);
   --chart-2: oklch(0.58 0.14 245);
@@ -115,10 +111,10 @@
   --sidebar: oklch(0.975 0.005 220);
   --sidebar-foreground: oklch(0.185 0.02 230);
   --sidebar-primary: oklch(0.588 0.065 220);
-  --sidebar-primary-foreground: oklch(0.99 0.002 220);
+  --sidebar-primary-foreground: oklch(0.185 0.02 230);
   --sidebar-accent: oklch(0.94 0.012 230);
   --sidebar-accent-foreground: oklch(0.28 0.025 230);
-  --sidebar-border: oklch(0.905 0.015 220);
+  --sidebar-border: oklch(0.82 0.018 220);
   --sidebar-ring: oklch(0.588 0.065 220);
 }
 
@@ -160,13 +156,27 @@
   --sidebar-ring: oklch(0.66 0.075 220);
 }
 
-/* Hero carousel: uniform dark overlay for text readability */
+/* Hero carousel: light mode keeps the campus imagery bright and editorial. */
 .hero-overlay {
+  background: oklch(0.99 0.002 220 / 0.52);
+}
+
+.dark .hero-overlay {
   background: oklch(0 0 0 / 0.5);
 }
 
 /* Hero carousel: bottom gradient fade into page background */
 .hero-fade {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 50%,
+    oklch(0.99 0.002 220 / 0.58) 92%,
+    var(--background) 100%
+  );
+}
+
+.dark .hero-fade {
   background: linear-gradient(
     to bottom,
     transparent 0%,
@@ -181,6 +191,15 @@
   background: radial-gradient(
     circle,
     transparent 0%,
+    oklch(1 0 0 / 0.08) 50%,
+    oklch(1 0 0 / 0.38) 100%
+  );
+}
+
+.dark .hero-vignette {
+  background: radial-gradient(
+    circle,
+    transparent 0%,
     oklch(0 0 0 / 0.2) 50%,
     oklch(0 0 0 / 0.7) 100%
   );
@@ -190,10 +209,54 @@
 .hero-content-wash {
   background: linear-gradient(
     90deg,
+    oklch(0.99 0.002 220 / 0.78) 0%,
+    oklch(0.99 0.002 220 / 0.38) 46%,
+    transparent 78%
+  );
+}
+
+.dark .hero-content-wash {
+  background: linear-gradient(
+    90deg,
     oklch(0.05 0.02 230 / 0.78) 0%,
     oklch(0.05 0.02 230 / 0.38) 46%,
     transparent 78%
   );
+}
+
+/* Join video background: light mode uses an airy wash that still lets the campus footage lead. */
+.join-video-overlay {
+  background: oklch(0.99 0.002 220 / 0.52);
+}
+
+.dark .join-video-overlay {
+  background: rgb(2 6 23 / 0.58);
+}
+
+.join-video-wash {
+  background: linear-gradient(
+    90deg,
+    oklch(0.99 0.002 220 / 0.68),
+    transparent 55%,
+    oklch(0.99 0.002 220 / 0.34)
+  );
+}
+
+.dark .join-video-wash {
+  background: linear-gradient(90deg, rgba(2, 6, 23, 0.48), transparent 55%, rgba(2, 6, 23, 0.3));
+}
+
+.join-video-fade {
+  background: linear-gradient(
+    to top,
+    var(--background) 0%,
+    oklch(0.99 0.002 220 / 0.72) 55%,
+    transparent 100%
+  );
+}
+
+.dark .join-video-fade {
+  background: linear-gradient(to top, rgb(2 6 23 / 0.65), transparent);
 }
 
 /* CSS-Tricks-inspired stepped reveal with one caret moving across three responsive lines. */
@@ -326,5 +389,69 @@
 
   .hero-typewriter-caret {
     animation: none;
+  }
+}
+
+/* The join form uses scroll snapping only on desktop-class, fine-pointer devices. */
+.join-year-desktop {
+  display: none;
+}
+
+@media (min-width: 768px) and (pointer: fine) {
+  .join-year-mobile {
+    display: none;
+  }
+
+  .join-year-desktop {
+    display: block;
+  }
+
+  .join-form-shell {
+    height: 100svh;
+    scroll-margin-top: 0;
+  }
+
+  .join-form-progress {
+    position: absolute;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: none;
+    pointer-events: none;
+  }
+
+  .join-form-progress-meta {
+    position: absolute;
+    inset-inline: 0;
+    top: 5.35rem;
+    padding-block: 0;
+  }
+
+  .join-form-timeline {
+    height: 100svh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+  }
+
+  .join-form-timeline::-webkit-scrollbar {
+    display: none;
+  }
+
+  .join-form-step,
+  .join-form-step[aria-hidden="true"] {
+    display: flex !important;
+    height: 100svh;
+    min-height: 0;
+    align-items: center;
+    padding-top: 8rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .join-form-card {
+    max-height: calc(100svh - 10rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 }

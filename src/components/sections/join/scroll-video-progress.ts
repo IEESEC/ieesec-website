@@ -10,6 +10,18 @@ const MAX_SEEK_STEP_SECONDS = 1.2;
 const MIN_SEEK_STEP_SECONDS = 0.08;
 export const VIDEO_SEEK_TOLERANCE_SECONDS = 0.025;
 
+interface ScrollVideoWarmupPreferences {
+  reduceMotion: boolean;
+  saveData: boolean;
+}
+
+export function shouldWarmScrollVideo({
+  reduceMotion,
+  saveData,
+}: ScrollVideoWarmupPreferences): boolean {
+  return !reduceMotion && !saveData;
+}
+
 export function getSmoothedVideoTime(currentTime: number, targetTime: number): number {
   const difference = targetTime - currentTime;
   const distance = Math.abs(difference);
