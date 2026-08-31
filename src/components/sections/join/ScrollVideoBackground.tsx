@@ -187,9 +187,12 @@ export function ScrollVideoBackground({ activeStep }: ScrollVideoBackgroundProps
         />
         <source src="/videos/join-scroll-background.mp4" type="video/mp4" />
       </video>
-      <div className="absolute inset-0 bg-slate-950/58" />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,6,23,0.48),transparent_55%,rgba(2,6,23,0.3))]" />
-      <div className="absolute inset-x-0 bottom-0 h-48 bg-linear-to-t from-slate-950/65 to-transparent" />
+      <div data-testid="join-video-overlay" className="join-video-overlay absolute inset-0" />
+      <div data-testid="join-video-wash" className="join-video-wash absolute inset-0" />
+      <div
+        data-testid="join-video-fade"
+        className="join-video-fade absolute inset-x-0 bottom-0 h-48"
+      />
     </div>
   );
 }

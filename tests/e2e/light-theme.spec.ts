@@ -96,7 +96,23 @@ test("light hero and navbar use artifact-free terminal surfaces", async ({ page 
 
   const navbar = page.getByRole("banner").locator(":scope > div > div");
   const [, , , navbarAlpha] = await renderedColor(navbar, "backgroundColor");
-  expect(navbarAlpha / 255).toBeGreaterThanOrEqual(0.9);
+  expect(navbarAlpha / 255).toBeGreaterThan(0.55);
+  expect(navbarAlpha / 255).toBeLessThan(0.9);
+  await expect(navbar).toHaveCSS("backdrop-filter", /blur/);
+
+  const heroOverlay = page.locator(".hero-overlay").first();
+  const [overlayRed, overlayGreen, overlayBlue] = await renderedColor(
+    heroOverlay,
+    "backgroundColor",
+  );
+  expect(Math.min(overlayRed, overlayGreen, overlayBlue)).toBeGreaterThan(180);
+
+  const contentWash = page.locator(".hero-content-wash").first();
+  const contentWashGradient = await contentWash.evaluate(
+    (element) => getComputedStyle(element).backgroundImage,
+  );
+  expect(contentWashGradient).toMatch(/lab\(9[0-9]/);
+  expect(contentWashGradient).not.toMatch(/lab\((?:[0-8]?[0-9]|90)\./);
 
   const fadeProbe = page.locator(".hero-fade").first();
   const gradient = await fadeProbe.evaluate((element) => {
@@ -120,7 +136,7 @@ test("light hero and navbar use artifact-free terminal surfaces", async ({ page 
     };
     return convert(red) * 0.2126 + convert(green) * 0.7152 + convert(blue) * 0.0722;
   }, gradient);
-  expect(fadeLuminance).toBeLessThan(0.15);
+  expect(fadeLuminance).toBeGreaterThan(0.75);
 });
 
 test("light theme supporting text and controls meet WCAG AA", async ({ page }, testInfo) => {

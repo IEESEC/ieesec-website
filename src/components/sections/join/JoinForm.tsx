@@ -608,7 +608,7 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
     >
       <div
         data-testid="join-progress"
-        className="join-form-progress sticky inset-x-0 top-[4.25rem] z-30 bg-slate-950/80 backdrop-blur-md"
+        className="join-form-progress sticky inset-x-0 top-[4.25rem] z-30"
       >
         <div
           role="progressbar"
@@ -616,7 +616,7 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
           aria-valuemin={1}
           aria-valuemax={JOIN_FORM_STEP_COUNT}
           aria-valuenow={activeStep + 1}
-          className="h-1 overflow-hidden bg-white/15"
+          className="h-1 overflow-hidden bg-foreground/15 dark:bg-white/15"
         >
           <div
             className="h-full origin-left bg-primary transition-transform duration-500 ease-out motion-reduce:transition-none"
@@ -624,12 +624,12 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
           />
         </div>
         <div className="join-form-progress-meta px-4 py-2.5 md:px-6">
-          <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 text-xs text-white/80">
-            <p aria-live="polite" className="min-h-5 font-medium text-white">
+          <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 text-xs text-foreground/75 dark:text-white/80">
+            <p aria-live="polite" className="min-h-5 font-medium text-foreground dark:text-white">
               {blockedMessage}
             </p>
             <div className="flex shrink-0 items-center gap-3">
-              <span className="hidden items-center gap-1.5 rounded-full border border-amber-300/45 bg-amber-400/14 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-amber-100 sm:inline-flex">
+              <span className="hidden items-center gap-1.5 rounded-full border border-amber-700/65 bg-amber-100/95 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-amber-950 shadow-sm shadow-amber-950/10 sm:inline-flex dark:border-amber-300/45 dark:bg-amber-400/14 dark:text-amber-100 dark:shadow-none">
                 <AlertTriangle aria-hidden className="size-3" />
                 Experimental feature
               </span>

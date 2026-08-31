@@ -50,6 +50,70 @@ test("footer keeps the original opaque surface", async ({ page }) => {
   expect(backgroundColor).not.toMatch(/transparent|rgba?\(0,\s*0,\s*0(?:,|\s*\/).*0\)/);
 });
 
+test("light join hero uses a light video wash and page fade", async ({ page }, testInfo) => {
+  await page.addInitScript(() => localStorage.setItem("theme", "light"));
+  await page.reload();
+
+  const overlay = page.getByTestId("join-video-overlay");
+  await expect(overlay).toBeAttached();
+  const overlayColor = await overlay.evaluate(
+    (element) => getComputedStyle(element).backgroundColor,
+  );
+  expect(overlayColor).toMatch(/lab\(9[0-9]/);
+
+  const wash = page.getByTestId("join-video-wash");
+  const washGradient = await wash.evaluate((element) => getComputedStyle(element).backgroundImage);
+  expect(washGradient).toMatch(/255|lab\(9[0-9]/);
+  expect(washGradient).not.toContain("2, 6, 23");
+
+  const fade = page.getByTestId("join-video-fade");
+  const fadeGradient = await fade.evaluate((element) => getComputedStyle(element).backgroundImage);
+  expect(fadeGradient).toMatch(/lab\(9[0-9]/);
+  expect(fadeGradient).not.toContain("2, 6, 23");
+
+  await expect(page.getByRole("heading", { name: "Join our community!" })).toHaveCSS(
+    "color",
+    /lab\([0-9]/,
+  );
+
+  if (!isMobileProject(testInfo.project.name)) {
+    const warning = page.getByText("Experimental feature", { exact: true });
+    await expect(warning).toBeVisible();
+    const warningStyles = await warning.evaluate((element) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1;
+      canvas.height = 1;
+      const context = canvas.getContext("2d", { willReadFrequently: true });
+      if (!context) throw new Error("Canvas context is unavailable");
+      context.fillStyle = getComputedStyle(element).backgroundColor;
+      context.fillRect(0, 0, 1, 1);
+      const [red, green, blue, alpha] = context.getImageData(0, 0, 1, 1).data;
+      return { red, green, blue, alpha: alpha / 255 };
+    });
+    expect(warningStyles.alpha).toBeGreaterThan(0.75);
+    expect(Math.max(warningStyles.red, warningStyles.green, warningStyles.blue)).toBeGreaterThan(
+      120,
+    );
+  }
+});
+
+test("join progress chrome stays transparent in both themes", async ({ page }) => {
+  for (const theme of ["light", "dark"] as const) {
+    await page.evaluate((value) => localStorage.setItem("theme", value), theme);
+    await page.reload();
+
+    const progressColor = await page
+      .getByTestId("join-progress")
+      .evaluate((element) => getComputedStyle(element).backgroundColor);
+    const progressMetaColor = await page
+      .locator(".join-form-progress-meta")
+      .evaluate((element) => getComputedStyle(element).backgroundColor);
+
+    expect(progressColor).toMatch(/transparent|rgba?\(0,\s*0,\s*0(?:,|\s*\/).*0\)/);
+    expect(progressMetaColor).toMatch(/transparent|rgba?\(0,\s*0,\s*0(?:,|\s*\/).*0\)/);
+  }
+});
+
 test("mobile wizard stays in normal document flow", async ({ page }, testInfo) => {
   test.skip(!isMobileProject(testInfo.project.name));
 

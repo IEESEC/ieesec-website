@@ -33,7 +33,7 @@ function TypingHeadline() {
   return (
     <h1
       aria-label={headline}
-      className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(2.35rem,12vw,3.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-white drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)] sm:text-7xl lg:text-8xl"
+      className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(2.35rem,12vw,3.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_30px_rgb(255,255,255,0.35)] dark:text-white dark:drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)] sm:text-7xl lg:text-8xl"
     >
       <span aria-hidden="true" className="hero-typewriter block">
         <span className="hero-typewriter-line" data-text="Turn theory">
@@ -148,7 +148,7 @@ export function HeroCarousel() {
         <div className="mx-auto min-w-0 w-full max-w-7xl px-5 sm:px-10 md:absolute md:inset-x-0 md:bottom-0 md:pb-32 md:pt-32 lg:px-12 lg:pb-36">
           <div className="pointer-events-auto max-w-3xl">
             <TypingHeadline />
-            <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-white/80 drop-shadow-[0_2px_10px_rgb(0,0,0,0.5)] sm:text-lg">
+            <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-foreground/80 drop-shadow-[0_2px_10px_rgb(255,255,255,0.35)] dark:text-white/80 dark:drop-shadow-[0_2px_10px_rgb(0,0,0,0.5)] sm:text-lg">
               From curiosity to shipped projects, shared knowledge, and a community that keeps
               moving with you.
             </p>
@@ -162,7 +162,7 @@ export function HeroCarousel() {
               </a>
               <a
                 href="#team"
-                className="group inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold text-white/85 transition-colors duration-300 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                className="group inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold text-foreground/85 transition-colors duration-300 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground dark:text-white/85 dark:hover:text-white dark:focus-visible:outline-white"
               >
                 Meet the team
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -174,9 +174,9 @@ export function HeroCarousel() {
 
       {/* Carousel controls */}
       <div className="absolute inset-x-4 bottom-6 z-20 hidden min-w-0 items-center justify-center sm:bottom-8 sm:left-auto sm:right-10 sm:w-[min(32rem,calc(100%-3rem))] sm:justify-end md:flex">
-        <div className="flex max-w-full items-center gap-1 rounded-full border border-white/15 bg-black/20 p-1 pl-2 backdrop-blur-md sm:gap-3 sm:p-1.5 sm:pl-4">
+        <div className="flex max-w-full items-center gap-1 rounded-full border border-foreground/15 bg-background/65 p-1 pl-2 text-foreground shadow-sm backdrop-blur-sm sm:gap-3 sm:p-1.5 sm:pl-4 dark:border-white/15 dark:bg-black/20 dark:text-white dark:shadow-none dark:backdrop-blur-md">
           <span
-            className="hidden min-w-12 text-xs font-semibold tabular-nums text-white/75 sm:inline"
+            className="hidden min-w-12 text-xs font-semibold tabular-nums text-foreground/70 sm:inline dark:text-white/75"
             aria-hidden="true"
           >
             {String(selectedIndex + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
@@ -192,23 +192,23 @@ export function HeroCarousel() {
                 aria-current={selectedIndex === index ? "true" : undefined}
                 aria-label={`Show slide ${index + 1}`}
                 onClick={() => scrollTo(index)}
-                className="group flex h-11 w-8 items-center justify-center rounded-full px-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="group flex h-11 w-8 items-center justify-center rounded-full px-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground dark:focus-visible:outline-white"
               >
                 <span
                   className={cn(
                     "block h-1.5 rounded-full transition-[width,background-color] duration-300",
                     selectedIndex === index
                       ? "w-6 bg-primary"
-                      : "w-3 bg-white/30 group-hover:bg-white/60",
+                      : "w-3 bg-foreground/25 group-hover:bg-foreground/50 dark:bg-white/30 dark:group-hover:bg-white/60",
                   )}
                 />
               </button>
             ))}
           </div>
-          <div className="ml-0.5 flex items-center gap-0.5 border-l border-white/15 pl-0.5 sm:ml-1 sm:gap-1 sm:pl-1">
+          <div className="ml-0.5 flex items-center gap-0.5 border-l border-foreground/15 pl-0.5 sm:ml-1 sm:gap-1 sm:pl-1 dark:border-white/15">
             <button
               aria-label="Previous slide"
-              className="flex h-11 w-11 items-center justify-center rounded-full text-white/70 transition-colors duration-200 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-9 sm:w-9"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-200 hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:h-9 sm:w-9 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
               onClick={scrollPrev}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -216,7 +216,7 @@ export function HeroCarousel() {
             <button
               aria-label={isAutoplaying ? "Pause background carousel" : "Play background carousel"}
               aria-pressed={isAutoplaying}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors duration-200 hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-9 sm:w-9"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-foreground/10 text-foreground transition-colors duration-200 hover:bg-foreground/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:h-9 sm:w-9 dark:bg-white/10 dark:text-white dark:hover:bg-white/20 dark:focus-visible:outline-white"
               onClick={toggleAutoplay}
             >
               {isAutoplaying ? (
@@ -227,7 +227,7 @@ export function HeroCarousel() {
             </button>
             <button
               aria-label="Next slide"
-              className="flex h-11 w-11 items-center justify-center rounded-full text-white/70 transition-colors duration-200 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-9 sm:w-9"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-200 hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:h-9 sm:w-9 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
               onClick={scrollNext}
             >
               <ChevronRight className="h-4 w-4" />

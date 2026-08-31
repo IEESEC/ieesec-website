@@ -103,7 +103,7 @@ export function Navbar() {
         <div className="mx-auto max-w-7xl px-4 pt-3">
           <div
             data-testid="navbar-surface"
-            className="relative flex h-14 items-center justify-between rounded-2xl border border-border/80 bg-background/92 px-5 shadow-sm backdrop-blur-sm dark:border-primary/10 dark:bg-background/30 dark:shadow-lg dark:shadow-black/20 dark:backdrop-blur-md"
+            className="relative flex h-14 items-center justify-between rounded-2xl border border-foreground/15 bg-background/68 px-5 shadow-lg shadow-foreground/5 backdrop-blur-md backdrop-saturate-150 dark:border-primary/10 dark:bg-background/30 dark:shadow-lg dark:shadow-black/20 dark:backdrop-blur-md dark:backdrop-saturate-150"
           >
             <div className="absolute -bottom-px left-1/2 -translate-x-1/2 w-1/2 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
             {/* Logo */}
