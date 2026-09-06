@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { BlogPost } from "./BlogPost";
 import { useFormatter, useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 
 function initials(name: string) {
   return name
@@ -21,7 +20,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
   const tags = [t(`posts.${post.id}.tag1`), t(`posts.${post.id}.tag2`)];
 
   return (
-    <Link href={`/blog/${post.slug}`} className="group block h-full">
+    <article className="group block h-full">
       <Card className="h-full overflow-hidden rounded-2xl border border-border bg-card p-0 transition-all duration-300 hover:border-primary/60 hover:shadow-sm dark:hover:shadow-lg">
         <div className="relative aspect-video overflow-hidden">
           <Image
@@ -47,7 +46,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
             </div>
           )}
 
-          <h2 className="text-lg font-semibold leading-snug">{title}</h2>
+          <h3 className="text-lg font-semibold leading-snug">{title}</h3>
           <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">
             {t(`posts.${post.id}.excerpt`)}
           </p>
@@ -72,6 +71,6 @@ export default function BlogCard({ post }: { post: BlogPost }) {
           </div>
         </CardFooter>
       </Card>
-    </Link>
+    </article>
   );
 }

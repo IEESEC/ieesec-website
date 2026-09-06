@@ -9,7 +9,11 @@ export default function NotFound() {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-background">
-      <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 text-center">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="relative z-10 flex flex-1 flex-col items-center justify-center px-4 text-center"
+      >
         <Reveal direction="none">
           <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground/50">
             404

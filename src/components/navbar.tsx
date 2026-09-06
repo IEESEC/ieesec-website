@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageToggle } from "./language-toggle";
@@ -24,7 +24,61 @@ export function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
+  useEffect(() => {
+    if (!isSidebarOpen) return;
+    const sidebar = sidebarRef.current;
+    if (!sidebar) return;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const overflow = document.body.style.overflow;
+    const background = [...document.querySelectorAll<HTMLElement>("header, main, footer")].filter(
+      (element) => !sidebar.contains(element),
+    );
+    const previousInert = background.map((element) => element.inert);
+    background.forEach((element) => {
+      element.inert = true;
+    });
+    document.body.style.overflow = "hidden";
+    sidebar.querySelector<HTMLButtonElement>("button")?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setIsSidebarOpen(false);
+      }
+      if (event.key !== "Tab") return;
+      const controls = [...sidebar.querySelectorAll<HTMLElement>("a[href], button:not(:disabled)")];
+      const first = controls[0];
+      const last = controls.at(-1);
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setIsSidebarOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      desktop.removeEventListener("change", closeOnDesktop);
+      document.body.style.overflow = overflow;
+      background.forEach((element, index) => {
+        element.inert = previousInert[index];
+      });
+      if (previousFocus?.isConnected && previousFocus.getClientRects().length) {
+        previousFocus.focus({ preventScroll: true });
+      }
+    };
+  }, [isSidebarOpen]);
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -79,20 +133,25 @@ export function Navbar() {
   }, [pathname]);
 
   const scrollTo = useCallback((sectionId: string) => {
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "instant"
+      : "smooth";
     if (sectionId === "home") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior });
     } else {
       const el = document.getElementById(sectionId);
-      el?.scrollIntoView({ behavior: "smooth" });
+      el?.scrollIntoView({ behavior });
     }
   }, []);
 
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
       // Let the root hash URL navigate from secondary pages such as /join.
-      if (pathname !== "/") return;
+      if (pathname !== "/" || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)
+        return;
 
       e.preventDefault();
+      window.history.pushState(null, "", `#${sectionId}`);
       setActiveSection(sectionId);
       scrollTo(sectionId);
     },
@@ -109,7 +168,7 @@ export function Navbar() {
           >
             <div className="absolute -bottom-px left-1/2 -translate-x-1/2 w-1/2 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
             {/* Logo */}
-            <a
+            <Link
               href="/#home"
               onClick={(e) => handleNavClick(e, "home")}
               aria-label={t("homeLabel")}
@@ -125,13 +184,14 @@ export function Navbar() {
                 decoding="sync"
                 className="h-7 w-auto text-transparent brightness-0 transition-opacity group-hover:opacity-80 dark:brightness-100"
               />
-            </a>
+            </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-0.5">
+            <nav className="hidden lg:flex items-center gap-0.5">
               {navItems.map((item) => (
                 <Link
                   key={item.sectionId}
+                  aria-current={activeSection === item.sectionId ? "location" : undefined}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.sectionId)}
                   className={cn(
@@ -147,7 +207,7 @@ export function Navbar() {
             </nav>
 
             {/* Desktop actions */}
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-2">
               <LanguageToggle />
               <ThemeToggle />
               <Button
@@ -159,7 +219,7 @@ export function Navbar() {
             </div>
 
             {/* Mobile actions */}
-            <div className="flex md:hidden items-center gap-2">
+            <div className="flex lg:hidden items-center gap-2">
               <button
                 className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground hover:bg-muted cursor-pointer"
                 onClick={toggleSidebar}
@@ -177,17 +237,21 @@ export function Navbar() {
       {/* Backdrop overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={toggleSidebar}
         />
       )}
 
       {/* Mobile Sidebar */}
       <div
+        ref={sidebarRef}
+        role="dialog"
+        aria-modal={isSidebarOpen || undefined}
+        aria-label={t("openMenu")}
         id="mobile-navigation"
         aria-hidden={!isSidebarOpen}
         inert={!isSidebarOpen}
-        className={`fixed inset-y-0 right-0 z-60 w-[min(18rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain transform bg-card border-l border-border p-6 sm:p-8 shadow-2xl transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed inset-y-0 right-0 z-60 w-[min(18rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain transform bg-card border-l border-border p-6 sm:p-8 shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >

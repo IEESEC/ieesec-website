@@ -182,7 +182,7 @@ test("touch layouts use the native year selector", async ({ page }, testInfo) =>
 });
 
 test("mobile wizard completes all five steps", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "mobile-standard");
+  test.skip(!["mobile-standard", "mobile-compact"].includes(testInfo.project.name));
 
   await page.route("**/api/join-application", (route) =>
     route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true}' }),

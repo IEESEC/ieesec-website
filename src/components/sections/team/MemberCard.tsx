@@ -116,15 +116,15 @@ export default function MemberCard({ member }: { member: Member }) {
           className="absolute left-5 top-0 h-0.5 w-12 bg-primary transition-[width] duration-500 group-hover:w-20"
         />
 
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3">
-          <h2 className="min-w-0 text-xl font-semibold leading-tight tracking-tight text-foreground">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2">
+          <h3 className="min-w-0 break-words text-xl font-semibold leading-tight tracking-tight text-foreground">
             {nameParts.map((part, index) => (
               <Fragment key={`${part}-${index}`}>
                 {part}
                 {index < nameParts.length - 1 ? <br /> : null}
               </Fragment>
             ))}
-          </h2>
+          </h3>
           <p className="whitespace-nowrap text-right text-sm font-medium tracking-wide text-muted-foreground">
             {role}
           </p>

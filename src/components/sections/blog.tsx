@@ -6,13 +6,16 @@ import { useTranslations } from "next-intl";
 export function BlogSection() {
   const t = useTranslations("sections");
   return (
-    <section id="blog" className="min-h-screen w-full flex flex-col pt-32 pb-20 scroll-mt-20">
+    <section
+      id="blog"
+      className="min-h-screen w-full flex flex-col pt-24 pb-16 sm:pt-32 sm:pb-20 scroll-mt-20"
+    >
       <div className="mx-auto max-w-7xl px-6 w-full">
         <div className="mb-12">
           <Reveal direction="left">
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-5xl">
               {t("blogTitle")}
-            </h1>
+            </h2>
           </Reveal>
 
           <Reveal direction="right" className="mt-8">

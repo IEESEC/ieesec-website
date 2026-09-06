@@ -4,11 +4,83 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 1rem;
+  z-index: 70;
+  padding: 0.75rem 1rem;
+  color: var(--foreground);
+  background: var(--background);
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+
+@media (min-width: 768px) {
+  .hero-carousel h1:lang(el) {
+    font-size: clamp(2rem, 6vw, 5rem);
+  }
+}
+
+@media (max-width: 767px), (max-height: 600px) {
+  .hero-carousel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-carousel > div:first-child {
+    position: absolute;
+    inset: 0;
+  }
+  .hero-carousel > div:first-child > div,
+  .hero-carousel > div:first-child > div > div {
+    height: 100%;
+  }
+  .hero-carousel .hero-content {
+    min-width: 0;
+    position: relative;
+    min-height: 100svh;
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+  .hero-carousel .hero-content > div {
+    position: static;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-carousel .hero-typewriter-line {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-carousel .hero-typewriter-line::before,
+  .hero-carousel .hero-typewriter-line .hero-typewriter-reveal {
+    white-space: normal;
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root,
+  .join-form-timeline {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @theme inline {
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-inter), Arial, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-inter), Arial, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -128,18 +200,18 @@
   --popover-foreground: oklch(0.93 0.008 220);
   /* Primary = luminous brand blue */
   --primary: oklch(0.66 0.075 220);
-  --primary-foreground: oklch(0.99 0.005 220);
+  --primary-foreground: oklch(0.13 0.015 235);
   /* Secondary = deep cool slate */
   --secondary: oklch(0.22 0.016 230);
   --secondary-foreground: oklch(0.9 0.008 220);
   --muted: oklch(0.2 0.012 232);
-  --muted-foreground: oklch(0.58 0.015 220);
+  --muted-foreground: oklch(0.62 0.015 220);
   /* Accent = lighter cobalt blue for dark surfaces */
   --accent: oklch(0.72 0.12 230);
   --accent-foreground: oklch(0.13 0.015 235);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(0.22 0.012 230);
-  --input: oklch(0.24 0.014 230);
+  --input: oklch(0.55 0.014 230);
   --ring: oklch(0.66 0.075 220);
   --chart-1: oklch(0.66 0.075 220);
   --chart-2: oklch(0.72 0.12 230);

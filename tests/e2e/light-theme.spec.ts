@@ -78,6 +78,20 @@ async function contrastRatio(locator: Locator, pseudoElement?: "::placeholder") 
   }, pseudoElement);
 }
 
+test("dark supporting text and primary controls meet WCAG AA", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+  await forceTheme(page, "dark");
+  await page.goto("/en");
+  for (const sample of [
+    page.locator("#team p").first(),
+    page.locator("#team [data-slot='card'] p").last(),
+    page.getByRole("banner").getByRole("link", { name: "Join us", exact: true }),
+  ]) {
+    await expect(sample).toBeVisible();
+    expect(await contrastRatio(sample)).toBeGreaterThanOrEqual(4.5);
+  }
+});
+
 test("one click switches a system-resolved dark theme to light", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop");
   await page.emulateMedia({ colorScheme: "dark" });
@@ -149,7 +163,7 @@ test("light theme supporting text and controls meet WCAG AA", async ({ page }, t
     page.locator("#tech-stack p").first(),
     page.locator("#blog p.text-muted-foreground").first(),
     page.locator("footer p").first(),
-    page.locator("footer h4").first(),
+    page.locator("footer h2").first(),
   ];
   for (const sample of textSamples) {
     await expect(sample).toBeVisible();

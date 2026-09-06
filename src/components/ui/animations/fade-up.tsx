@@ -1,5 +1,6 @@
 "use client";
-import { Easing, motion, type Transition, type Variants } from "framer-motion";
+
+import { useEffect, useRef } from "react";
 
 export type FadeDirection = "up" | "down" | "left" | "right" | "none";
 export interface RevealProps {
@@ -9,18 +10,13 @@ export interface RevealProps {
   duration?: number;
   className?: string;
 }
-
-const DISTANCE = 124;
-const EASE: Easing = [0.21, 0.47, 0.32, 0.98];
-
-const DIRECTION_OFFSET: Record<FadeDirection, { x: number; y: number }> = {
-  up: { x: 0, y: DISTANCE },
-  down: { x: 0, y: -DISTANCE },
-  left: { x: -DISTANCE, y: 0 },
-  right: { x: DISTANCE, y: 0 },
-  none: { x: 0, y: 0 },
+const OFFSET: Record<FadeDirection, string> = {
+  up: "translateY(124px)",
+  down: "translateY(-124px)",
+  left: "translateX(-124px)",
+  right: "translateX(124px)",
+  none: "none",
 };
-
 export function Reveal({
   children,
   direction = "up",
@@ -28,29 +24,48 @@ export function Reveal({
   duration = 0.8,
   className,
 }: RevealProps) {
-  const { x, y } = DIRECTION_OFFSET[direction];
-
-  const variants: Variants = {
-    hidden: { opacity: 0, x, y },
-    visible: { opacity: 1, x: 0, y: 0 },
-  };
-
-  const transition: Transition = {
-    duration,
-    delay,
-    ease: EASE,
-  };
-
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let animation: Animation | undefined;
+    // Server HTML and the no-JavaScript fallback remain visible.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        if (reducedMotion.matches || document.hidden) return;
+        animation = element.animate(
+          [
+            { opacity: 0, transform: OFFSET[direction] },
+            { opacity: 1, transform: "none" },
+          ],
+          {
+            duration: duration * 1000,
+            delay: delay * 1000,
+            easing: "cubic-bezier(0.21,0.47,0.32,0.98)",
+          },
+        );
+      },
+      { threshold: 0 },
+    );
+    const stopMotion = () => {
+      if (reducedMotion.matches || document.hidden) animation?.cancel();
+    };
+    observer.observe(element);
+    reducedMotion.addEventListener("change", stopMotion);
+    document.addEventListener("visibilitychange", stopMotion);
+    return () => {
+      observer.disconnect();
+      animation?.cancel();
+      reducedMotion.removeEventListener("change", stopMotion);
+      document.removeEventListener("visibilitychange", stopMotion);
+    };
+  }, [direction, delay, duration]);
   return (
-    <motion.div
-      variants={variants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-128px" }}
-      transition={transition}
-      className={className}
-    >
+    <div ref={ref} className={className}>
       {children}
-    </motion.div>
+    </div>
   );
 }

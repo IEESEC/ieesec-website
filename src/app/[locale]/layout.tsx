@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { SITE_URL } from "@/lib/seo";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -10,12 +11,7 @@ import { Footbar } from "@/components/footbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { routing } from "@/i18n/routing";
 
-const inter = Inter({ subsets: ["latin", "greek"], variable: "--font-sans" });
-const jakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
-  subsets: ["latin"],
-  display: "swap",
-});
+const inter = Inter({ subsets: ["latin", "greek"], variable: "--font-inter" });
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
@@ -33,7 +29,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
   if (!hasLocale(routing.locales, locale)) notFound();
 
   const t = await getTranslations({ locale, namespace: "metadata" });
-  const baseUrl = "https://ieesec-website.vercel.app";
+  const baseUrl = SITE_URL;
 
   return {
     metadataBase: new URL(baseUrl),
@@ -91,7 +87,6 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
       suppressHydrationWarning
       className={cn(
         "h-full antialiased font-sans",
-        jakartaSans.variable,
         geistMono.variable,
         geistSans.variable,
         inter.variable,
@@ -105,6 +100,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             enableSystem
             disableTransitionOnChange
           >
+            <a href="#main-content" className="skip-link">
+              {locale === "el" ? "Μετάβαση στο περιεχόμενο" : "Skip to content"}
+            </a>
             <Navbar />
             {children}
             <Footbar />
