@@ -197,7 +197,7 @@ export function Navbar() {
                   className={cn(
                     "px-3.5 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200",
                     activeSection === item.sectionId
-                      ? "text-primary-foreground bg-primary"
+                      ? "bg-primary text-white"
                       : "text-foreground/80 hover:text-primary hover:bg-primary/25",
                   )}
                 >
@@ -212,7 +212,7 @@ export function Navbar() {
               <ThemeToggle />
               <Button
                 asChild
-                className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/85 transition-colors"
+                className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-white hover:bg-primary/85 transition-colors"
               >
                 <Link href="/join">{t("join")}</Link>
               </Button>
@@ -281,7 +281,7 @@ export function Navbar() {
               className={cn(
                 "px-4 py-3 text-base font-medium rounded-xl transition-colors",
                 activeSection === item.sectionId
-                  ? "text-primary-foreground bg-primary"
+                  ? "bg-primary text-white"
                   : "text-muted-foreground hover:text-primary hover:bg-primary/15",
               )}
             >
@@ -291,7 +291,7 @@ export function Navbar() {
           <div className="mt-6 px-4">
             <Button
               asChild
-              className="w-full h-10 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/85 transition-colors"
+              className="w-full h-10 rounded-full bg-primary text-white font-semibold hover:bg-primary/85 transition-colors"
             >
               <Link href="/join" onClick={toggleSidebar}>
                 {t("join")}

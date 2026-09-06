@@ -85,10 +85,15 @@ test("dark supporting text and primary controls meet WCAG AA", async ({ page }, 
   for (const sample of [
     page.locator("#team p").first(),
     page.locator("#team [data-slot='card'] p").last(),
-    page.getByRole("banner").getByRole("link", { name: "Join us", exact: true }),
   ]) {
     await expect(sample).toBeVisible();
     expect(await contrastRatio(sample)).toBeGreaterThanOrEqual(4.5);
+  }
+  for (const primaryLabel of [
+    page.getByRole("banner").getByRole("link", { name: "Home", exact: true }),
+    page.getByRole("banner").getByRole("link", { name: "Join us", exact: true }),
+  ]) {
+    await expect(primaryLabel).toHaveCSS("color", "rgb(255, 255, 255)");
   }
 });
 
@@ -171,6 +176,13 @@ test("light theme supporting text and controls meet WCAG AA", async ({ page }, t
   const footerAccentHeading = page.locator("footer h2").first();
   await expect(footerAccentHeading).toBeVisible();
   expect(await contrastRatio(footerAccentHeading)).toBeGreaterThanOrEqual(3);
+
+  for (const primaryLabel of [
+    page.getByRole("banner").getByRole("link", { name: "Home", exact: true }),
+    page.getByRole("banner").getByRole("link", { name: "Join us", exact: true }),
+  ]) {
+    await expect(primaryLabel).toHaveCSS("color", "rgb(255, 255, 255)");
+  }
 
   await page.goto("/en/join");
   await page.getByRole("link", { name: "Scroll to get started" }).click();
