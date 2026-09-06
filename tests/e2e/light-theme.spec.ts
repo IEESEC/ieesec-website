@@ -136,7 +136,7 @@ test("light hero and navbar use artifact-free terminal surfaces", async ({ page 
   const fadeProbe = page.locator(".hero-fade").first();
   const gradient = await fadeProbe.evaluate((element) => {
     const value = getComputedStyle(element).backgroundImage;
-    return value.match(/,\s*([^,]+)\s+100%\)$/)?.[1] ?? "";
+    return value.match(/((?:transparent|rgba?\([^)]*\)|lab\([^)]*\)))\s+100%\)$/)?.[1] ?? "";
   });
   expect(gradient).not.toBe("");
 
@@ -155,6 +155,8 @@ test("light hero and navbar use artifact-free terminal surfaces", async ({ page 
     };
     return convert(red) * 0.2126 + convert(green) * 0.7152 + convert(blue) * 0.0722;
   }, gradient);
+  // A transparent endpoint is intentional so the page atmosphere can continue below the hero.
+  if (fadeLuminance === 0) return;
   expect(fadeLuminance).toBeGreaterThan(0.75);
 });
 

@@ -15,6 +15,7 @@ type Filter = TechCategory | "All";
 export function TechStackSection() {
   const t = useTranslations("sections");
   const [filter, setFilter] = useState<Filter>("All");
+  const [showAllOnMobile, setShowAllOnMobile] = useState(false);
 
   const filtered = useMemo(
     () => (filter === "All" ? techStack : techStack.filter((item) => item.category === filter)),
@@ -56,13 +57,32 @@ export function TechStackSection() {
             </div>
           </Reveal>
 
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-stretch">
+          <div
+            id="tech-stack-grid"
+            className="mt-8 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          >
             {filtered.map((item, i) => (
-              <Reveal key={item.name} direction="up" delay={i * 0.05} className="h-full">
+              <Reveal
+                key={item.name}
+                direction="up"
+                delay={i * 0.05}
+                className={cn("h-full", i >= 3 && !showAllOnMobile && "hidden md:block")}
+              >
                 <TechCard item={item} />
               </Reveal>
             ))}
           </div>
+
+          {!showAllOnMobile && filtered.length > 3 && (
+            <button
+              type="button"
+              onClick={() => setShowAllOnMobile(true)}
+              aria-controls="tech-stack-grid"
+              className="mt-6 min-h-11 w-full rounded-full border border-border px-5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground md:hidden"
+            >
+              {t("showMore")}
+            </button>
+          )}
         </div>
       </div>
     </section>

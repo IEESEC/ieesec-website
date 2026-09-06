@@ -56,6 +56,7 @@
     "eventsDescription": "Workshops, talks and meet-ups where we test ideas and share what we learn.",
     "techTitle": "Our tech stack",
     "techDescription": "The languages, frameworks and tools we use to design, build and ship our projects.",
+    "showMore": "Show more",
     "blogTitle": "Blog",
     "filters": {
       "all": "All",

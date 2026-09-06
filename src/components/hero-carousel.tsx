@@ -168,11 +168,12 @@ export function HeroCarousel() {
               <div className="absolute inset-0 hero-overlay opacity-60" />
               <div className="absolute inset-0 hero-vignette" />
               <div className="absolute inset-0 hero-content-wash" />
-              <div data-testid="hero-fade" className="absolute inset-0 hero-fade" />
             </div>
           ))}
         </div>
       </div>
+
+      <div data-testid="hero-fade" className="hero-fade" />
 
       {/* Fixed onboarding message while the background images autoplay */}
       <div className="hero-content pointer-events-none absolute inset-0 z-10 flex items-center">
