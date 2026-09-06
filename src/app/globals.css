@@ -18,12 +18,6 @@
   transform: none;
 }
 
-@media (min-width: 768px) {
-  .hero-carousel h1:lang(el) {
-    font-size: clamp(2rem, 6vw, 5rem);
-  }
-}
-
 @media (max-width: 767px), (max-height: 600px) {
   .hero-carousel {
     display: grid;
@@ -36,18 +30,6 @@
   .hero-carousel > div:first-child > div,
   .hero-carousel > div:first-child > div > div {
     height: 100%;
-  }
-  .hero-carousel .hero-content {
-    min-width: 0;
-    position: relative;
-    min-height: 100svh;
-    padding-top: 7rem;
-    padding-bottom: 7rem;
-  }
-  .hero-carousel .hero-content > div {
-    position: static;
-    padding-top: 0;
-    padding-bottom: 0;
   }
 }
 
@@ -153,6 +135,7 @@
 
 :root {
   /* Brand: #508CA4 (steel-blue teal) */
+  --light-rays-theme-color: rgba(80, 140, 164, 0.22);
   --background: oklch(0.985 0.002 220);
   --foreground: oklch(0.185 0.02 230);
   --card: oklch(0.995 0.001 220);
@@ -192,6 +175,7 @@
 
 .dark {
   /* Brand-aware dark mode: deep navy #0c1219 */
+  --light-rays-theme-color: rgba(158, 218, 255, 0.28);
   --background: oklch(0.13 0.015 235);
   --foreground: oklch(0.93 0.008 220);
   --card: oklch(0.17 0.016 232);
@@ -228,6 +212,90 @@
   --sidebar-ring: oklch(0.66 0.075 220);
 }
 
+/* Ambient background layer: the rays stay behind content and become brighter on navy surfaces. */
+.light-rays {
+  isolation: isolate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.light-rays-page {
+  position: fixed;
+  inset: 0;
+  height: 100svh;
+  width: 100%;
+}
+
+.light-rays-glow,
+.light-rays-source,
+.light-rays-ray {
+  position: absolute;
+  pointer-events: none;
+}
+
+.light-rays-glow {
+  top: -16%;
+  left: 50%;
+  width: min(72rem, 96vw);
+  height: 22rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    var(--light-rays-color) 0%,
+    color-mix(in oklab, var(--light-rays-color) 35%, transparent) 38%,
+    transparent 76%
+  );
+  filter: blur(calc(var(--light-rays-blur) * 1.1));
+  opacity: calc(var(--light-rays-opacity) * 0.72);
+}
+
+.light-rays-source {
+  top: -4%;
+  left: 50%;
+  width: min(34rem, 65vw);
+  height: 8rem;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, var(--light-rays-color) 0%, transparent 72%);
+  filter: blur(calc(var(--light-rays-blur) * 0.65));
+  opacity: calc(var(--light-rays-opacity) * 0.9);
+}
+
+.light-rays-ray {
+  top: -7%;
+  left: var(--ray-left);
+  width: var(--ray-width);
+  height: var(--light-rays-length);
+  transform: translateX(-50%) rotate(var(--ray-angle)) scaleX(0.96);
+  transform-origin: top center;
+  background: linear-gradient(
+    to bottom,
+    var(--light-rays-color) 0%,
+    color-mix(in oklab, var(--light-rays-color) 55%, transparent) 34%,
+    transparent 86%
+  );
+  border-radius: 999px;
+  filter: blur(var(--light-rays-blur));
+  opacity: calc(var(--light-rays-opacity) * var(--ray-opacity));
+  animation: light-rays-sway var(--light-rays-speed) ease-in-out var(--ray-delay) infinite alternate;
+}
+
+@keyframes light-rays-sway {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(calc(var(--ray-angle) - 3deg)) scaleX(0.92);
+  }
+
+  50% {
+    transform: translateX(-50%) rotate(calc(var(--ray-angle) + 4deg)) scaleX(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light-rays-ray {
+    animation: none;
+  }
+}
+
 /* Hero carousel: light mode keeps the campus imagery bright and editorial. */
 .hero-overlay {
   background: oklch(0.99 0.002 220 / 0.52);
@@ -237,24 +305,32 @@
   background: oklch(0 0 0 / 0.5);
 }
 
-/* Hero carousel: bottom gradient fade into page background */
-.hero-fade {
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    transparent 50%,
-    oklch(0.99 0.002 220 / 0.58) 92%,
-    var(--background) 100%
-  );
+/* Light-theme brand accents keep secondary footer and navigation content tied to the primary hue. */
+:where(html:not(.dark)) .light-theme-accent {
+  color: color-mix(in oklab, var(--primary) 85%, transparent);
 }
 
-.dark .hero-fade {
+/* External SVG images cannot inherit currentColor, so tint the light logos to the same brand hue. */
+html:not(.dark) .light-theme-logo {
+  filter: brightness(0) saturate(100%) invert(55%) sepia(12%) saturate(903%) hue-rotate(153deg)
+    brightness(91%) contrast(87%);
+}
+
+/* Hero carousel: bottom gradient fade into page background */
+.hero-fade {
+  position: absolute;
+  z-index: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 14rem;
+  pointer-events: none;
   background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    transparent 50%,
-    oklch(0 0 0 / 0.4) 92%,
-    var(--background) 100%
+    to top,
+    var(--background) 0%,
+    color-mix(in oklab, var(--background) 72%, transparent) 24%,
+    color-mix(in oklab, var(--background) 28%, transparent) 54%,
+    transparent 100%
   );
 }
 
@@ -285,6 +361,7 @@
     oklch(0.99 0.002 220 / 0.38) 46%,
     transparent 78%
   );
+  animation: hero-wash-enter 750ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .dark .hero-content-wash {
@@ -294,6 +371,56 @@
     oklch(0.05 0.02 230 / 0.38) 46%,
     transparent 78%
   );
+}
+
+.hero-slide-image {
+  animation: hero-media-enter 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-supporting-copy,
+.hero-actions {
+  opacity: 0;
+  transform: translateY(1rem);
+  animation: hero-copy-enter 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-supporting-copy {
+  animation-delay: 3.12s;
+}
+
+.hero-actions {
+  animation-delay: 3.27s;
+}
+
+@keyframes hero-media-enter {
+  from {
+    filter: blur(5px) saturate(0.82);
+    transform: scale(1.045);
+  }
+  to {
+    filter: none;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-wash-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-copy-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Join video background: light mode uses an airy wash that still lets the campus footage lead. */
@@ -352,21 +479,18 @@
 }
 
 .hero-typewriter-line:nth-child(1) {
-  --typewriter-characters: 11;
-  --typewriter-delay: 350ms;
-  --typewriter-duration: 660ms;
+  --typewriter-delay: 950ms;
+  --typewriter-duration: 800ms;
 }
 
 .hero-typewriter-line:nth-child(2) {
-  --typewriter-characters: 12;
-  --typewriter-delay: 1010ms;
-  --typewriter-duration: 720ms;
+  --typewriter-delay: 1750ms;
+  --typewriter-duration: 650ms;
 }
 
 .hero-typewriter-line:nth-child(3) {
-  --typewriter-characters: 9;
-  --typewriter-delay: 1730ms;
-  --typewriter-duration: 540ms;
+  --typewriter-delay: 2400ms;
+  --typewriter-duration: 650ms;
 }
 
 .hero-typewriter-reveal {
@@ -453,6 +577,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-slide-image,
+  .hero-content-wash,
+  .hero-supporting-copy,
+  .hero-actions {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
+  }
+
   .hero-typewriter .hero-typewriter-line .hero-typewriter-reveal {
     width: 100%;
     clip-path: none;

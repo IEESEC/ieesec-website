@@ -13,6 +13,10 @@ type HeroSlide = {
   altKey: "campus1" | "campus2" | "campus3";
 };
 
+type TypewriterStyle = React.CSSProperties & {
+  "--typewriter-characters": number;
+};
+
 const slides: HeroSlide[] = [
   {
     image: "/images/hero/campus3.jpg",
@@ -30,24 +34,37 @@ const slides: HeroSlide[] = [
 
 function TypingHeadline() {
   const t = useTranslations("hero");
+  const line1 = t("line1");
+  const line2Start = t("line2Start");
+  const line2Accent = t("line2Accent");
+  const line2 = `${line2Start} ${line2Accent}`;
+  const line3 = t("line3");
+  const typewriterStyle = (text: string): TypewriterStyle => ({
+    "--typewriter-characters": Array.from(text).length,
+  });
+
   return (
     <h1
       aria-label={t("headlineLabel")}
-      className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(1.8rem,9.8vw,3.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_30px_rgb(255,255,255,0.35)] dark:text-white dark:drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)] sm:text-7xl lg:text-8xl"
+      className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(1.8rem,6vw,5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_30px_rgb(255,255,255,0.35)] dark:text-white dark:drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)]"
     >
       <span aria-hidden="true" className="hero-typewriter block">
-        <span className="hero-typewriter-line" data-text={t("line1")}>
-          <span className="hero-typewriter-reveal">{t("line1")}</span>
+        <span className="hero-typewriter-line" data-text={line1} style={typewriterStyle(line1)}>
+          <span className="hero-typewriter-reveal">{line1}</span>
           <span aria-hidden="true" className="hero-typewriter-caret" />
         </span>
-        <span className="hero-typewriter-line" data-text={`${t("line2Start")} ${t("line2Accent")}`}>
+        <span className="hero-typewriter-line" data-text={line2} style={typewriterStyle(line2)}>
           <span className="hero-typewriter-reveal">
-            {t("line2Start")} <span className="text-primary">{t("line2Accent")}</span>
+            {line2Start} <span className="text-primary">{line2Accent}</span>
           </span>
           <span aria-hidden="true" className="hero-typewriter-caret" />
         </span>
-        <span className="hero-typewriter-line text-primary" data-text={t("line3")}>
-          <span className="hero-typewriter-reveal">{t("line3")}</span>
+        <span
+          className="hero-typewriter-line text-primary"
+          data-text={line3}
+          style={typewriterStyle(line3)}
+        >
+          <span className="hero-typewriter-reveal">{line3}</span>
           <span aria-hidden="true" className="hero-typewriter-caret" />
         </span>
       </span>
@@ -141,7 +158,7 @@ export function HeroCarousel() {
                 src={slide.image}
                 alt={t(`images.${slide.altKey}`)}
                 fill
-                className="object-cover"
+                className={cn("object-cover", index === 0 && "hero-slide-image")}
                 loading={index === 0 ? "eager" : "lazy"}
                 fetchPriority={index === 0 ? "high" : "auto"}
                 sizes="100vw"
@@ -151,21 +168,22 @@ export function HeroCarousel() {
               <div className="absolute inset-0 hero-overlay opacity-60" />
               <div className="absolute inset-0 hero-vignette" />
               <div className="absolute inset-0 hero-content-wash" />
-              <div data-testid="hero-fade" className="absolute inset-0 hero-fade" />
             </div>
           ))}
         </div>
       </div>
 
+      <div data-testid="hero-fade" className="hero-fade" />
+
       {/* Fixed onboarding message while the background images autoplay */}
-      <div className="hero-content pointer-events-none absolute inset-0 z-10 flex items-center md:block">
-        <div className="mx-auto min-w-0 w-full max-w-7xl px-5 sm:px-10 md:absolute md:inset-x-0 md:bottom-0 md:pb-32 md:pt-32 lg:px-12 lg:pb-36">
-          <div className="pointer-events-auto max-w-3xl">
+      <div className="hero-content pointer-events-none absolute inset-0 z-10 flex items-center">
+        <div className="mx-auto flex min-h-dvh min-w-0 w-full max-w-7xl items-center px-5 py-28 sm:px-10 sm:py-32 lg:px-12">
+          <div data-testid="hero-copy" className="hero-copy pointer-events-auto w-full max-w-3xl">
             <TypingHeadline />
-            <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-foreground/80 drop-shadow-[0_2px_10px_rgb(255,255,255,0.35)] dark:text-white/80 dark:drop-shadow-[0_2px_10px_rgb(0,0,0,0.5)] sm:text-lg">
+            <p className="hero-supporting-copy mt-6 max-w-xl text-pretty text-base leading-relaxed text-foreground/80 drop-shadow-[0_2px_10px_rgb(255,255,255,0.35)] dark:text-white/80 dark:drop-shadow-[0_2px_10px_rgb(0,0,0,0.5)] sm:text-lg">
               {t("description")}
             </p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 sm:gap-x-6 sm:gap-y-4">
+            <div className="hero-actions mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 sm:gap-x-6 sm:gap-y-4">
               <a
                 href="#projects"
                 className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-lg shadow-accent/20 transition-[background-color,transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-accent/30 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"

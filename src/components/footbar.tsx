@@ -30,7 +30,7 @@ export function Footbar() {
                 width={366}
                 height={322}
                 loading="lazy"
-                className="h-auto w-24 dark:hidden"
+                className="light-theme-logo h-auto w-24 dark:hidden"
               />
               <img
                 data-testid="footer-logo-white"
@@ -42,11 +42,11 @@ export function Footbar() {
                 className="hidden h-auto w-24 dark:block"
               />
             </div>
-            <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
+            <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
               {t("descriptionStart")}&nbsp;
               <Link
                 href="https://iee.ihu.gr"
-                className="font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
+                className="light-theme-accent font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
               >
                 {t("department")}
               </Link>
@@ -56,14 +56,14 @@ export function Footbar() {
 
           {/* Quick Links Subcontainer */}
           <div>
-            <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            <h2 className="light-theme-accent mb-4 text-xs font-semibold uppercase tracking-widest">
               {t("quickLinks")}
             </h2>
             <ul className="space-y-2.5 flex flex-col">
               {quickLinks.map((item) => (
                 <li key={item.labelKey}>
                   <Link href={item.href} className="inline-flex items-center">
-                    <span className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    <span className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                       {item.labelKey === "github" ? "GitHub" : t(item.labelKey)}
                     </span>
                   </Link>
@@ -74,7 +74,7 @@ export function Footbar() {
 
           {/* Location Subcontainer */}
           <div>
-            <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            <h2 className="light-theme-accent mb-4 text-xs font-semibold uppercase tracking-widest">
               {t("location")}
             </h2>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
@@ -84,7 +84,7 @@ export function Footbar() {
               <li>
                 <Link
                   href="mailto:ieesec.ihu@gmail.com"
-                  className="inline-flex min-h-11 items-center break-all font-medium text-foreground"
+                  className="light-theme-accent font-medium break-all text-foreground"
                 >
                   ieesec.ihu@gmail.com
                 </Link>

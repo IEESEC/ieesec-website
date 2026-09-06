@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 export type FadeDirection = "up" | "down" | "left" | "right" | "none";
 export interface RevealProps {
@@ -25,17 +25,30 @@ export function Reveal({
   className,
 }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = ref.current;
     if (!element) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let animation: Animation | undefined;
-    // Server HTML and the no-JavaScript fallback remain visible.
+    const showElement = () => {
+      element.style.opacity = "1";
+      element.style.transform = "none";
+      element.style.removeProperty("will-change");
+    };
+
+    // Apply the initial state before paint while keeping server and no-JavaScript HTML visible.
+    if (reducedMotion.matches || document.hidden) {
+      showElement();
+      return;
+    }
+    element.style.opacity = "0";
+    element.style.transform = OFFSET[direction];
+    element.style.willChange = "opacity, transform";
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         observer.disconnect();
-        if (reducedMotion.matches || document.hidden) return;
         animation = element.animate(
           [
             { opacity: 0, transform: OFFSET[direction] },
@@ -45,13 +58,23 @@ export function Reveal({
             duration: duration * 1000,
             delay: delay * 1000,
             easing: "cubic-bezier(0.21,0.47,0.32,0.98)",
+            fill: "forwards",
           },
         );
+        void animation.finished
+          .then(() => {
+            showElement();
+            animation?.cancel();
+          })
+          .catch(() => undefined);
       },
-      { threshold: 0 },
+      { rootMargin: "0px 0px -15% 0px", threshold: 0 },
     );
     const stopMotion = () => {
-      if (reducedMotion.matches || document.hidden) animation?.cancel();
+      if (!reducedMotion.matches && !document.hidden) return;
+      observer.disconnect();
+      animation?.cancel();
+      showElement();
     };
     observer.observe(element);
     reducedMotion.addEventListener("change", stopMotion);
@@ -59,6 +82,7 @@ export function Reveal({
     return () => {
       observer.disconnect();
       animation?.cancel();
+      showElement();
       reducedMotion.removeEventListener("change", stopMotion);
       document.removeEventListener("visibilitychange", stopMotion);
     };

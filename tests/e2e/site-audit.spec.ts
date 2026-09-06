@@ -39,6 +39,69 @@ test("content remains readable without JavaScript", async ({ browser, baseURL })
   await context.close();
 });
 
+test("section reveals animate and footer contact spacing stays consistent", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/el");
+
+  const teamHeadingReveal = page.locator("#team h2").locator("..");
+  await expect(teamHeadingReveal).toHaveCSS("opacity", "0");
+  await teamHeadingReveal.scrollIntoViewIfNeeded();
+  await expect
+    .poll(() => teamHeadingReveal.evaluate((element) => element.getAnimations().length))
+    .toBeGreaterThan(0);
+  await expect(teamHeadingReveal).toHaveCSS("opacity", "1");
+
+  const locationItems = page.locator("footer ul").nth(1).locator("li");
+  await locationItems.last().scrollIntoViewIfNeeded();
+  const gaps = await locationItems.evaluateAll((items) =>
+    items.slice(1).map((item, index) => {
+      const previous = items[index].getBoundingClientRect();
+      const current = item.getBoundingClientRect();
+      return current.top - previous.bottom;
+    }),
+  );
+  expect(gaps[2]).toBeCloseTo(gaps[1], 0);
+});
+
+test("hero stays left aligned, vertically centered, and starts typing after its load animation", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+
+  const fontSizes: string[] = [];
+  for (const locale of ["en", "el"]) {
+    await page.goto(`/${locale}`);
+    const heroCopy = page.getByTestId("hero-copy");
+    const metrics = await heroCopy.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const heading = element.querySelector("h1");
+      return {
+        centerOffset: Math.abs(rect.top + rect.height / 2 - innerHeight / 2),
+        fontSize: heading ? getComputedStyle(heading).fontSize : "",
+        textAlign: getComputedStyle(element).textAlign,
+      };
+    });
+    expect(metrics.centerOffset).toBeLessThanOrEqual(1);
+    expect(metrics.textAlign).toBe("start");
+    fontSizes.push(metrics.fontSize);
+  }
+  expect(fontSizes[0]).toBe(fontSizes[1]);
+
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/en");
+  const timing = await page.evaluate(() => {
+    const mediaAnimation = document.querySelector(".hero-slide-image")?.getAnimations()[0];
+    const typingAnimation = document.querySelector(".hero-typewriter-reveal")?.getAnimations()[0];
+    return {
+      mediaDuration: Number(mediaAnimation?.effect?.getComputedTiming().duration ?? 0),
+      typingDelay: Number(typingAnimation?.effect?.getComputedTiming().delay ?? 0),
+    };
+  });
+  expect(timing.mediaDuration).toBeGreaterThan(0);
+  expect(timing.typingDelay).toBeGreaterThanOrEqual(timing.mediaDuration);
+});
+
 test("tablet headings and navigation fit in both languages", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop");
   await page.emulateMedia({ reducedMotion: "reduce" });

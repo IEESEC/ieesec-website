@@ -5,6 +5,7 @@ import { ProjectsSection } from "@/components/sections/projects";
 import { TechStackSection } from "@/components/sections/tech-stack";
 import { EventsSection } from "@/components/sections/events";
 import { BlogSection } from "@/components/sections/blog";
+import { LightRays } from "@/components/ui/light-rays";
 import type { Locale } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/seo";
 
@@ -33,14 +34,24 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           }).replace(/</g, "\\u003c"),
         }}
       />
-      <div id="home">
-        <HeroCarousel />
+      <LightRays
+        className="light-rays-page"
+        count={8}
+        blur={44}
+        opacity={0.58}
+        speed={18}
+        length="90vh"
+      />
+      <div className="relative z-10">
+        <div id="home">
+          <HeroCarousel />
+        </div>
+        <TeamSection />
+        <ProjectsSection />
+        <TechStackSection />
+        <EventsSection />
+        <BlogSection />
       </div>
-      <TeamSection />
-      <ProjectsSection />
-      <TechStackSection />
-      <EventsSection />
-      <BlogSection />
     </main>
   );
 }
