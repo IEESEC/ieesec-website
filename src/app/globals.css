@@ -18,12 +18,6 @@
   transform: none;
 }
 
-@media (min-width: 768px) {
-  .hero-carousel h1:lang(el) {
-    font-size: clamp(2rem, 6vw, 5rem);
-  }
-}
-
 @media (max-width: 767px), (max-height: 600px) {
   .hero-carousel {
     display: grid;
@@ -36,18 +30,6 @@
   .hero-carousel > div:first-child > div,
   .hero-carousel > div:first-child > div > div {
     height: 100%;
-  }
-  .hero-carousel .hero-content {
-    min-width: 0;
-    position: relative;
-    min-height: 100svh;
-    padding-top: 7rem;
-    padding-bottom: 7rem;
-  }
-  .hero-carousel .hero-content > div {
-    position: static;
-    padding-top: 0;
-    padding-bottom: 0;
   }
 }
 
@@ -296,6 +278,7 @@ html:not(.dark) .light-theme-logo {
     oklch(0.99 0.002 220 / 0.38) 46%,
     transparent 78%
   );
+  animation: hero-wash-enter 750ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .dark .hero-content-wash {
@@ -305,6 +288,56 @@ html:not(.dark) .light-theme-logo {
     oklch(0.05 0.02 230 / 0.38) 46%,
     transparent 78%
   );
+}
+
+.hero-slide-image {
+  animation: hero-media-enter 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-supporting-copy,
+.hero-actions {
+  opacity: 0;
+  transform: translateY(1rem);
+  animation: hero-copy-enter 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-supporting-copy {
+  animation-delay: 3.12s;
+}
+
+.hero-actions {
+  animation-delay: 3.27s;
+}
+
+@keyframes hero-media-enter {
+  from {
+    filter: blur(5px) saturate(0.82);
+    transform: scale(1.045);
+  }
+  to {
+    filter: none;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-wash-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-copy-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Join video background: light mode uses an airy wash that still lets the campus footage lead. */
@@ -363,21 +396,18 @@ html:not(.dark) .light-theme-logo {
 }
 
 .hero-typewriter-line:nth-child(1) {
-  --typewriter-characters: 11;
-  --typewriter-delay: 350ms;
-  --typewriter-duration: 660ms;
+  --typewriter-delay: 950ms;
+  --typewriter-duration: 800ms;
 }
 
 .hero-typewriter-line:nth-child(2) {
-  --typewriter-characters: 12;
-  --typewriter-delay: 1010ms;
-  --typewriter-duration: 720ms;
+  --typewriter-delay: 1750ms;
+  --typewriter-duration: 650ms;
 }
 
 .hero-typewriter-line:nth-child(3) {
-  --typewriter-characters: 9;
-  --typewriter-delay: 1730ms;
-  --typewriter-duration: 540ms;
+  --typewriter-delay: 2400ms;
+  --typewriter-duration: 650ms;
 }
 
 .hero-typewriter-reveal {
@@ -464,6 +494,16 @@ html:not(.dark) .light-theme-logo {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-slide-image,
+  .hero-content-wash,
+  .hero-supporting-copy,
+  .hero-actions {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
+  }
+
   .hero-typewriter .hero-typewriter-line .hero-typewriter-reveal {
     width: 100%;
     clip-path: none;
