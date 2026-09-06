@@ -46,6 +46,8 @@ export function ScrollVideoBackground({ activeStep }: ScrollVideoBackgroundProps
     ).cancelIdleCallback;
     let timeoutId = 0;
     let idleId = 0;
+    let nearForm = false;
+    let scheduled = false;
 
     const warmSelectedSource = () => {
       if (!video.currentSrc || document.visibilityState === "hidden") return;
@@ -57,6 +59,8 @@ export function ScrollVideoBackground({ activeStep }: ScrollVideoBackgroundProps
     };
 
     const scheduleWarmup = () => {
+      if (!nearForm || scheduled || video.readyState < 1) return;
+      scheduled = true;
       if (requestIdle) {
         idleId = requestIdle.call(window, warmSelectedSource, { timeout: 2_000 });
       } else {
@@ -64,11 +68,20 @@ export function ScrollVideoBackground({ activeStep }: ScrollVideoBackgroundProps
       }
     };
 
-    if (video.readyState >= 1) scheduleWarmup();
-    else video.addEventListener("loadedmetadata", scheduleWarmup, { once: true });
+    const form = document.getElementById("join-application");
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        nearForm = entry.isIntersecting && entry.intersectionRatio > 0;
+        if (nearForm) scheduleWarmup();
+      },
+      { threshold: 0.01 },
+    );
+    if (form) observer.observe(form);
+    video.addEventListener("loadedmetadata", scheduleWarmup, { once: true });
 
     return () => {
       abortController.abort();
+      observer.disconnect();
       video.removeEventListener("loadedmetadata", scheduleWarmup);
       if (idleId) cancelIdle?.call(window, idleId);
       if (timeoutId) window.clearTimeout(timeoutId);
@@ -176,14 +189,14 @@ export function ScrollVideoBackground({ activeStep }: ScrollVideoBackgroundProps
         className="h-full w-full object-cover"
       >
         <source
-          src="/videos/join-scroll-background-large.mp4"
-          type="video/mp4"
-          media="(min-width: 1200px)"
-        />
-        <source
           src="/videos/join-scroll-background-mobile.mp4"
           type="video/mp4"
           media="(max-width: 767px), (pointer: coarse)"
+        />
+        <source
+          src="/videos/join-scroll-background-large.mp4"
+          type="video/mp4"
+          media="(min-width: 1200px)"
         />
         <source src="/videos/join-scroll-background.mp4" type="video/mp4" />
       </video>

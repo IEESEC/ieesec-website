@@ -1,0 +1,247 @@
+{
+  "metadata": {
+    "title": "IEESEC | Software Engineering Community at IHU",
+    "description": "The Software Engineering student community of the Department of Information and Electronic Engineering at IHU. We build projects, share knowledge and grow together.",
+    "joinTitle": "Join us",
+    "joinDescription": "Apply to join IEESEC, the Software Engineering student community at the International Hellenic University."
+  },
+  "navigation": {
+    "home": "Home",
+    "team": "Team",
+    "projects": "Projects",
+    "stack": "Stack",
+    "events": "Events",
+    "blog": "Blog",
+    "join": "Join us",
+    "homeLabel": "IEESEC home",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "controls": {
+    "theme": "Toggle theme",
+    "switchToEnglish": "Switch language to English",
+    "switchToGreek": "Switch language to Greek",
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "carousel": "carousel",
+    "slide": "slide"
+  },
+  "hero": {
+    "regionLabel": "IEESEC introduction",
+    "headlineLabel": "Turn theory into working software.",
+    "line1": "Turn theory",
+    "line2Start": "into",
+    "line2Accent": "working",
+    "line3": "software.",
+    "description": "From curiosity to shipped projects, shared knowledge and a community that keeps moving with you.",
+    "projectsCta": "Explore projects",
+    "teamCta": "Meet the team",
+    "chooseImage": "Choose background image",
+    "slide": "Slide {current} of {total}",
+    "showSlide": "Show slide {number}",
+    "pause": "Pause background carousel",
+    "play": "Play background carousel",
+    "images": {
+      "campus3": "International Hellenic University campus viewed from the surrounding grounds",
+      "campus2": "International Hellenic University campus building",
+      "campus1": "International Hellenic University campus exterior"
+    }
+  },
+  "sections": {
+    "teamTitle": "Meet our team",
+    "teamDescription": "Engineering with purpose. Building as one.",
+    "projectsTitle": "Projects",
+    "projectsDescription": "We design and build applications that connect university knowledge with practical needs.",
+    "eventsTitle": "Events",
+    "eventsDescription": "Workshops, talks and meet-ups where we test ideas and share what we learn.",
+    "techTitle": "Our tech stack",
+    "techDescription": "The languages, frameworks and tools we use to design, build and ship our projects.",
+    "blogTitle": "Blog",
+    "filters": {
+      "all": "All",
+      "Frontend": "Frontend",
+      "Backend": "Backend",
+      "DevOps": "DevOps",
+      "Tools": "Tools",
+      "Languages": "Languages"
+    }
+  },
+  "team": {
+    "socialLabel": "{name} on {network}",
+    "members": {
+      "andreas": {
+        "role": "Chair|Full-stack Developer",
+        "bio": "Studies in the Department of Information and Electronic Engineering at IHU and actively experiments with different technologies and software stacks."
+      },
+      "magda": {
+        "role": "Project Manager|Backend Developer",
+        "bio": "A second-year Information and Electronic Engineering student at IHU Thessaloniki, focused on backend development with Java and Spring Boot."
+      },
+      "dimitris": {
+        "role": "Project Manager|Full-stack Developer",
+        "bio": "Works where code meets circuitry, pursuing clear solutions grounded in Computer Science and Electronics."
+      }
+    }
+  },
+  "blog": {
+    "readTime": "{minutes} min read",
+    "author": "IEESEC Team",
+    "posts": {
+      "open-source": {
+        "title": "How we work on open-source projects",
+        "excerpt": "From the first idea to the pull request, we organise collaboration so every member can contribute.",
+        "tag1": "Open Source",
+        "tag2": "Collaboration"
+      },
+      "workshops": {
+        "title": "Workshops built around practice",
+        "excerpt": "Focused sessions where we write code, answer questions and leave with something that works.",
+        "tag1": "Workshops",
+        "tag2": "Learning"
+      },
+      "student-projects": {
+        "title": "What makes a student project useful",
+        "excerpt": "We choose problems with real context, a clear goal and room to learn through implementation.",
+        "tag1": "Projects",
+        "tag2": "Engineering"
+      }
+    }
+  },
+  "footer": {
+    "descriptionStart": "The Software Engineering student team of the",
+    "department": "Department of Information and Electronic Engineering",
+    "descriptionEnd": "at the International Hellenic University.",
+    "quickLinks": "Quick links",
+    "join": "Join us",
+    "departmentLink": "Department",
+    "discord": "Discord Server",
+    "location": "Location",
+    "university": "International Hellenic University",
+    "campus": "Sindos Campus",
+    "city": "Sindos 574 00",
+    "copyright": "© {year} IEESEC · All rights reserved."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "back": "Back to home"
+  },
+  "join": {
+    "heroTitle": "Join our community!",
+    "heroDescription": "From curiosity to shipped projects, shared knowledge and a community that keeps moving with you.",
+    "heroDetails": "Fill in your details and we will contact you!",
+    "requiredNote": "Required fields are marked as you go.",
+    "scroll": "Scroll to get started",
+    "progress": "Application progress",
+    "experimental": "Experimental feature",
+    "optional": "optional",
+    "back": "Back",
+    "continue": "Continue",
+    "completeRequired": "Complete the required fields to continue.",
+    "submitToFinish": "Submit your application to finish.",
+    "submitError": "The application could not be submitted. Please try again in a moment.",
+    "validation": {
+      "identity": "Add your name and a valid email to continue.",
+      "links": "Add your GitHub and Discord to continue.",
+      "interests": "Choose an interest, your experience level and every participation preference.",
+      "generic": "Complete the required field before continuing.",
+      "consent": "Consent is required before submitting."
+    },
+    "year": {
+      "label": "Year of study",
+      "drag": "Drag to select",
+      "year1": "1st year",
+      "year2": "2nd year",
+      "year3": "3rd year",
+      "year4": "4th year",
+      "year5plus": "5th year+",
+      "short1": "1st",
+      "short2": "2nd",
+      "short3": "3rd",
+      "short4": "4th",
+      "short5plus": "5th+"
+    },
+    "experience": {
+      "label": "Programming experience level",
+      "level": "Experience level {level}",
+      "beginner": "Beginner: I know the basics.",
+      "advanced": "Advanced: I feel comfortable with real projects, frameworks and Git."
+    },
+    "ratings": {
+      "preference": "Preference",
+      "none": "Not at all",
+      "low": "A little",
+      "medium": "Moderately",
+      "high": "Very"
+    },
+    "participation": {
+      "regularMember": "Participate as a regular member",
+      "eventOrganizer": "Help organise events",
+      "workshopVolunteer": "Volunteer or present workshops"
+    },
+    "interests": {
+      "web": "Web Development (Frontend/Backend)",
+      "mobile": "Mobile Development (iOS/Android)",
+      "dataAi": "Data Science / Machine Learning / AI",
+      "embedded": "Embedded Systems / IoT Software",
+      "games": "Game Development",
+      "testing": "Software Testing / Quality Assurance",
+      "devops": "DevOps / Cloud Computing",
+      "dsa": "Data Structures and Algorithms"
+    },
+    "steps": {
+      "identity": {
+        "eyebrow": "Start with the basics",
+        "title": "Who is applying",
+        "description": "Tell us who you are and where you are in your studies.",
+        "name": "Full name",
+        "namePlaceholder": "George Georgiou",
+        "email": "Email address",
+        "year": "Year"
+      },
+      "links": {
+        "eyebrow": "Your online trail",
+        "title": "Your links",
+        "description": "GitHub helps us see your work. Discord helps us reach you quickly."
+      },
+      "interests": {
+        "eyebrow": "What pulls you in",
+        "title": "What you want to build",
+        "description": "Pick the areas and team activities that sound worth your time.",
+        "areas": "Areas of interest",
+        "pickOne": "Pick at least one.",
+        "experience": "Experience level",
+        "experienceHint": "Choose the point that feels closest today.",
+        "participation": "How much would you like to participate in these parts of the team?",
+        "participationHint": "Select one option per row."
+      },
+      "details": {
+        "eyebrow": "The longer answer",
+        "title": "In your words",
+        "description": "A couple of sentences is plenty.",
+        "idea": "Do you have a specific idea for a project or an initiative that you would like us to carry out together?",
+        "ideaPlaceholder": "A workshop, an open-source tool, a campus app, a research idea...",
+        "projects": "Share links to the projects you are most proud of",
+        "projectsPlaceholder": "GitHub repositories, demos, write-ups, apps, bots, notebooks, videos..."
+      },
+      "submit": {
+        "eyebrow": "One last thing",
+        "title": "Send it",
+        "description": "We document how we use your data, just as we document the rest of our work.",
+        "consent": "I agree that IEESEC may store this information to process my application.",
+        "privacy": "Read the privacy note",
+        "submitting": "Submitting…",
+        "submit": "Submit application",
+        "ready": "You are all set.",
+        "locked": "Complete the required form steps to unlock submission."
+      }
+    },
+    "success": {
+      "title": "Thanks, {name}. We have received your application.",
+      "reply": "Someone on the team reads every application. Expect a reply at <email>{address}</email> within about a week.",
+      "fallbackEmail": "your email",
+      "discordText": "In the meantime, Discord is where you will find projects, workshop announcements and team discussions.",
+      "discordCta": "Join us on Discord"
+    }
+  }
+}

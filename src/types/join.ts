@@ -1,12 +1,14 @@
 export type InterestArea =
-  | "Web Development (Frontend/Backend)"
-  | "Mobile Development (iOS/Android)"
-  | "Data Science / Machine Learning / AI"
-  | "Embedded Systems / IoT Software"
-  | "Game Development"
-  | "Software Testing / Quality Assurance"
-  | "DevOps / Cloud Computing"
-  | "DSA";
+  | "web"
+  | "mobile"
+  | "dataAi"
+  | "embedded"
+  | "games"
+  | "testing"
+  | "devops"
+  | "dsa";
+
+export type YearOption = "year1" | "year2" | "year3" | "year4" | "year5plus";
 
 export type ExperienceLevel = 1 | 2 | 3 | 4 | 5;
 
@@ -19,7 +21,7 @@ export type ParticipationPreferences = Record<ParticipationPreference, Participa
 export interface JoinFormData {
   fullName: string;
   email: string;
-  year: string;
+  year: YearOption;
   github: string;
   linkedin: string;
   discord: string;

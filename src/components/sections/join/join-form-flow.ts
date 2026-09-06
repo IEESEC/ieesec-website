@@ -3,7 +3,7 @@ import type { JoinFormData } from "@/types/join";
 export const JOIN_FORM_STEP_COUNT = 5;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+$/;
-const DEFAULT_YEAR = "1st year";
+const DEFAULT_YEAR = "year1";
 
 export function getJoinStepProgress(step: number): number {
   const finalStep = JOIN_FORM_STEP_COUNT - 1;

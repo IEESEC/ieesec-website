@@ -78,11 +78,25 @@ async function contrastRatio(locator: Locator, pseudoElement?: "::placeholder") 
   }, pseudoElement);
 }
 
+test("dark supporting text and primary controls meet WCAG AA", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+  await forceTheme(page, "dark");
+  await page.goto("/en");
+  for (const sample of [
+    page.locator("#team p").first(),
+    page.locator("#team [data-slot='card'] p").last(),
+    page.getByRole("banner").getByRole("link", { name: "Join us", exact: true }),
+  ]) {
+    await expect(sample).toBeVisible();
+    expect(await contrastRatio(sample)).toBeGreaterThanOrEqual(4.5);
+  }
+});
+
 test("one click switches a system-resolved dark theme to light", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop");
   await page.emulateMedia({ colorScheme: "dark" });
   await page.addInitScript(() => localStorage.removeItem("theme"));
-  await page.goto("/");
+  await page.goto("/en");
 
   await expect(page.locator("html")).toHaveClass(/dark/);
   await page.getByRole("button", { name: "Toggle theme" }).click();
@@ -92,7 +106,7 @@ test("one click switches a system-resolved dark theme to light", async ({ page }
 test("light hero and navbar use artifact-free terminal surfaces", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop");
   await forceTheme(page, "light");
-  await page.goto("/");
+  await page.goto("/en");
 
   const navbar = page.getByRole("banner").locator(":scope > div > div");
   const [, , , navbarAlpha] = await renderedColor(navbar, "backgroundColor");
@@ -142,21 +156,21 @@ test("light hero and navbar use artifact-free terminal surfaces", async ({ page 
 test("light theme supporting text and controls meet WCAG AA", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop");
   await forceTheme(page, "light");
-  await page.goto("/");
+  await page.goto("/en");
 
   const textSamples = [
     page.locator("#team p").first(),
     page.locator("#tech-stack p").first(),
     page.locator("#blog p.text-muted-foreground").first(),
     page.locator("footer p").first(),
-    page.locator("footer h4").first(),
+    page.locator("footer h2").first(),
   ];
   for (const sample of textSamples) {
     await expect(sample).toBeVisible();
     expect(await contrastRatio(sample)).toBeGreaterThanOrEqual(4.5);
   }
 
-  await page.goto("/join");
+  await page.goto("/en/join");
   await page.getByRole("link", { name: "Scroll to get started" }).click();
   const nameInput = page.getByLabel("Full name");
   await expect(nameInput).toBeVisible();

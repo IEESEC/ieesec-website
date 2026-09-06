@@ -6,32 +6,27 @@ import type {
   ParticipationRating,
 } from "@/types/join";
 
-export const YEAR_OPTIONS = ["1st year", "2nd year", "3rd year", "4th year", "5th year+"];
+export const YEAR_OPTIONS = ["year1", "year2", "year3", "year4", "year5plus"] as const;
 
 export const INTEREST_AREAS: InterestArea[] = [
-  "Web Development (Frontend/Backend)",
-  "Mobile Development (iOS/Android)",
-  "Data Science / Machine Learning / AI",
-  "Embedded Systems / IoT Software",
-  "Game Development",
-  "Software Testing / Quality Assurance",
-  "DevOps / Cloud Computing",
-  "DSA",
+  "web",
+  "mobile",
+  "dataAi",
+  "embedded",
+  "games",
+  "testing",
+  "devops",
+  "dsa",
 ];
 
 export const EXPERIENCE_LEVELS: ExperienceLevel[] = [1, 2, 3, 4, 5];
 
-export const PARTICIPATION_RATINGS: { value: ParticipationRating; label: string }[] = [
-  { value: "none", label: "Not at all" },
-  { value: "low", label: "A little" },
-  { value: "medium", label: "Moderately" },
-  { value: "high", label: "Very" },
-];
+export const PARTICIPATION_RATINGS: ParticipationRating[] = ["none", "low", "medium", "high"];
 
-export const PARTICIPATION_ROWS: { value: ParticipationPreference; label: string }[] = [
-  { value: "regularMember", label: "Participate as a regular member" },
-  { value: "eventOrganizer", label: "Help organize events" },
-  { value: "workshopVolunteer", label: "Volunteer or present workshops" },
+export const PARTICIPATION_ROWS: ParticipationPreference[] = [
+  "regularMember",
+  "eventOrganizer",
+  "workshopVolunteer",
 ];
 
 export const EMPTY_JOIN_FORM: JoinFormData = {

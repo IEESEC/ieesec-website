@@ -5,6 +5,7 @@ import type {
   JoinFormData,
   ParticipationPreference,
   ParticipationRating,
+  YearOption,
 } from "@/types/join";
 import {
   EXPERIENCE_LEVELS,
@@ -156,15 +157,15 @@ function normalizeParticipationPreferences(
 ): Record<ParticipationPreference, ParticipationRating | null> | null {
   if (!isRecord(value)) return null;
 
-  const allowedRatings = PARTICIPATION_RATINGS.map((rating) => rating.value);
+  const allowedRatings = PARTICIPATION_RATINGS;
   const preferences = {} as Record<ParticipationPreference, ParticipationRating | null>;
 
-  for (const row of PARTICIPATION_ROWS) {
-    const rating = value[row.value];
+  for (const preference of PARTICIPATION_ROWS) {
+    const rating = value[preference];
 
     if (!isOneOf(rating, allowedRatings)) return null;
 
-    preferences[row.value] = rating;
+    preferences[preference] = rating;
   }
 
   return preferences;
@@ -240,14 +241,14 @@ function clipDiscordField(value: string, fallback = "Not provided"): string {
 }
 
 const INTEREST_LABELS: Record<InterestArea, string> = {
-  "Web Development (Frontend/Backend)": "🌐 Web Development",
-  "Mobile Development (iOS/Android)": "📱 Mobile Development",
-  "Data Science / Machine Learning / AI": "🧠 Data Science / ML / AI",
-  "Embedded Systems / IoT Software": "🔌 Embedded Systems / IoT",
-  "Game Development": "🎮 Game Development",
-  "Software Testing / Quality Assurance": "🧪 Software Testing / QA",
-  "DevOps / Cloud Computing": "☁️ DevOps / Cloud Computing",
-  DSA: "🧩 DSA",
+  web: "🌐 Web Development",
+  mobile: "📱 Mobile Development",
+  dataAi: "🧠 Data Science / ML / AI",
+  embedded: "🔌 Embedded Systems / IoT",
+  games: "🎮 Game Development",
+  testing: "🧪 Software Testing / QA",
+  devops: "☁️ DevOps / Cloud Computing",
+  dsa: "🧩 Data Structures & Algorithms",
 };
 
 const PARTICIPATION_LABELS: Record<ParticipationPreference, string> = {
@@ -271,10 +272,18 @@ const EXPERIENCE_LABELS: Record<ExperienceLevel, string> = {
   5: "🏆 5 / 5 - Advanced",
 };
 
+const YEAR_LABELS: Record<YearOption, string> = {
+  year1: "1st year",
+  year2: "2nd year",
+  year3: "3rd year",
+  year4: "4th year",
+  year5plus: "5th year+",
+};
+
 function formatParticipationPreferences(form: JoinFormData): string {
-  return PARTICIPATION_ROWS.map((row) => {
-    const selectedValue = form.participationPreferences[row.value];
-    const preferenceLabel = PARTICIPATION_LABELS[row.value];
+  return PARTICIPATION_ROWS.map((preference) => {
+    const selectedValue = form.participationPreferences[preference];
+    const preferenceLabel = PARTICIPATION_LABELS[preference];
     const ratingLabel =
       selectedValue === null ? "Not provided" : PARTICIPATION_RATING_LABELS[selectedValue];
 
@@ -298,7 +307,7 @@ function buildDiscordPayload(form: JoinFormData) {
           {
             name: "👤 Applicant",
             value: clipDiscordField(
-              `**Name:** ${form.fullName}\n**Email:** ${form.email}\n**Year:** ${form.year}`,
+              `**Name:** ${form.fullName}\n**Email:** ${form.email}\n**Year:** ${YEAR_LABELS[form.year]}`,
             ),
             inline: true,
           },
@@ -357,15 +366,22 @@ function isTrustedOrigin(request: Request): boolean {
   }
 }
 
-function jsonError(status: number) {
-  return Response.json({ ok: false, message: "Application could not be submitted." }, { status });
+type JoinApplicationErrorCode =
+  | "invalid-origin"
+  | "unsupported-media-type"
+  | "rate-limited"
+  | "invalid-application"
+  | "service-unavailable";
+
+function jsonError(status: number, code: JoinApplicationErrorCode) {
+  return Response.json({ ok: false, code }, { status });
 }
 
 export async function POST(request: Request) {
-  if (!isTrustedOrigin(request)) return jsonError(403);
+  if (!isTrustedOrigin(request)) return jsonError(403, "invalid-origin");
 
   if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) {
-    return jsonError(415);
+    return jsonError(415, "unsupported-media-type");
   }
 
   const clientIdentifier = getClientIdentifier(request);
@@ -378,13 +394,13 @@ export async function POST(request: Request) {
       windowMs: REQUEST_RATE_LIMIT_WINDOW_MS,
     })
   ) {
-    return jsonError(429);
+    return jsonError(429, "rate-limited");
   }
 
   const validation = validateJoinApplication(await request.text());
 
   if (!validation.ok) {
-    return jsonError(validation.reason === "payload-too-large" ? 413 : 400);
+    return jsonError(validation.reason === "payload-too-large" ? 413 : 400, "invalid-application");
   }
 
   if (
@@ -401,13 +417,13 @@ export async function POST(request: Request) {
       windowMs: APPLICANT_RATE_LIMIT_WINDOW_MS,
     })
   ) {
-    return jsonError(429);
+    return jsonError(429, "rate-limited");
   }
 
   const webhookUrl = process.env[DISCORD_WEBHOOK_ENV];
 
   if (!webhookUrl || !DISCORD_WEBHOOK_PATTERN.test(webhookUrl)) {
-    return jsonError(500);
+    return jsonError(500, "service-unavailable");
   }
 
   try {
@@ -417,9 +433,9 @@ export async function POST(request: Request) {
       body: JSON.stringify(buildDiscordPayload(validation.data)),
     });
 
-    if (!discordResponse.ok) return jsonError(502);
+    if (!discordResponse.ok) return jsonError(502, "service-unavailable");
   } catch {
-    return jsonError(502);
+    return jsonError(502, "service-unavailable");
   }
 
   return Response.json({ ok: true });
