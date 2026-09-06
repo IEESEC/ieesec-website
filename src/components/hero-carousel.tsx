@@ -33,7 +33,7 @@ function TypingHeadline() {
   return (
     <h1
       aria-label={t("headlineLabel")}
-      className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(2.35rem,12vw,3.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_30px_rgb(255,255,255,0.35)] dark:text-white dark:drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)] sm:text-7xl lg:text-8xl"
+      className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(1.8rem,9.8vw,3.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_30px_rgb(255,255,255,0.35)] dark:text-white dark:drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)] sm:text-7xl lg:text-8xl"
     >
       <span aria-hidden="true" className="hero-typewriter block">
         <span className="hero-typewriter-line" data-text={t("line1")}>
@@ -61,9 +61,10 @@ export function HeroCarousel() {
   const autoplayPlugin = React.useRef(
     Autoplay({
       delay: 5000,
-      stopOnFocusIn: false,
-      stopOnInteraction: false,
-      stopOnMouseEnter: false,
+      playOnInit: false,
+      stopOnFocusIn: true,
+      stopOnInteraction: true,
+      stopOnMouseEnter: true,
     }),
   );
 
@@ -91,6 +92,14 @@ export function HeroCarousel() {
   React.useEffect(() => {
     if (!emblaApi) return;
 
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const stopForReducedMotion = () => {
+      if (reducedMotion.matches) autoplayPlugin.current.stop();
+    };
+    stopForReducedMotion();
+    if (!reducedMotion.matches) autoplayPlugin.current.play();
+    reducedMotion.addEventListener("change", stopForReducedMotion);
+
     const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
     const onAutoplayPlay = () => setIsAutoplaying(true);
     const onAutoplayStop = () => setIsAutoplaying(false);
@@ -99,8 +108,10 @@ export function HeroCarousel() {
     emblaApi.on("autoplay:play", onAutoplayPlay);
     emblaApi.on("autoplay:stop", onAutoplayStop);
     onSelect();
+    setIsAutoplaying(autoplayPlugin.current.isPlaying());
 
     return () => {
+      reducedMotion.removeEventListener("change", stopForReducedMotion);
       emblaApi.off("select", onSelect);
       emblaApi.off("autoplay:play", onAutoplayPlay);
       emblaApi.off("autoplay:stop", onAutoplayStop);
@@ -111,7 +122,7 @@ export function HeroCarousel() {
     <section
       aria-label={t("regionLabel")}
       aria-roledescription="carousel"
-      className="relative isolate min-h-dvh w-full min-w-0 max-w-full overflow-hidden"
+      className="hero-carousel relative isolate min-h-dvh w-full min-w-0 max-w-full overflow-hidden"
       role="region"
     >
       <div ref={emblaRef} className="min-h-dvh w-full overflow-hidden">
@@ -131,7 +142,8 @@ export function HeroCarousel() {
                 alt={t(`images.${slide.altKey}`)}
                 fill
                 className="object-cover"
-                loading="eager"
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "auto"}
                 sizes="100vw"
               />
 
@@ -146,7 +158,7 @@ export function HeroCarousel() {
       </div>
 
       {/* Fixed onboarding message while the background images autoplay */}
-      <div className="pointer-events-none absolute inset-0 z-10 flex items-center md:block">
+      <div className="hero-content pointer-events-none absolute inset-0 z-10 flex items-center md:block">
         <div className="mx-auto min-w-0 w-full max-w-7xl px-5 sm:px-10 md:absolute md:inset-x-0 md:bottom-0 md:pb-32 md:pt-32 lg:px-12 lg:pb-36">
           <div className="pointer-events-auto max-w-3xl">
             <TypingHeadline />
@@ -174,7 +186,7 @@ export function HeroCarousel() {
       </div>
 
       {/* Carousel controls */}
-      <div className="absolute inset-x-4 bottom-6 z-20 hidden min-w-0 items-center justify-center sm:bottom-8 sm:left-auto sm:right-10 sm:w-[min(32rem,calc(100%-3rem))] sm:justify-end md:flex">
+      <div className="absolute inset-x-4 bottom-6 z-20 flex min-w-0 items-center justify-center sm:bottom-8 sm:left-auto sm:right-10 sm:w-[min(32rem,calc(100%-3rem))] sm:justify-end">
         <div className="flex max-w-full items-center gap-1 rounded-full border border-foreground/15 bg-background/65 p-1 pl-2 text-foreground shadow-sm backdrop-blur-sm sm:gap-3 sm:p-1.5 sm:pl-4 dark:border-white/15 dark:bg-black/20 dark:text-white dark:shadow-none dark:backdrop-blur-md">
           <span
             className="hidden min-w-12 text-xs font-semibold tabular-nums text-foreground/70 sm:inline dark:text-white/75"
@@ -193,7 +205,7 @@ export function HeroCarousel() {
                 aria-current={selectedIndex === index ? "true" : undefined}
                 aria-label={t("showSlide", { number: index + 1 })}
                 onClick={() => scrollTo(index)}
-                className="group flex h-11 w-8 items-center justify-center rounded-full px-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground dark:focus-visible:outline-white"
+                className="group flex h-11 w-11 items-center justify-center rounded-full px-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground dark:focus-visible:outline-white"
               >
                 <span
                   className={cn(
@@ -209,7 +221,7 @@ export function HeroCarousel() {
           <div className="ml-0.5 flex items-center gap-0.5 border-l border-foreground/15 pl-0.5 sm:ml-1 sm:gap-1 sm:pl-1 dark:border-white/15">
             <button
               aria-label={controls("previousSlide")}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-200 hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:h-9 sm:w-9 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-200 hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground  dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
               onClick={scrollPrev}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -217,7 +229,7 @@ export function HeroCarousel() {
             <button
               aria-label={isAutoplaying ? t("pause") : t("play")}
               aria-pressed={isAutoplaying}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-foreground/10 text-foreground transition-colors duration-200 hover:bg-foreground/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:h-9 sm:w-9 dark:bg-white/10 dark:text-white dark:hover:bg-white/20 dark:focus-visible:outline-white"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-foreground/10 text-foreground transition-colors duration-200 hover:bg-foreground/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground  dark:bg-white/10 dark:text-white dark:hover:bg-white/20 dark:focus-visible:outline-white"
               onClick={toggleAutoplay}
             >
               {isAutoplaying ? (
@@ -228,7 +240,7 @@ export function HeroCarousel() {
             </button>
             <button
               aria-label={controls("nextSlide")}
-              className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-200 hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground sm:h-9 sm:w-9 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-200 hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground  dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
               onClick={scrollNext}
             >
               <ChevronRight className="h-4 w-4" />

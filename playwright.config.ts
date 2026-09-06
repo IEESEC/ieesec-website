@@ -37,8 +37,8 @@ export default defineConfig({
   webServer: process.argv.includes("--project=unit")
     ? undefined
     : {
-        command: "npm run dev",
-        url: "http://localhost:3000",
+        command: `"${process.execPath}" node_modules/next/dist/bin/next dev`,
+        url: process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:3000",
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
       },

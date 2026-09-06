@@ -6,7 +6,7 @@ test("updates the active section after returning from the join page", async ({
   test.skip(testInfo.project.name !== "desktop");
 
   await page.goto("/en");
-  await page.getByRole("banner").getByRole("link", { name: "Join Us", exact: true }).click();
+  await page.getByRole("banner").getByRole("link", { name: "Join us", exact: true }).click();
   await expect(page).toHaveURL(/\/en\/join$/);
 
   const homeLink = page.getByRole("link", { name: "Home", exact: true });
@@ -15,7 +15,7 @@ test("updates the active section after returning from the join page", async ({
   await expect(homeLink).not.toHaveClass(/(?:^|\s)bg-primary(?:\s|$)/);
   await teamLink.click();
 
-  await expect(page).toHaveURL(/\/en\/#team$/);
+  await expect(page).toHaveURL(/\/en\/?#team$/);
   await expect(teamLink).toHaveClass(/(?:^|\s)bg-primary(?:\s|$)/);
   await expect(homeLink).not.toHaveClass(/(?:^|\s)bg-primary(?:\s|$)/);
 });

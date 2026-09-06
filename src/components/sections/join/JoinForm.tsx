@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type {
   ExperienceLevel,
   InterestArea,
@@ -218,6 +218,7 @@ interface ExperienceScaleProps {
 
 function ExperienceScale({ value, onChange }: ExperienceScaleProps) {
   const t = useTranslations("join.experience");
+  const groupName = useId();
   return (
     <div
       role="radiogroup"
@@ -231,21 +232,24 @@ function ExperienceScale({ value, onChange }: ExperienceScaleProps) {
       </div>
       <div className="mt-3 grid grid-cols-5 gap-2">
         {EXPERIENCE_LEVELS.map((level) => (
-          <button
+          <label
             key={level}
-            type="button"
-            role="radio"
-            aria-checked={value === level}
-            onClick={() => onChange(level)}
-            className={cn(
-              "mx-auto size-5 rounded-full border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25",
-              value === level
-                ? "border-primary bg-primary ring-4 ring-primary/15"
-                : "border-input bg-background hover:border-primary",
-            )}
+            className="relative mx-auto flex size-11 cursor-pointer items-center justify-center"
           >
-            <span className="sr-only">{t("level", { level })}</span>
-          </button>
+            <input
+              type="radio"
+              name={groupName}
+              value={level}
+              checked={value === level}
+              onChange={() => onChange(level)}
+              aria-label={t("level", { level })}
+              className="peer absolute inset-0 z-10 size-full cursor-pointer opacity-0"
+            />
+            <span
+              aria-hidden
+              className="size-5 rounded-full border border-input bg-background transition-colors peer-checked:border-primary peer-checked:bg-primary peer-checked:ring-4 peer-checked:ring-primary/15 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-ring"
+            />
+          </label>
         ))}
       </div>
       <div className="mt-4 flex justify-between gap-4 text-xs text-muted-foreground">
@@ -263,10 +267,11 @@ interface ParticipationMatrixProps {
 
 function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
   const ratings = useTranslations("join.ratings");
+  const groupName = useId();
   const participation = useTranslations("join.participation");
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-background dark:bg-background/70">
-      <div className="grid grid-cols-[minmax(5.8rem,1fr)_repeat(4,minmax(2.7rem,0.55fr))] border-b border-border px-2 py-2 text-center text-[0.62rem] font-semibold text-muted-foreground sm:grid-cols-[minmax(7.5rem,1.1fr)_repeat(4,minmax(3.6rem,0.7fr))] sm:px-3 sm:text-[0.68rem]">
+    <div className="overflow-x-auto rounded-2xl border border-border bg-background dark:bg-background/70">
+      <div className="grid grid-cols-[minmax(3rem,1fr)_repeat(4,minmax(2.75rem,0.55fr))] border-b border-border px-2 py-2 text-center text-[0.62rem] font-semibold text-muted-foreground lg:grid-cols-[minmax(5rem,1.1fr)_repeat(4,minmax(2.75rem,0.7fr))] sm:px-3 sm:text-[0.68rem]">
         <span className="text-left">{ratings("preference")}</span>
         {PARTICIPATION_RATINGS.map((rating) => (
           <span key={rating} className="leading-tight">
@@ -277,29 +282,39 @@ function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
       {PARTICIPATION_ROWS.map((preference) => (
         <div
           key={preference}
-          className="grid grid-cols-[minmax(5.8rem,1fr)_repeat(4,minmax(2.7rem,0.55fr))] items-center border-b border-border/80 px-2 py-3 last:border-b-0 sm:grid-cols-[minmax(7.5rem,1.1fr)_repeat(4,minmax(3.6rem,0.7fr))] sm:px-3"
+          role="radiogroup"
+          aria-label={participation(preference)}
+          className="grid grid-cols-[minmax(3rem,1fr)_repeat(4,minmax(2.75rem,0.55fr))] items-center border-b border-border/80 px-2 py-3 last:border-b-0 lg:grid-cols-[minmax(5rem,1.1fr)_repeat(4,minmax(2.75rem,0.7fr))] sm:px-3"
         >
           <p className="pr-3 text-xs font-semibold leading-snug text-foreground">
             {participation(preference)}
           </p>
           {PARTICIPATION_RATINGS.map((rating) => (
-            <button
+            <label
               key={rating}
-              type="button"
-              role="radio"
-              aria-checked={values[preference] === rating}
-              aria-label={`${participation(preference)}: ${ratings(rating)}`}
-              onClick={() => onChange(preference, rating)}
-              className="mx-auto flex size-5 cursor-pointer items-center justify-center rounded-full border border-input bg-background transition-all hover:border-primary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-primary/25"
+              className="relative mx-auto flex size-11 cursor-pointer items-center justify-center"
             >
+              <input
+                type="radio"
+                name={groupName + preference}
+                value={rating}
+                checked={values[preference] === rating}
+                onChange={() => onChange(preference, rating)}
+                aria-label={participation(preference) + ": " + ratings(rating)}
+                className="peer absolute inset-0 z-10 size-full cursor-pointer opacity-0"
+              />
               <span
                 aria-hidden
-                className={cn(
-                  "size-2.5 rounded-full transition-transform",
-                  values[preference] === rating ? "scale-100 bg-primary" : "scale-0 bg-transparent",
-                )}
-              />
-            </button>
+                className="flex size-5 items-center justify-center rounded-full border border-input bg-background peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-ring"
+              >
+                <span
+                  className={cn(
+                    "size-2.5 rounded-full transition-transform",
+                    values[preference] === rating ? "scale-100 bg-primary" : "scale-0",
+                  )}
+                />
+              </span>
+            </label>
           ))}
         </div>
       ))}
@@ -595,8 +610,8 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
     }
   };
 
-  const motivationCount = useMemo(() => form.motivation.length, [form.motivation]);
-  const builtCount = useMemo(() => form.builtSomething.length, [form.builtSomething]);
+  const motivationCount = form.motivation.length;
+  const builtCount = form.builtSomething.length;
 
   if (submitted) {
     return (

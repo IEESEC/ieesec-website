@@ -22,13 +22,16 @@ export function TechStackSection() {
   );
 
   return (
-    <section id="tech-stack" className="min-h-screen w-full flex flex-col pt-32 pb-20 scroll-mt-20">
+    <section
+      id="tech-stack"
+      className="min-h-screen w-full flex flex-col pt-24 pb-16 sm:pt-32 sm:pb-20 scroll-mt-20"
+    >
       <div className="mx-auto max-w-7xl px-6 w-full">
         <div className="mb-12">
           <Reveal direction="left">
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-5xl">
               {t("techTitle")}
-            </h1>
+            </h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("techDescription")}</p>
           </Reveal>
 
@@ -41,7 +44,7 @@ export function TechStackSection() {
                   onClick={() => setFilter(category)}
                   aria-pressed={filter === category}
                   className={cn(
-                    "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
+                    "min-h-11 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
                     filter === category
                       ? "border-accent bg-accent text-accent-foreground"
                       : "border-border text-muted-foreground hover:border-accent/50 hover:text-foreground",
