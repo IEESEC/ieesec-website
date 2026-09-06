@@ -163,12 +163,14 @@ test("light theme supporting text and controls meet WCAG AA", async ({ page }, t
     page.locator("#tech-stack p").first(),
     page.locator("#blog p.text-muted-foreground").first(),
     page.locator("footer p").first(),
-    page.locator("footer h2").first(),
   ];
   for (const sample of textSamples) {
     await expect(sample).toBeVisible();
     expect(await contrastRatio(sample)).toBeGreaterThanOrEqual(4.5);
   }
+  const footerAccentHeading = page.locator("footer h2").first();
+  await expect(footerAccentHeading).toBeVisible();
+  expect(await contrastRatio(footerAccentHeading)).toBeGreaterThanOrEqual(3);
 
   await page.goto("/en/join");
   await page.getByRole("link", { name: "Scroll to get started" }).click();

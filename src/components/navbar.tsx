@@ -182,7 +182,7 @@ export function Navbar() {
                 loading="eager"
                 fetchPriority="high"
                 decoding="sync"
-                className="h-7 w-auto text-transparent brightness-0 transition-opacity group-hover:opacity-80 dark:brightness-100"
+                className="light-theme-logo h-7 w-auto text-transparent brightness-0 transition-opacity group-hover:opacity-80 dark:brightness-100"
               />
             </Link>
 

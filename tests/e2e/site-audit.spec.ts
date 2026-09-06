@@ -39,6 +39,30 @@ test("content remains readable without JavaScript", async ({ browser, baseURL })
   await context.close();
 });
 
+test("section reveals animate and footer contact spacing stays consistent", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/el");
+
+  const teamHeadingReveal = page.locator("#team h2").locator("..");
+  await expect(teamHeadingReveal).toHaveCSS("opacity", "0");
+  await teamHeadingReveal.scrollIntoViewIfNeeded();
+  await expect
+    .poll(() => teamHeadingReveal.evaluate((element) => element.getAnimations().length))
+    .toBeGreaterThan(0);
+  await expect(teamHeadingReveal).toHaveCSS("opacity", "1");
+
+  const locationItems = page.locator("footer ul").nth(1).locator("li");
+  await locationItems.last().scrollIntoViewIfNeeded();
+  const gaps = await locationItems.evaluateAll((items) =>
+    items.slice(1).map((item, index) => {
+      const previous = items[index].getBoundingClientRect();
+      const current = item.getBoundingClientRect();
+      return current.top - previous.bottom;
+    }),
+  );
+  expect(gaps[2]).toBeCloseTo(gaps[1], 0);
+});
+
 test("tablet headings and navigation fit in both languages", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop");
   await page.emulateMedia({ reducedMotion: "reduce" });

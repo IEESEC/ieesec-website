@@ -237,6 +237,17 @@
   background: oklch(0 0 0 / 0.5);
 }
 
+/* Light-theme brand accents keep secondary footer and navigation content tied to the primary hue. */
+:where(html:not(.dark)) .light-theme-accent {
+  color: color-mix(in oklab, var(--primary) 85%, transparent);
+}
+
+/* External SVG images cannot inherit currentColor, so tint the light logos to the same brand hue. */
+html:not(.dark) .light-theme-logo {
+  filter: brightness(0) saturate(100%) invert(55%) sepia(12%) saturate(903%) hue-rotate(153deg)
+    brightness(91%) contrast(87%);
+}
+
 /* Hero carousel: bottom gradient fade into page background */
 .hero-fade {
   background: linear-gradient(
