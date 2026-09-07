@@ -306,6 +306,10 @@
 }
 
 @supports (-webkit-touch-callout: none) {
+  .light-rays-ray:nth-child(n + 5) {
+    display: none;
+  }
+
   .light-rays-glow {
     filter: blur(22px);
   }
