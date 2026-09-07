@@ -158,6 +158,7 @@ export function HeroCarousel() {
                 src={slide.image}
                 alt={t(`images.${slide.altKey}`)}
                 fill
+                quality={60}
                 className={cn("object-cover", index === 0 && "hero-slide-image")}
                 loading={index === 0 ? "eager" : "lazy"}
                 fetchPriority={index === 0 ? "high" : "auto"}
