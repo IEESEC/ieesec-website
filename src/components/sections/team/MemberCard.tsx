@@ -43,6 +43,7 @@ export default function MemberCard({ member }: { member: Member }) {
           src={member.image}
           alt={fullName}
           fill
+          quality={65}
           sizes="(min-width: 1024px) 320px, (min-width: 640px) 384px, 100vw"
           className="object-cover grayscale-[15%] contrast-[1.04] transition-[filter] duration-700 ease-out group-hover:grayscale-0 motion-reduce:transition-none"
         />
