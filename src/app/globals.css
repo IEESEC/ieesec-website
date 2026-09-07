@@ -279,6 +279,47 @@
   animation: light-rays-sway var(--light-rays-speed) ease-in-out var(--ray-delay) infinite alternate;
 }
 
+/* Keep below-the-fold sections out of the initial paint and layout work. */
+.home-section-lazy {
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto 900px;
+}
+
+/* WebKit and small screens pay a high cost for many large blurred animated layers. */
+@media (max-width: 767px) {
+  .light-rays-ray:nth-child(n + 5) {
+    display: none;
+  }
+
+  .light-rays-glow {
+    filter: blur(18px);
+  }
+
+  .light-rays-source {
+    filter: blur(12px);
+  }
+
+  .light-rays-ray {
+    filter: blur(16px);
+    animation: none;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .light-rays-glow {
+    filter: blur(22px);
+  }
+
+  .light-rays-source {
+    filter: blur(15px);
+  }
+
+  .light-rays-ray {
+    filter: blur(18px);
+    animation: none;
+  }
+}
+
 @keyframes light-rays-sway {
   0%,
   100% {
@@ -394,11 +435,11 @@ html:not(.dark) .light-theme-logo {
 
 @keyframes hero-media-enter {
   from {
-    filter: blur(5px) saturate(0.82);
+    opacity: 0.92;
     transform: scale(1.045);
   }
   to {
-    filter: none;
+    opacity: 1;
     transform: scale(1);
   }
 }
@@ -583,7 +624,6 @@ html:not(.dark) .light-theme-logo {
   .hero-actions {
     opacity: 1;
     transform: none;
-    filter: none;
     animation: none;
   }
 

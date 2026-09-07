@@ -6,7 +6,7 @@ export function EventsSection() {
   return (
     <section
       id="events"
-      className="min-h-screen w-full flex flex-col pt-24 pb-16 sm:pt-32 sm:pb-20 scroll-mt-20"
+      className="home-section-lazy min-h-screen w-full flex flex-col pt-24 pb-16 sm:pt-32 sm:pb-20 scroll-mt-20"
     >
       <div className="mx-auto max-w-7xl px-6 w-full">
         <div className="mb-12">
