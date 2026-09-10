@@ -1,69 +1,91 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 const quickLinks = [
-  { label: "Join Us", href: "/join" },
-  { label: "Department", href: "https://iee.ihu.gr" },
-  { label: "GitHub", href: "https://github.com/IEESEC" },
-  { label: "Discord Server", href: "https://discord.gg/2xHBsHMKy7" },
-];
+  { labelKey: "join", href: "/join" },
+  { labelKey: "departmentLink", href: "https://iee.ihu.gr" },
+  { labelKey: "github", href: "https://github.com/IEESEC" },
+  { labelKey: "discord", href: "https://discord.gg/2xHBsHMKy7" },
+] as const;
 
 export function Footbar() {
+  const t = useTranslations("footer");
   return (
-    <footer className="relative z-10 w-full overflow-hidden">
-      <div className="absolute inset-0 bg-linear-to-b from-background via-black/10 to-black/30 -z-20" />
+    <footer className="relative z-10 w-full bg-background">
       <div className="mx-auto max-w-7xl px-6 pt-20 pb-12">
         {/* Diaxoristiki grammi */}
         <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-primary/40 to-transparent" />
 
         {/* Main Footbar Container */}
-        <div className="grid gap-10 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Description Subcontainer */}
-          <div className="col-span-2">
+          <div className="min-w-0 sm:col-span-2">
             <div className="flex items-center gap-3 mb-3">
-              {/*edw tha exei kai to logo*/}
-              <span className="text-xl font-bold tracking-tight text-primary">IEESEC</span>
+              <img
+                data-testid="footer-logo-black"
+                src="/images/brand/ieesec-logo-black.svg"
+                alt="IEESEC"
+                width={366}
+                height={322}
+                loading="lazy"
+                className="light-theme-logo h-auto w-24 dark:hidden"
+              />
+              <img
+                data-testid="footer-logo-white"
+                src="/images/brand/ieesec-logo-white.svg"
+                alt="IEESEC"
+                width={366}
+                height={322}
+                loading="lazy"
+                className="hidden h-auto w-24 dark:block"
+              />
             </div>
-            <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
-              The Software Engineering Student Team of&nbsp;
+            <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
+              {t("descriptionStart")}&nbsp;
               <Link
                 href="https://iee.ihu.gr"
-                className="text-primary/70 hover:text-primary transition-colors"
+                className="light-theme-accent font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
               >
-                Informatics and Electronics Engineering Department
+                {t("department")}
               </Link>
-              &nbsp;at International Hellenic University.
+              &nbsp;{t("descriptionEnd")}
             </p>
           </div>
 
           {/* Quick Links Subcontainer */}
           <div>
-            <h4 className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
-              Quick Links
-            </h4>
+            <h2 className="light-theme-accent mb-4 text-xs font-semibold uppercase tracking-widest">
+              {t("quickLinks")}
+            </h2>
             <ul className="space-y-2.5 flex flex-col">
               {quickLinks.map((item) => (
-                <Link href={item.href} key={item.label}>
-                  <span className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    {item.label}
-                  </span>
-                </Link>
+                <li key={item.labelKey}>
+                  <Link href={item.href} className="inline-flex items-center">
+                    <span className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                      {item.labelKey === "github" ? "GitHub" : t(item.labelKey)}
+                    </span>
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
 
           {/* Location Subcontainer */}
           <div>
-            <h4 className="mb-4 text-xs font-semibold uppercase tracking-widest text-muted-foreground/60">
-              Location
-            </h4>
+            <h2 className="light-theme-accent mb-4 text-xs font-semibold uppercase tracking-widest">
+              {t("location")}
+            </h2>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li>International Hellenic University</li>
-              <li>Sindos Campus</li>
-              <li>Sindos 574 00</li>
+              <li>{t("university")}</li>
+              <li>{t("campus")}</li>
+              <li>{t("city")}</li>
               <li>
-                <Link href="mailto:ieesec.ihu@gmail.com" className="text-primary/70">
+                <Link
+                  href="mailto:ieesec.ihu@gmail.com"
+                  className="light-theme-accent font-medium break-all text-foreground"
+                >
                   ieesec.ihu@gmail.com
                 </Link>
               </li>
@@ -75,8 +97,8 @@ export function Footbar() {
         <div className="mt-16 flex flex-col items-center">
           {/* Diaxoristiki grammi */}
           <div className="w-full max-w-xl h-px bg-linear-to-r from-transparent via-primary/20 to-transparent mb-8" />
-          <p className="text-xs text-muted-foreground/60">
-            &copy; {new Date().getFullYear()}&nbsp;IEESEC &middot; All rights reserved.
+          <p className="text-xs text-muted-foreground">
+            {t("copyright", { year: new Date().getFullYear() })}
           </p>
         </div>
       </div>

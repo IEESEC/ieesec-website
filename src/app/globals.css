@@ -4,11 +4,65 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 1rem;
+  z-index: 70;
+  padding: 0.75rem 1rem;
+  color: var(--foreground);
+  background: var(--background);
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+
+@media (max-width: 767px), (max-height: 600px) {
+  .hero-carousel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-carousel > div:first-child {
+    position: absolute;
+    inset: 0;
+  }
+  .hero-carousel > div:first-child > div,
+  .hero-carousel > div:first-child > div > div {
+    height: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-carousel .hero-typewriter-line {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-carousel .hero-typewriter-line::before,
+  .hero-carousel .hero-typewriter-line .hero-typewriter-reveal {
+    white-space: normal;
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root,
+  .join-form-timeline {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @theme inline {
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-inter), Arial, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-inter), Arial, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -62,7 +116,6 @@
     min-width: 0;
     background-color: var(--background);
     color: var(--foreground);
-    transition: color 150ms ease;
 
     @apply font-sans antialiased bg-background text-foreground;
   }
@@ -73,9 +126,6 @@
   }
   * {
     @apply border-border outline-ring/50;
-    transition-property: background-color, border-color;
-    transition-duration: 250ms;
-    transition-timing-function: ease;
   }
   html {
     @apply font-sans;
@@ -85,6 +135,7 @@
 
 :root {
   /* Brand: #508CA4 (steel-blue teal) */
+  --light-rays-theme-color: rgba(80, 140, 164, 0.22);
   --background: oklch(0.985 0.002 220);
   --foreground: oklch(0.185 0.02 230);
   --card: oklch(0.995 0.001 220);
@@ -93,18 +144,18 @@
   --popover-foreground: oklch(0.185 0.02 230);
   /* Primary = brand color #508CA4 */
   --primary: oklch(0.588 0.065 220);
-  --primary-foreground: oklch(0.99 0.002 220);
+  --primary-foreground: oklch(0.185 0.02 230);
   /* Secondary = desaturated cool slate */
   --secondary: oklch(0.94 0.012 230);
   --secondary-foreground: oklch(0.28 0.025 230);
   --muted: oklch(0.955 0.008 220);
-  --muted-foreground: oklch(0.48 0.02 230);
+  --muted-foreground: oklch(0.39 0.025 230);
   /* Accent = saturated cobalt blue, paired with the steel-blue primary */
   --accent: oklch(0.58 0.14 245);
-  --accent-foreground: oklch(0.99 0.002 220);
+  --accent-foreground: oklch(0.185 0.02 230);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.905 0.015 220);
-  --input: oklch(0.905 0.015 220);
+  --border: oklch(0.82 0.018 220);
+  --input: oklch(0.62 0.025 220);
   --ring: oklch(0.588 0.065 220);
   --chart-1: oklch(0.588 0.065 220);
   --chart-2: oklch(0.58 0.14 245);
@@ -115,15 +166,16 @@
   --sidebar: oklch(0.975 0.005 220);
   --sidebar-foreground: oklch(0.185 0.02 230);
   --sidebar-primary: oklch(0.588 0.065 220);
-  --sidebar-primary-foreground: oklch(0.99 0.002 220);
+  --sidebar-primary-foreground: oklch(0.185 0.02 230);
   --sidebar-accent: oklch(0.94 0.012 230);
   --sidebar-accent-foreground: oklch(0.28 0.025 230);
-  --sidebar-border: oklch(0.905 0.015 220);
+  --sidebar-border: oklch(0.82 0.018 220);
   --sidebar-ring: oklch(0.588 0.065 220);
 }
 
 .dark {
   /* Brand-aware dark mode: deep navy #0c1219 */
+  --light-rays-theme-color: rgba(158, 218, 255, 0.28);
   --background: oklch(0.13 0.015 235);
   --foreground: oklch(0.93 0.008 220);
   --card: oklch(0.17 0.016 232);
@@ -132,18 +184,18 @@
   --popover-foreground: oklch(0.93 0.008 220);
   /* Primary = luminous brand blue */
   --primary: oklch(0.66 0.075 220);
-  --primary-foreground: oklch(0.99 0.005 220);
+  --primary-foreground: oklch(0.13 0.015 235);
   /* Secondary = deep cool slate */
   --secondary: oklch(0.22 0.016 230);
   --secondary-foreground: oklch(0.9 0.008 220);
   --muted: oklch(0.2 0.012 232);
-  --muted-foreground: oklch(0.58 0.015 220);
+  --muted-foreground: oklch(0.62 0.015 220);
   /* Accent = lighter cobalt blue for dark surfaces */
   --accent: oklch(0.72 0.12 230);
   --accent-foreground: oklch(0.13 0.015 235);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(0.22 0.012 230);
-  --input: oklch(0.24 0.014 230);
+  --input: oklch(0.55 0.014 230);
   --ring: oklch(0.66 0.075 220);
   --chart-1: oklch(0.66 0.075 220);
   --chart-2: oklch(0.72 0.12 230);
@@ -160,24 +212,184 @@
   --sidebar-ring: oklch(0.66 0.075 220);
 }
 
-/* Hero carousel: uniform dark overlay for text readability */
+/* Ambient background layer: the rays stay behind content and become brighter on navy surfaces. */
+.light-rays {
+  isolation: isolate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.light-rays-page {
+  position: fixed;
+  inset: 0;
+  height: 100svh;
+  width: 100%;
+}
+
+.light-rays-glow,
+.light-rays-source,
+.light-rays-ray {
+  position: absolute;
+  pointer-events: none;
+}
+
+.light-rays-glow {
+  top: -16%;
+  left: 50%;
+  width: min(72rem, 96vw);
+  height: 22rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    var(--light-rays-color) 0%,
+    color-mix(in oklab, var(--light-rays-color) 35%, transparent) 38%,
+    transparent 76%
+  );
+  filter: blur(calc(var(--light-rays-blur) * 1.1));
+  opacity: calc(var(--light-rays-opacity) * 0.72);
+}
+
+.light-rays-source {
+  top: -4%;
+  left: 50%;
+  width: min(34rem, 65vw);
+  height: 8rem;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, var(--light-rays-color) 0%, transparent 72%);
+  filter: blur(calc(var(--light-rays-blur) * 0.65));
+  opacity: calc(var(--light-rays-opacity) * 0.9);
+}
+
+.light-rays-ray {
+  top: -7%;
+  left: var(--ray-left);
+  width: var(--ray-width);
+  height: var(--light-rays-length);
+  transform: translateX(-50%) rotate(var(--ray-angle)) scaleX(0.96);
+  transform-origin: top center;
+  background: linear-gradient(
+    to bottom,
+    var(--light-rays-color) 0%,
+    color-mix(in oklab, var(--light-rays-color) 55%, transparent) 34%,
+    transparent 86%
+  );
+  border-radius: 999px;
+  filter: blur(var(--light-rays-blur));
+  opacity: calc(var(--light-rays-opacity) * var(--ray-opacity));
+  animation: light-rays-sway var(--light-rays-speed) ease-in-out var(--ray-delay) infinite alternate;
+}
+
+/* Keep below-the-fold sections out of the initial paint and layout work. */
+.home-section-lazy {
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto 900px;
+}
+
+/* WebKit and small screens pay a high cost for many large blurred animated layers. */
+@media (max-width: 767px) {
+  .light-rays-ray:nth-child(n + 5) {
+    display: none;
+  }
+
+  .light-rays-glow {
+    filter: blur(18px);
+  }
+
+  .light-rays-source {
+    filter: blur(12px);
+  }
+
+  .light-rays-ray {
+    filter: blur(16px);
+    animation: none;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  .light-rays-ray:nth-child(n + 5) {
+    display: none;
+  }
+
+  .light-rays-glow {
+    filter: blur(22px);
+  }
+
+  .light-rays-source {
+    filter: blur(15px);
+  }
+
+  .light-rays-ray {
+    filter: blur(18px);
+    animation: none;
+  }
+}
+
+@keyframes light-rays-sway {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(calc(var(--ray-angle) - 3deg)) scaleX(0.92);
+  }
+
+  50% {
+    transform: translateX(-50%) rotate(calc(var(--ray-angle) + 4deg)) scaleX(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light-rays-ray {
+    animation: none;
+  }
+}
+
+/* Hero carousel: light mode keeps the campus imagery bright and editorial. */
 .hero-overlay {
+  background: oklch(0.99 0.002 220 / 0.52);
+}
+
+.dark .hero-overlay {
   background: oklch(0 0 0 / 0.5);
+}
+
+/* Light-theme brand accents keep secondary footer and navigation content tied to the primary hue. */
+:where(html:not(.dark)) .light-theme-accent {
+  color: color-mix(in oklab, var(--primary) 85%, transparent);
+}
+
+/* External SVG images cannot inherit currentColor, so tint the light logos to the same brand hue. */
+html:not(.dark) .light-theme-logo {
+  filter: brightness(0) saturate(100%) invert(55%) sepia(12%) saturate(903%) hue-rotate(153deg)
+    brightness(91%) contrast(87%);
 }
 
 /* Hero carousel: bottom gradient fade into page background */
 .hero-fade {
+  position: absolute;
+  z-index: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 14rem;
+  pointer-events: none;
   background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    transparent 50%,
-    oklch(0 0 0 / 0.4) 92%,
-    var(--background) 100%
+    to top,
+    var(--background) 0%,
+    color-mix(in oklab, var(--background) 72%, transparent) 24%,
+    color-mix(in oklab, var(--background) 28%, transparent) 54%,
+    transparent 100%
   );
 }
 
 /* Vignette effect for improved readability */
 .hero-vignette {
+  background: radial-gradient(
+    circle,
+    transparent 0%,
+    oklch(1 0 0 / 0.08) 50%,
+    oklch(1 0 0 / 0.38) 100%
+  );
+}
+
+.dark .hero-vignette {
   background: radial-gradient(
     circle,
     transparent 0%,
@@ -190,10 +402,105 @@
 .hero-content-wash {
   background: linear-gradient(
     90deg,
+    oklch(0.99 0.002 220 / 0.78) 0%,
+    oklch(0.99 0.002 220 / 0.38) 46%,
+    transparent 78%
+  );
+  animation: hero-wash-enter 750ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.dark .hero-content-wash {
+  background: linear-gradient(
+    90deg,
     oklch(0.05 0.02 230 / 0.78) 0%,
     oklch(0.05 0.02 230 / 0.38) 46%,
     transparent 78%
   );
+}
+
+.hero-slide-image {
+  animation: hero-media-enter 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-supporting-copy,
+.hero-actions {
+  opacity: 0;
+  transform: translateY(1rem);
+  animation: hero-copy-enter 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-supporting-copy {
+  animation-delay: 3.12s;
+}
+
+.hero-actions {
+  animation-delay: 3.27s;
+}
+
+@keyframes hero-media-enter {
+  from {
+    opacity: 0.92;
+    transform: scale(1.045);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-wash-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-copy-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Join video background: light mode uses an airy wash that still lets the campus footage lead. */
+.join-video-overlay {
+  background: oklch(0.99 0.002 220 / 0.52);
+}
+
+.dark .join-video-overlay {
+  background: rgb(2 6 23 / 0.58);
+}
+
+.join-video-wash {
+  background: linear-gradient(
+    90deg,
+    oklch(0.99 0.002 220 / 0.68),
+    transparent 55%,
+    oklch(0.99 0.002 220 / 0.34)
+  );
+}
+
+.dark .join-video-wash {
+  background: linear-gradient(90deg, rgba(2, 6, 23, 0.48), transparent 55%, rgba(2, 6, 23, 0.3));
+}
+
+.join-video-fade {
+  background: linear-gradient(
+    to top,
+    var(--background) 0%,
+    oklch(0.99 0.002 220 / 0.72) 55%,
+    transparent 100%
+  );
+}
+
+.dark .join-video-fade {
+  background: linear-gradient(to top, rgb(2 6 23 / 0.65), transparent);
 }
 
 /* CSS-Tricks-inspired stepped reveal with one caret moving across three responsive lines. */
@@ -217,21 +524,18 @@
 }
 
 .hero-typewriter-line:nth-child(1) {
-  --typewriter-characters: 11;
-  --typewriter-delay: 350ms;
-  --typewriter-duration: 660ms;
+  --typewriter-delay: 950ms;
+  --typewriter-duration: 800ms;
 }
 
 .hero-typewriter-line:nth-child(2) {
-  --typewriter-characters: 12;
-  --typewriter-delay: 1010ms;
-  --typewriter-duration: 720ms;
+  --typewriter-delay: 1750ms;
+  --typewriter-duration: 650ms;
 }
 
 .hero-typewriter-line:nth-child(3) {
-  --typewriter-characters: 9;
-  --typewriter-delay: 1730ms;
-  --typewriter-duration: 540ms;
+  --typewriter-delay: 2400ms;
+  --typewriter-duration: 650ms;
 }
 
 .hero-typewriter-reveal {
@@ -318,6 +622,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero-slide-image,
+  .hero-content-wash,
+  .hero-supporting-copy,
+  .hero-actions {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
   .hero-typewriter .hero-typewriter-line .hero-typewriter-reveal {
     width: 100%;
     clip-path: none;
@@ -326,5 +639,69 @@
 
   .hero-typewriter-caret {
     animation: none;
+  }
+}
+
+/* The join form uses scroll snapping only on desktop-class, fine-pointer devices. */
+.join-year-desktop {
+  display: none;
+}
+
+@media (min-width: 768px) and (pointer: fine) {
+  .join-year-mobile {
+    display: none;
+  }
+
+  .join-year-desktop {
+    display: block;
+  }
+
+  .join-form-shell {
+    height: 100svh;
+    scroll-margin-top: 0;
+  }
+
+  .join-form-progress {
+    position: absolute;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: none;
+    pointer-events: none;
+  }
+
+  .join-form-progress-meta {
+    position: absolute;
+    inset-inline: 0;
+    top: 5.35rem;
+    padding-block: 0;
+  }
+
+  .join-form-timeline {
+    height: 100svh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+  }
+
+  .join-form-timeline::-webkit-scrollbar {
+    display: none;
+  }
+
+  .join-form-step,
+  .join-form-step[aria-hidden="true"] {
+    display: flex !important;
+    height: 100svh;
+    min-height: 0;
+    align-items: center;
+    padding-top: 8rem;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .join-form-card {
+    max-height: calc(100svh - 10rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 }
