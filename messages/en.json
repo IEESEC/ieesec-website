@@ -127,6 +127,58 @@
     "description": "The page you are looking for does not exist or has been moved.",
     "back": "Back to home"
   },
+  "privacy": {
+    "eyebrow": "Join applications",
+    "title": "Privacy notice for join applications",
+    "summary": "This notice explains how IEESEC handles the information submitted through the website join form.",
+    "lastUpdated": "Last updated: 11 September 2026",
+    "controller": {
+      "title": "Who is responsible",
+      "body": "IEESEC, the student Software Engineering community of the Department of Information and Electronic Engineering at the International Hellenic University, is responsible for handling join applications."
+    },
+    "data": {
+      "title": "Information we collect",
+      "body": "The form may collect the following information:",
+      "items": [
+        "Full name, email address and year of study.",
+        "GitHub and Discord identifiers, plus an optional LinkedIn profile.",
+        "Technical interests, experience level and participation preferences.",
+        "Optional free-text answers about ideas and previous projects.",
+        "Technical request information used to reduce spam and abuse."
+      ]
+    },
+    "purpose": {
+      "title": "Why we use the information",
+      "body": "We use the information only to review the application, contact the applicant, organise participation in the community and protect the public form from spam or abuse. We do not sell applicant information."
+    },
+    "processing": {
+      "title": "Where the application goes",
+      "body": "The website sends a validated application through a private Discord webhook to a restricted team channel. The website does not maintain a separate applicant database. Discord and the hosting provider may process technical or submitted information under their own service terms."
+    },
+    "access": {
+      "title": "Who can access it",
+      "body": "Access is limited to authorised IEESEC members who review applications or maintain the submission service. Applications must not be copied to personal files, public channels or unrelated services."
+    },
+    "retention": {
+      "title": "How long we keep it",
+      "body": "Applications are kept in the designated private channel for no longer than 12 months and are then deleted, unless the applicant asks for earlier deletion or continued retention is required to resolve an active request."
+    },
+    "rights": {
+      "title": "Your choices",
+      "body": "You may ask for access to your application, correction of inaccurate information, deletion of the application or withdrawal from the application process. We will verify the request before acting on it."
+    },
+    "security": {
+      "title": "How we protect it",
+      "body": "We use server-side validation, restricted webhook configuration, rate limiting and limited channel access. No internet transmission or storage system can be guaranteed to be completely secure."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "For a privacy request or a question about an application, contact IEESEC by email."
+    },
+    "navigationLabel": "Privacy page navigation",
+    "backToJoin": "Back to the join form",
+    "backToHome": "Back to the home page"
+  },
   "join": {
     "heroTitle": "Join our community!",
     "heroDescription": "From curiosity to shipped projects, shared knowledge and a community that keeps moving with you.",
@@ -230,7 +282,7 @@
         "title": "Send it",
         "description": "We document how we use your data, just as we document the rest of our work.",
         "consent": "I agree that IEESEC may store this information to process my application.",
-        "privacy": "Read the privacy note",
+        "privacy": "Read the privacy notice",
         "submitting": "Submitting…",
         "submit": "Submit application",
         "ready": "You are all set.",

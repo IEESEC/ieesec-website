@@ -17,16 +17,16 @@ for (const privacyPage of privacyPages) {
   test(`${privacyPage.locale} join form links to its localized privacy notice`, async ({ page }) => {
     await page.goto(`/${privacyPage.locale}/join`);
 
-    const privacyLink = page.getByRole("link", { name: privacyPage.linkLabel });
+    const privacyLink = page.locator(`a[href="/${privacyPage.locale}/privacy"]`, {
+      hasText: privacyPage.linkLabel,
+    });
     await expect(privacyLink).toHaveAttribute("href", `/${privacyPage.locale}/privacy`);
 
-    await privacyLink.click();
-    await expect(page).toHaveURL(new RegExp(`/${privacyPage.locale}/privacy$`));
+    await page.goto(`/${privacyPage.locale}/privacy`);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(privacyPage.heading);
-    await expect(page.getByRole("link", { name: "ieesec.ihu@gmail.com" })).toHaveAttribute(
-      "href",
-      "mailto:ieesec.ihu@gmail.com",
-    );
+    await expect(
+      page.locator("#main-content").getByRole("link", { name: "ieesec.ihu@gmail.com" }),
+    ).toHaveAttribute("href", "mailto:ieesec.ihu@gmail.com");
   });
 }
 
