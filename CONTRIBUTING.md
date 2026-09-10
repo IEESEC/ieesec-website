@@ -6,7 +6,7 @@ Thank you for helping improve the IEESEC website. This guide is the human contri
 
 1. Search existing issues and pull requests.
 2. Open or claim an issue with a clear Definition of Done.
-3. For security-sensitive reports, stop and follow [SECURITY.md](SECURITY.md).
+3. For security-sensitive reports, contact `ieesec.ihu@gmail.com` privately and do not open a public issue; see the [operations guide](docs/operations.md) for ownership details.
 4. For large architectural or product changes, agree on the approach in the issue before implementation.
 
 ## Branch model

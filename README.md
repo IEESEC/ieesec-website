@@ -95,8 +95,6 @@ docs/                     Architecture, operations and team guides
 - [Operations and join applications](docs/operations.md)
 - [Product direction](PRODUCT.md)
 - [Design system](DESIGN.md)
-- [Security policy](SECURITY.md)
-- [Support](SUPPORT.md)
 - [Architecture decisions](docs/adr/README.md)
 
 ### Documentation language
@@ -107,7 +105,7 @@ docs/                     Architecture, operations and team guides
 
 ## Contributing and security
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Do not report suspected security vulnerabilities or exposed secrets in public issues; follow [SECURITY.md](SECURITY.md).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Do not report suspected security vulnerabilities or exposed secrets in public issues; contact `ieesec.ihu@gmail.com` privately instead.
 
 ## License
 
