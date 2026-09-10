@@ -14,7 +14,9 @@ const privacyPages = [
 ] as const;
 
 for (const privacyPage of privacyPages) {
-  test(`${privacyPage.locale} join form links to its localized privacy notice`, async ({ page }) => {
+  test(`${privacyPage.locale} join form links to its localized privacy notice`, async ({
+    page,
+  }) => {
     await page.goto(`/${privacyPage.locale}/join`);
 
     const privacyLink = page.locator(`a[href="/${privacyPage.locale}/privacy"]`, {

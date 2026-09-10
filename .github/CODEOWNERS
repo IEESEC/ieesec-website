@@ -1,0 +1,8 @@
+# Default owner until dedicated frontend, operations and content teams are created.
+* @andreaskapsalhs
+
+# Sensitive application and privacy paths.
+/src/app/api/join-application/ @andreaskapsalhs
+/src/app/*/privacy/ @andreaskapsalhs
+/docs/operations.md @andreaskapsalhs
+/SECURITY.md @andreaskapsalhs

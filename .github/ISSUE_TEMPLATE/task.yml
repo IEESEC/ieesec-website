@@ -1,0 +1,60 @@
+name: 📋 Task
+description: Πρόταση για νέο feature, βελτίωση, refactor, documentation ή DevOps εργασία
+title: "[TASK] "
+labels:
+  - task
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Περιέγραψε το αποτέλεσμα που χρειάζεται η ομάδα. Μην συμπεριλάβεις secrets ή προσωπικά δεδομένα.
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Περιγραφή
+      description: Τι πρέπει να γίνει και γιατί;
+      placeholder: Ως χρήστης ή maintainer, θέλω...
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: 🏷️ Τύπος task
+      options:
+        - 🆕 Νέο Feature
+        - ♻️ Refactor
+        - 🎨 UI / Styling
+        - 📄 Documentation
+        - ⚙️ DevOps / Config
+    validations:
+      required: true
+  - type: textarea
+    id: technical
+    attributes:
+      label: 🛠️ Τεχνικές λεπτομέρειες
+      description: Προτεινόμενη προσέγγιση, interfaces, dependencies ή σχετικά αρχεία.
+  - type: textarea
+    id: design
+    attributes:
+      label: 🎨 UI / Design
+      description: Figma, screenshots, responsive states ή accessibility απαιτήσεις, αν αφορά frontend.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: ⚙️ Definition of Done
+      description: Γράψε ελέγξιμα acceptance criteria, ένα ανά γραμμή.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Προτεραιότητα
+      options:
+        - 🔴 High
+        - 🟡 Medium
+        - 🟢 Low
+    validations:
+      required: true
