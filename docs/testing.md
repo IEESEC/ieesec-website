@@ -37,6 +37,16 @@ pnpm build
 
 `PLAYWRIGHT_BASE_URL` may point E2E tests at an already-running environment. Otherwise Playwright starts the local Next.js server at `http://localhost:3000`. CI retries failed tests twice; local runs do not retry.
 
+## Targeted execution policy
+
+Run the smallest relevant target first; the full suite is not required after every edit:
+
+- Pure logic, data or API validation: `pnpm test:unit --grep "<relevant test>"`.
+- One browser behavior: `pnpm test:e2e --project=desktop --grep "<relevant test>"` (or the matching mobile project).
+- Responsive, touch, theme, media or cross-route changes: run the affected Playwright project(s).
+
+Run `pnpm test` before handoff or release, and whenever a change crosses boundaries that targeted tests cannot cover.
+
 ## Viewport matrix
 
 | Project            | Viewport | Input model    |

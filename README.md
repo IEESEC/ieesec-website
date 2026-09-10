@@ -99,6 +99,12 @@ docs/                     Architecture, operations and team guides
 - [Support](SUPPORT.md)
 - [Architecture decisions](docs/adr/README.md)
 
+### Documentation language
+
+- Technical and contributor documentation is written in English so public contributors can use the same reference.
+- Privacy notices and other user-facing copy are maintained in both Greek and English.
+- GitHub issue and pull-request forms use Greek for the team's day-to-day workflow.
+
 ## Contributing and security
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Do not report suspected security vulnerabilities or exposed secrets in public issues; follow [SECURITY.md](SECURITY.md).

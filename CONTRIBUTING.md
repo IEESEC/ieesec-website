@@ -57,7 +57,15 @@ Examples:
 
 Husky runs formatting and lint fixes before a commit and commitlint validates the message. Review hook changes before completing the commit.
 
-## Required checks
+## Targeted checks first
+
+Start with the smallest check that exercises the behavior you changed. Do not run the complete test suite after every edit:
+
+- Pure logic, data or API validation: `pnpm test:unit --grep "<relevant test>"`.
+- One browser behavior: `pnpm test:e2e --project=desktop --grep "<relevant test>"` (or the matching mobile project).
+- Responsive, touch, theme, media or cross-route changes: run the affected Playwright project(s).
+
+Use the complete matrix before handoff, for release validation, or whenever the change crosses multiple boundaries:
 
 Run at least:
 
@@ -69,7 +77,7 @@ pnpm build
 pnpm test:e2e --project=desktop
 ```
 
-Run the complete `pnpm test` matrix for changes involving responsive behavior, touch input, navigation, accessibility, themes or media.
+Run the complete `pnpm test` matrix for release validation or changes involving multiple areas such as responsive behavior, touch input, navigation, accessibility, themes or media.
 
 ## Pull requests
 
