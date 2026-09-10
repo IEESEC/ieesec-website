@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Fragment, type ReactNode } from "react";
 import { Card } from "@/components/ui/card";
 import type { Member } from "./Member";
+import { useTranslations } from "next-intl";
 
 function SocialLink({
   href,
@@ -20,7 +21,7 @@ function SocialLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="flex size-11 items-center justify-center rounded-full border border-white/20 bg-card/90 text-card-foreground shadow-sm backdrop-blur-sm transition-[color,background-color,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transform-none"
+      className="flex size-11 items-center justify-center rounded-full border border-border/80 bg-card text-card-foreground shadow-sm transition-[color,background-color,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transform-none dark:border-white/20 dark:bg-card/90 dark:backdrop-blur-sm"
     >
       {children}
     </a>
@@ -28,18 +29,21 @@ function SocialLink({
 }
 
 export default function MemberCard({ member }: { member: Member }) {
+  const t = useTranslations("team");
   const fullName = `${member.firstname} ${member.lastname}`;
   const nameParts = fullName.split(/\s+/);
-  const [role, specialization = ""] = member.role.split("|").map((value) => value.trim());
+  const translatedRole = t(`members.${member.id}.role`);
+  const [role, specialization = ""] = translatedRole.split("|").map((value) => value.trim());
   const specializationLabel = specialization.replace(/\s+developer$/i, "");
 
   return (
-    <Card className="group relative isolate mx-auto h-full w-full max-w-sm gap-0 overflow-hidden rounded-3xl border border-border/80 bg-card p-0 shadow-sm transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10 focus-within:border-primary/50 motion-reduce:transform-none">
+    <Card className="group relative isolate mx-auto h-full w-full max-w-sm gap-0 overflow-hidden rounded-3xl border border-border/80 bg-card p-0 shadow-sm transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-primary/40 hover:shadow-sm focus-within:border-primary/50 motion-reduce:transform-none dark:hover:shadow-xl dark:hover:shadow-primary/10">
       <div className="relative aspect-video overflow-hidden bg-muted">
         <Image
           src={member.image}
-          alt=""
+          alt={fullName}
           fill
+          quality={65}
           sizes="(min-width: 1024px) 320px, (min-width: 640px) 384px, 100vw"
           className="object-cover grayscale-[15%] contrast-[1.04] transition-[filter] duration-700 ease-out group-hover:grayscale-0 motion-reduce:transition-none"
         />
@@ -48,7 +52,10 @@ export default function MemberCard({ member }: { member: Member }) {
           className="absolute inset-0 bg-linear-to-t from-card via-transparent to-transparent opacity-70"
         />
         <div className="absolute right-4 bottom-4 z-10 flex gap-2">
-          <SocialLink href={member.socialLinks.linkedIn} label={`${fullName} on LinkedIn`}>
+          <SocialLink
+            href={member.socialLinks.linkedIn}
+            label={t("socialLabel", { name: fullName, network: "LinkedIn" })}
+          >
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -65,7 +72,10 @@ export default function MemberCard({ member }: { member: Member }) {
             </svg>
           </SocialLink>
 
-          <SocialLink href={member.socialLinks.github} label={`${fullName} on GitHub`}>
+          <SocialLink
+            href={member.socialLinks.github}
+            label={t("socialLabel", { name: fullName, network: "GitHub" })}
+          >
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -81,7 +91,10 @@ export default function MemberCard({ member }: { member: Member }) {
             </svg>
           </SocialLink>
 
-          <SocialLink href={member.socialLinks.twitter} label={`${fullName} on Twitter`}>
+          <SocialLink
+            href={member.socialLinks.twitter}
+            label={t("socialLabel", { name: fullName, network: "Twitter" })}
+          >
             <svg
               aria-hidden="true"
               viewBox="0 0 24 24"
@@ -104,25 +117,27 @@ export default function MemberCard({ member }: { member: Member }) {
           className="absolute left-5 top-0 h-0.5 w-12 bg-primary transition-[width] duration-500 group-hover:w-20"
         />
 
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-3">
-          <h2 className="min-w-0 text-xl font-semibold leading-tight tracking-tight text-foreground">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-2">
+          <h3 className="min-w-0 break-words text-xl font-semibold leading-tight tracking-tight text-foreground">
             {nameParts.map((part, index) => (
               <Fragment key={`${part}-${index}`}>
                 {part}
                 {index < nameParts.length - 1 ? <br /> : null}
               </Fragment>
             ))}
-          </h2>
+          </h3>
           <p className="whitespace-nowrap text-right text-sm font-medium tracking-wide text-muted-foreground">
             {role}
           </p>
         </div>
         {specializationLabel ? (
-          <span className="mt-2.5 inline-flex w-fit items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-primary">
+          <span className="mt-2.5 inline-flex w-fit items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-foreground">
             {specializationLabel}
           </span>
         ) : null}
-        <p className="mt-3 text-sm leading-5 text-muted-foreground">{member.bio}</p>
+        <p className="mt-3 text-sm leading-5 text-muted-foreground">
+          {t(`members.${member.id}.bio`)}
+        </p>
       </div>
     </Card>
   );
