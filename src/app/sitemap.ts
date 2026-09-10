@@ -3,7 +3,7 @@ import { routing } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return ["", "/join"].flatMap((path) =>
+  return ["", "/join", "/privacy"].flatMap((path) =>
     routing.locales.map((locale) => ({
       url: `${SITE_URL}/${locale}${path}`,
       alternates: {

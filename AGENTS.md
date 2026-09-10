@@ -46,5 +46,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
   - **Assignee:** @username
   ```
+
 - Before committing or pushing, review the staged file list and exclude generated agent artifacts, audit reports, screenshots, traces, logs, temporary files, and other outputs created only for verification. Do not push files such as `AUDIT.md` unless the user explicitly requests that artifact in the repository.
 - Keep generated verification output ignored by Git where appropriate, and never stage ignored artifacts with `git add -f` without explicit user instruction.
+
+## Test execution rules
+
+- Run the smallest relevant test target for the change by default; do not run the entire test suite after every edit. Use targeted unit or E2E tests for the touched behavior, and run the full matrix only for cross-cutting changes, release validation, or when targeted tests cannot cover the risk.
