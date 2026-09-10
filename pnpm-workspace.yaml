@@ -7,3 +7,5 @@ allowBuilds:
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+patchedDependencies:
+  next-themes@0.4.6: patches/next-themes@0.4.6.patch
