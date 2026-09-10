@@ -5,7 +5,7 @@
 - Deployment owner: project maintainers with access to the Vercel project.
 - Join-service owner: the community chair or delegated application coordinator.
 - Security and privacy contact: `ieesec.ihu@gmail.com`.
-- Discord access: only members who review applications or operate the integration.
+- Discord application channel access: only members who review applications or operate the integration.
 
 Review access whenever responsibilities change and at least once per academic term.
 
