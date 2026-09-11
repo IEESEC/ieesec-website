@@ -1,40 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IEESEC Website
 
-## Getting Started
+The public website of IEESEC, the Software Engineering student community of the Department of Information and Electronic Engineering at the International Hellenic University (IHU).
 
-First, run the development server:
+The site presents the community, its members and technical interests, and provides a bilingual application flow for prospective members.
+
+![IEESEC project identity](public/images/metadata/og-image.png)
+
+## Live site
+
+- Production: <https://ieesec-website.vercel.app>
+- Greek: <https://ieesec-website.vercel.app/el>
+- English: <https://ieesec-website.vercel.app/en>
+
+## Technology
+
+- Next.js 16 App Router and React 19
+- TypeScript and Tailwind CSS 4
+- `next-intl` with Greek and English routes
+- Playwright for unit-style and browser tests
+- Vercel hosting and a server-side Discord webhook for join applications
+
+## Prerequisites
+
+- Node.js 20.9 or newer
+- pnpm 11.19.0
+- A Discord webhook URL only when testing successful application delivery
+
+pnpm is the canonical package manager. Do not create or commit npm, Yarn or Bun lockfiles.
+
+## Local setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+git clone https://github.com/IEESEC/ieesec-website.git
+cd ieesec-website
+corepack enable
+corepack prepare pnpm@11.19.0 --activate
+pnpm install --frozen-lockfile
+cp .env.example .env.local
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+On PowerShell, replace the copy command with `Copy-Item .env.example .env.local`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open <http://localhost:3000>. The middleware redirects unprefixed URLs to the default Greek locale.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`DISCORD_JOIN_WEBHOOK_URL` may remain empty for ordinary UI work. A valid secret is required for a successful join-form submission; never commit a real webhook.
 
-## Learn More
+## Routes
 
-To learn more about Next.js, take a look at the following resources:
+| Route                         | Purpose                          |
+| ----------------------------- | -------------------------------- |
+| `/el`, `/en`                  | Localized home page              |
+| `/el/join`, `/en/join`        | Join application                 |
+| `/el/privacy`, `/en/privacy`  | Join-application privacy notice  |
+| `/api/join-application`       | Server-side application endpoint |
+| `/robots.txt`, `/sitemap.xml` | Crawler metadata                 |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Command                           | Purpose                                    |
+| --------------------------------- | ------------------------------------------ |
+| `pnpm dev`                        | Start the development server               |
+| `pnpm build`                      | Create a production build                  |
+| `pnpm start`                      | Serve the production build                 |
+| `pnpm lint`                       | Run oxlint                                 |
+| `pnpm format:check`               | Verify formatting                          |
+| `pnpm format`                     | Format the repository                      |
+| `pnpm test:unit`                  | Run fast Playwright unit-style tests       |
+| `pnpm test:e2e --project=desktop` | Run desktop browser tests                  |
+| `pnpm test`                       | Run the complete Playwright project matrix |
 
-## Deploy on Vercel
+Install Chromium before the first E2E run with `pnpm exec playwright install chromium`. On Linux CI or a fresh Linux workstation, use `pnpm exec playwright install --with-deps chromium`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Repository map
 
-Set `DISCORD_JOIN_WEBHOOK_URL` in Vercel project environment variables so join applications can be delivered to Discord. Do not prefix it with `NEXT_PUBLIC_`, and do not commit the real webhook URL.
+```text
+messages/                 Greek and English translation dictionaries
+public/                   Versioned images, logos and video assets
+src/app/[locale]/         Localized App Router pages
+src/app/api/              Server-side route handlers
+src/components/           Shared UI and homepage sections
+src/i18n/                 Locale routing and navigation helpers
+tests/unit/               Pure logic, configuration and asset checks
+tests/e2e/                Browser-level behavior and accessibility checks
+docs/                     Architecture, operations and team guides
+```
 
-Join submissions are protected by a server-side in-memory rate limit before Discord forwarding. This reduces casual spam without storing raw applicant details, but Vercel WAF, CAPTCHA, or an external rate-limit store should be added if the public form is abused heavily.
+## Documentation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Contributing](CONTRIBUTING.md)
+- [Architecture](docs/architecture.md)
+- [Content and localization](docs/content-guide.md)
+- [Testing and quality](docs/testing.md)
+- [Operations and join applications](docs/operations.md)
+- [Product direction](PRODUCT.md)
+- [Design system](DESIGN.md)
+- [Architecture decisions](docs/adr/README.md)
+
+### Documentation language
+
+- Technical and contributor documentation is written in English so public contributors can use the same reference.
+- Privacy notices and other user-facing copy are maintained in both Greek and English.
+- GitHub issue and pull-request forms use Greek for the team's day-to-day workflow.
+
+## Contributing and security
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Do not report suspected security vulnerabilities or exposed secrets in public issues; contact `ieesec.ihu@gmail.com` privately instead.
+
+## License
+
+Source code is available under the [MIT License](LICENSE). IEESEC names, logos, photographs and other brand assets remain the property of their respective owners unless explicitly stated otherwise.

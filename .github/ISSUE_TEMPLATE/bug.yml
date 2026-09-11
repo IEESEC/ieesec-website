@@ -1,0 +1,45 @@
+name: 🐛 Bug report
+description: Αναφορά αναπαραγώγιμου προβλήματος στον ιστότοπο
+title: "[BUG] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Μην αναφέρεις δημόσια vulnerabilities, webhook URLs ή στοιχεία αιτούντων. Χρησιμοποίησε το SECURITY.md ή το SUPPORT.md.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Περιγραφή προβλήματος
+      description: Τι συνέβη και ποια είναι η επίπτωση;
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Βήματα αναπαραγωγής
+      placeholder: |
+        1. Άνοιξε...
+        2. Επίλεξε...
+        3. Παρατήρησε...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Αναμενόμενο αποτέλεσμα
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Περιβάλλον
+      description: URL, browser, λειτουργικό, συσκευή και viewport.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Πρόσθετα στοιχεία
+      description: Logs ή screenshots χωρίς προσωπικά δεδομένα και secrets.
