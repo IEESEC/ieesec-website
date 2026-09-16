@@ -105,7 +105,7 @@ docs/                     Architecture, operations and team guides
 
 ## Contributing and security
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Do not report suspected security vulnerabilities or exposed secrets in public issues; contact `ieesec.ihu@gmail.com` privately instead.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Contributions follow an issue-first workflow: IEESEC members with repository write access use a branch in the upstream repository, while external contributors and members without write access use a fork. Do not report suspected security vulnerabilities or exposed secrets in public issues; contact `ieesec.ihu@gmail.com` privately instead.
 
 ## License
 

@@ -9,16 +9,38 @@ Thank you for helping improve the IEESEC website. This guide is the human contri
 3. For security-sensitive reports, contact `ieesec.ihu@gmail.com` privately and do not open a public issue; see the [operations guide](docs/operations.md) for ownership details.
 4. For large architectural or product changes, agree on the approach in the issue before implementation.
 
+Every change follows this path: **issue → branch → pull request → review → merge**.
+
 ## Branch model
 
 - `main` is the production-ready branch.
 - `dev` is the integration branch for ordinary work.
-- Create a short-lived branch from the current `dev` branch.
 - Use a Conventional Commit type in the branch name: `feat/`, `fix/`, `perf/`, `refactor/`, `test/`, `docs/`, `chore/` or `build/`.
 
 Examples: `feat/member-directory`, `fix/join-validation`, `docs/onboarding`.
 
 Urgent production fixes may branch from `main`, but must be merged back into `dev` after release.
+
+### IEESEC members with repository write access
+
+Members with write access may work directly in the upstream repository:
+
+1. Clone `https://github.com/IEESEC/ieesec-website.git` and update your local `dev` branch.
+2. Create a short-lived Conventional Commit-style branch from `dev`.
+3. Push that branch to the upstream repository.
+4. Open a pull request targeting upstream `dev` and link the issue with `Closes #...` when appropriate.
+
+### External contributors or members without write access
+
+Contributors without upstream write access must use a fork:
+
+1. Fork `https://github.com/IEESEC/ieesec-website` on GitHub.
+2. Clone your fork and add the upstream repository as the `upstream` remote.
+3. Create your short-lived branch from the latest `upstream/dev`.
+4. Push the branch to your fork.
+5. Open a pull request from your fork branch to `IEESEC/ieesec-website:dev` and link the issue with `Closes #...` when appropriate.
+
+Organization membership alone does not guarantee repository write access. If you cannot push to the upstream repository, use the fork workflow.
 
 ## Local workflow
 
