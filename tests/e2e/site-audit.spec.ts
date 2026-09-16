@@ -4,7 +4,16 @@ test("localized layouts remain within the viewport and have no runtime errors", 
   page,
 }, testInfo) => {
   const errors: string[] = [];
+  const scriptWarnings: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (
+      message.type() === "error" &&
+      message.text().includes("Encountered a script tag while rendering React component")
+    ) {
+      scriptWarnings.push(message.text());
+    }
+  });
   await page.emulateMedia({ reducedMotion: "reduce" });
   for (const locale of ["el", "en"]) {
     await page.goto(`/${locale}`);
@@ -28,6 +37,7 @@ test("localized layouts remain within the viewport and have no runtime errors", 
     await page.screenshot({ path: testInfo.outputPath(`${locale}-home.png`) });
   }
   expect(errors).toEqual([]);
+  expect(scriptWarnings).toEqual([]);
 });
 
 test("content remains readable without JavaScript", async ({ browser, baseURL }) => {

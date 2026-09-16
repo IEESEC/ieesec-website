@@ -46,6 +46,7 @@ import {
 } from "./join-form-flow";
 import { SuccessPanel } from "./SuccessPanel";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 function toggleInArray<T>(list: T[], value: T): T[] {
   return list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
@@ -893,9 +894,12 @@ export function JoinForm({ onActiveStepChange }: JoinFormProps) {
               <span>
                 {t("steps.submit.consent")}
                 <span className="text-primary"> *</span>{" "}
-                <span className="text-primary underline underline-offset-2">
+                <Link
+                  href="/privacy"
+                  className="text-primary underline underline-offset-2 hover:text-primary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
                   {t("steps.submit.privacy")}
-                </span>
+                </Link>
               </span>
             </label>
 

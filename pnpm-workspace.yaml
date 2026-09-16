@@ -1,7 +1,11 @@
 allowBuilds:
+  "@parcel/watcher": true
+  "@swc/core": true
   msw: true
   sharp: true
   unrs-resolver: true
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+patchedDependencies:
+  next-themes@0.4.6: patches/next-themes@0.4.6.patch

@@ -1,0 +1,103 @@
+name: 🛠️ Engineering Task
+description: Track maintenance, refactoring, documentation, testing, or infrastructure work
+title: "[Task]: "
+labels:
+  - maintenance
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for engineering work that is not primarily a user-facing bug or feature request.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Briefly describe the work that needs to be completed.
+      placeholder: What needs to change?
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this work necessary?
+      placeholder: Explain the problem, technical debt, maintenance need, or engineering goal.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Task Type
+      options:
+        - Refactoring
+        - Testing
+        - Documentation
+        - Developer Experience
+        - Dependency Update
+        - Performance
+        - Accessibility
+        - Infrastructure / DevOps
+        - Security Hardening
+        - Code Cleanup
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Describe the expected scope and relevant areas of the codebase.
+      placeholder: |
+        In scope:
+        - ...
+
+        Out of scope:
+        - ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical
+    attributes:
+      label: Technical Notes
+      description: Include relevant architecture, constraints, dependencies, ADRs, or implementation considerations.
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Definition of Done
+      description: Provide clear and verifiable completion criteria.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification
+      description: Describe how the completed work should be tested or validated.
+      placeholder: |
+        - pnpm ...
+        - Manual verification ...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I checked for existing issues covering the same work.
+          required: true
+        - label: The task has a clear outcome and completion criteria.
+          required: true
