@@ -99,9 +99,9 @@ docs/                     Architecture, operations and team guides
 
 ### Documentation language
 
-- Technical and contributor documentation is written in English so public contributors can use the same reference.
-- Privacy notices and other user-facing copy are maintained in both Greek and English.
-- GitHub issue and pull-request forms use Greek for the team's day-to-day workflow.
+- Technical documentation and contributor-facing materials are written in English.
+- GitHub issues, pull requests, and code review discussions are written in English.
+- User-facing website content, including privacy notices, is maintained in both Greek and English.
 
 ## Contributing and security
 

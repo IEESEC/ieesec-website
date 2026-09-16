@@ -1,0 +1,108 @@
+name: ✨ Feature Request
+description: Suggest a new feature or meaningful improvement
+title: "[Feature]: "
+labels:
+  - enhancement
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement.
+
+        Focus on the problem or user need first. Implementation details are welcome, but they should not replace a clear description of the desired outcome.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem, limitation, or user need does this address?
+      placeholder: Describe the current limitation and why it matters.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the behavior or outcome you would like to see.
+      placeholder: What should change?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or workarounds you considered.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - UI / UX
+        - Localization / Content
+        - Join Application
+        - Accessibility
+        - Performance
+        - SEO
+        - Testing
+        - Documentation
+        - Developer Experience
+        - Infrastructure / DevOps
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: locale
+    attributes:
+      label: Affected Locale
+      options:
+        - Greek (`el`)
+        - English (`en`)
+        - Both
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: design
+    attributes:
+      label: Design / References
+      description: Add mockups, screenshots, Figma links, examples, or references when relevant.
+    validations:
+      required: false
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Define clear, verifiable conditions that would make this feature complete.
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+        - [ ] ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Add any additional information that may help evaluate the request.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and did not find an equivalent request.
+          required: true
+        - label: This request describes the problem and desired outcome, not only a specific implementation.
+          required: true

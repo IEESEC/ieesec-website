@@ -1,60 +1,103 @@
-name: 📋 Task
-description: Πρόταση για νέο feature, βελτίωση, refactor, documentation ή DevOps εργασία
-title: "[TASK] "
+name: 🛠️ Engineering Task
+description: Track maintenance, refactoring, documentation, testing, or infrastructure work
+title: "[Task]: "
 labels:
-  - task
+  - maintenance
+
 body:
   - type: markdown
     attributes:
       value: |
-        Περιέγραψε το αποτέλεσμα που χρειάζεται η ομάδα. Μην συμπεριλάβεις secrets ή προσωπικά δεδομένα.
+        Use this template for engineering work that is not primarily a user-facing bug or feature request.
+
   - type: textarea
-    id: description
+    id: summary
     attributes:
-      label: 📝 Περιγραφή
-      description: Τι πρέπει να γίνει και γιατί;
-      placeholder: Ως χρήστης ή maintainer, θέλω...
+      label: Summary
+      description: Briefly describe the work that needs to be completed.
+      placeholder: What needs to change?
     validations:
       required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why is this work necessary?
+      placeholder: Explain the problem, technical debt, maintenance need, or engineering goal.
+    validations:
+      required: true
+
   - type: dropdown
     id: type
     attributes:
-      label: 🏷️ Τύπος task
+      label: Task Type
       options:
-        - 🆕 Νέο Feature
-        - ♻️ Refactor
-        - 🎨 UI / Styling
-        - 📄 Documentation
-        - ⚙️ DevOps / Config
+        - Refactoring
+        - Testing
+        - Documentation
+        - Developer Experience
+        - Dependency Update
+        - Performance
+        - Accessibility
+        - Infrastructure / DevOps
+        - Security Hardening
+        - Code Cleanup
+        - Other
     validations:
       required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Describe the expected scope and relevant areas of the codebase.
+      placeholder: |
+        In scope:
+        - ...
+
+        Out of scope:
+        - ...
+    validations:
+      required: false
+
   - type: textarea
     id: technical
     attributes:
-      label: 🛠️ Τεχνικές λεπτομέρειες
-      description: Προτεινόμενη προσέγγιση, interfaces, dependencies ή σχετικά αρχεία.
-  - type: textarea
-    id: design
-    attributes:
-      label: 🎨 UI / Design
-      description: Figma, screenshots, responsive states ή accessibility απαιτήσεις, αν αφορά frontend.
+      label: Technical Notes
+      description: Include relevant architecture, constraints, dependencies, ADRs, or implementation considerations.
+    validations:
+      required: false
+
   - type: textarea
     id: acceptance
     attributes:
-      label: ⚙️ Definition of Done
-      description: Γράψε ελέγξιμα acceptance criteria, ένα ανά γραμμή.
+      label: Definition of Done
+      description: Provide clear and verifiable completion criteria.
       placeholder: |
         - [ ] ...
         - [ ] ...
+        - [ ] ...
     validations:
       required: true
-  - type: dropdown
-    id: priority
+
+  - type: textarea
+    id: verification
     attributes:
-      label: Προτεραιότητα
-      options:
-        - 🔴 High
-        - 🟡 Medium
-        - 🟢 Low
+      label: Verification
+      description: Describe how the completed work should be tested or validated.
+      placeholder: |
+        - pnpm ...
+        - Manual verification ...
     validations:
-      required: true
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I checked for existing issues covering the same work.
+          required: true
+        - label: The task has a clear outcome and completion criteria.
+          required: true
