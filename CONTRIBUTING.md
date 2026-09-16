@@ -83,9 +83,12 @@ Run the complete `pnpm test` matrix for release validation or changes involving 
 
 - Target `dev` unless the change is an approved release or urgent production fix.
 - Use a Conventional Commit-style PR title.
-- Complete the Greek pull request template and select exactly one task type.
-- Link the issue and describe testing evidence.
-- Add before/after screenshots for visible changes, but do not commit verification screenshots to the repository.
+- Complete the pull request template in English.
+- Link the related issue, ticket, discussion or specification when one exists.
+- Clearly describe what changed, why it changed and how it was verified.
+- Include the relevant testing commands and results.
+- Add before/after screenshots or recordings for meaningful visual changes.
+- Remove optional PR sections that are not applicable.
 - Request at least one review from a code owner.
 - The PR author must not approve their own change.
 - Resolve review threads or explain why no change is required.

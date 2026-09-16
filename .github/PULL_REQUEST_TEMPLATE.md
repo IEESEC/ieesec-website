@@ -1,42 +1,65 @@
-## 📝 Περιγραφή
+## 📜 Summary
 
-<!-- Τι αλλάζει, γιατί χρειάζεται και ποιο issue κλείνει; -->
+<!-- Briefly explain what this PR changes and why. Keep this focused on the user-facing or engineering outcome. -->
 
-## 🛠️ Τεχνικές Λεπτομέρειες
+## 🖇️ Related Issue
 
-- <!-- Κύριες τεχνικές αποφάσεις και interfaces -->
+<!-- Link the related issue, ticket, discussion, or specification. -->
 
-## 🎨 UI / Design (αν αφορά frontend)
+Closes #
 
-- <!-- Responsive states, themes, accessibility και before/after screenshots. Διαφορετικά γράψε «Δεν εφαρμόζεται». -->
+## 📝 Changes
 
-## ✅ Έλεγχοι
+<!-- List the main implementation changes. -->
 
-- [ ] `pnpm format:check`
-- [ ] `pnpm lint`
-- [ ] `pnpm test:unit`
-- [ ] `pnpm build`
-- [ ] Σχετικά E2E tests
-- [ ] Έλεγχος Ελληνικών και Αγγλικών όπου απαιτείται
+-
+-
+-
 
-## ⚙️ Definition of Done
+## 🧪 Testing
 
-- [ ] Πληρούνται τα acceptance criteria του issue
-- [ ] Ενημερώθηκαν tests, documentation και runbooks όπου απαιτείται
-- [ ] Δεν περιλαμβάνονται secrets, προσωπικά δεδομένα ή generated verification artifacts
-- [ ] Έγινε code review από τουλάχιστον ένα άλλο μέλος
+<!-- Describe how the change was verified. Include commands, test cases, or manual checks when relevant. -->
 
-## 🏷️ Τύπος Task
+- [ ] Unit tests
+- [ ] Integration / E2E tests
+- [ ] Manual verification
+- [ ] Build / type checks
+- [ ] Not applicable
 
-<!-- Σημείωσε ακριβώς έναν τύπο με [x]. -->
+### ⌨️ Commands run
 
-- [ ] 🆕 Νέο Feature
-- [ ] 🐛 Bug Fix
-- [ ] ♻️ Refactor
-- [ ] 🎨 UI / Styling
-- [ ] 📄 Documentation
-- [ ] ⚙️ DevOps / Config
+```bash
+# Example:
+# pnpm lint
+# pnpm test:unit
+# pnpm build
+```
 
-## 👤 Ανάθεση
+## 🎥 Screenshots / Recordings
 
-- **Assignee:** @username
+<!-- Required for meaningful visual changes. Remove this section if not applicable. -->
+
+| Before | After |
+| ------ | ----- |
+|        |       |
+
+## ⚠️ Impact and Risk
+
+<!-- Mention affected areas, migrations, compatibility concerns, security/privacy implications, or notable rollout risks. Write "Low / none identified" when appropriate. -->
+
+## 💥 Breaking Changes
+
+<!-- Describe any breaking behavior, API, configuration, migration, or deployment changes. Write "None" if there are no breaking changes. -->
+
+None
+
+## ☑️ Checklist
+
+- [ ] The change is focused and does not include unrelated modifications.
+- [ ] Tests were added or updated where appropriate.
+- [ ] Relevant checks pass locally.
+- [ ] Documentation was updated where required.
+- [ ] Accessibility and responsive behavior were considered for UI changes.
+- [ ] Both supported locales were considered for user-facing changes.
+- [ ] No secrets, personal data, debug artifacts, logs, traces, or generated files were committed.
+- [ ] Existing architecture and ADRs were respected or updated where necessary.

@@ -94,7 +94,13 @@ Use the complete matrix for changes to layout, navigation, the join wizard, scro
 
 ## Pull request evidence
 
-The PR body should state which commands ran and the relevant results. Visible changes should include before/after screenshots as PR attachments, not committed files. On failure, Playwright stores screenshots and traces under ignored output directories; review them locally and do not stage them.
+Use the PR template's `Testing` section to record the checks that were actually run and their results.
+
+For meaningful visual changes, include before/after screenshots or recordings as PR attachments rather than committed repository files.
+
+Do not mark a check as completed unless it was actually performed.
+
+On failure, Playwright stores screenshots and traces under ignored output directories; review them locally and do not stage them.
 
 ## Documentation verification
 
