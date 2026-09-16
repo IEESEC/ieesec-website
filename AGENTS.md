@@ -58,7 +58,7 @@ Do not read every document for every task. Select the relevant ones based on the
 - Do not mark checklist items as complete or claim tests passed unless they were actually verified.
 - Set the assignee to the user who opened the PR unless the user explicitly requests another assignee.
 
-```md
+````md
 ## 📜 Summary
 
 <!-- Briefly explain what this PR changes and why. Keep this focused on the user-facing or engineering outcome. -->
@@ -89,12 +89,12 @@ Closes #
 
 ### ⌨️ Commands run
 
-\```bash
+```bash
 # Example:
 # pnpm lint
 # pnpm test:unit
 # pnpm build
-\```
+```
 
 ## 🎥 Screenshots / Recordings
 
@@ -124,7 +124,7 @@ None
 - [ ] Both supported locales were considered for user-facing changes.
 - [ ] No secrets, personal data, debug artifacts, logs, traces, or generated files were committed.
 - [ ] Existing architecture and ADRs were respected or updated where necessary.
-```
+````
 
 - Before committing or pushing, review the staged file list and exclude generated agent artifacts, audit reports, screenshots, traces, logs, temporary files, and other outputs created only for verification. Do not push files such as `AUDIT.md` unless the user explicitly requests that artifact in the repository.
 - Keep generated verification output ignored by Git where appropriate, and never stage ignored artifacts with `git add -f` without explicit user instruction.
@@ -174,5 +174,3 @@ When behavior changes, check whether the change affects:
 Update affected documentation in the same change.
 
 Do not silently contradict an accepted ADR; update or supersede the ADR when the decision changes.
-
-Μία μόνο τεχνική προσοχή: επειδή το PR template περιέχει εσωτερικό ` ```bash ` μέσα σε ` ```md `, στο πραγματικό `AGENTS.md` χρησιμοποίησε **τέσσερα backticks για το εξωτερικό fence** ώστε να μη σπάσει το Markdown.
