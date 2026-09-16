@@ -46,6 +46,10 @@ Do not read every document for every task. Select the relevant ones based on the
 - `main` is the production-ready branch.
 - `dev` is the integration branch.
 - Unless explicitly instructed otherwise, create work branches from the current `dev` branch and target pull requests to `dev`.
+- Every change must start from an existing or newly opened issue and follow `issue → branch → pull request → review → merge`.
+- For IEESEC organization members with repository write access, clone the upstream repository, create a short-lived branch from the current upstream `dev`, push it upstream, and target the pull request to upstream `dev`.
+- For external contributors, or organization members without repository write access, use a fork: create the branch from the latest upstream `dev`, push it to the fork, and open the pull request from the fork branch to `IEESEC/ieesec-website:dev`.
+- Inspect the available remotes and permissions before choosing the push destination; organization membership alone does not imply write access.
 - Production hotfixes are the exception; follow `CONTRIBUTING.md`.
 
 ### PR body

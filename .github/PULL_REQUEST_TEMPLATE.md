@@ -2,6 +2,8 @@
 
 <!-- Briefly explain what this PR changes and why. Keep this focused on the user-facing or engineering outcome. -->
 
+<!-- Every PR should implement or close an issue. Members with write access may use an upstream branch; external contributors should use a fork. -->
+
 ## 🖇️ Related Issue
 
 <!-- Link the related issue, ticket, discussion, or specification. -->
