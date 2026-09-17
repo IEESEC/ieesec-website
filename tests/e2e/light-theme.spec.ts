@@ -160,6 +160,22 @@ test("light hero and navbar use artifact-free terminal surfaces", async ({ page 
   expect(fadeLuminance).toBeGreaterThan(0.75);
 });
 
+test("light theme accent matches the primary palette", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+  await forceTheme(page, "light");
+  await page.goto("/en");
+
+  const tokens = await page.evaluate(() => {
+    const styles = getComputedStyle(document.documentElement);
+    return {
+      accent: styles.getPropertyValue("--accent").trim(),
+      primary: styles.getPropertyValue("--primary").trim(),
+    };
+  });
+
+  expect(tokens.accent).toBe(tokens.primary);
+});
+
 test("light theme supporting text and controls meet WCAG AA", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop");
   await forceTheme(page, "light");
