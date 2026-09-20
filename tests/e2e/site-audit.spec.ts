@@ -211,6 +211,21 @@ test("homepage ends with a localized Discord community CTA", async ({ page }) =>
   }
 });
 
+test("places the FAQ section below Discord", async ({ page }) => {
+  await page.goto("/en");
+
+  await expect
+    .poll(() =>
+      page.locator("#discord").evaluate((discord) => {
+        const faq = document.getElementById("faq");
+        return faq
+          ? Boolean(discord.compareDocumentPosition(faq) & Node.DOCUMENT_POSITION_FOLLOWING)
+          : false;
+      }),
+    )
+    .toBe(true);
+});
+
 test("Discord member count and join button stay inline", async ({ page }) => {
   for (const viewport of [
     { width: 1280, height: 720 },

@@ -53,8 +53,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <TechStackSection />
         <EventsSection />
         <BlogSection />
-        <FAQSection />
         <DiscordCtaSection locale={locale} />
+        <FAQSection />
       </div>
     </main>
   );
