@@ -6,7 +6,7 @@ export function TechCard({ item }: { item: TechItem }) {
     <Card
       tabIndex={0}
       data-testid="tech-card"
-      className="group/tech h-full overflow-hidden rounded-2xl border border-border bg-card p-0 outline-none transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-sm focus-within:-translate-y-1 focus-within:border-accent/60 focus-within:shadow-sm dark:hover:shadow-[0_0_24px_-6px_var(--accent)] dark:focus-within:shadow-[0_0_24px_-6px_var(--accent)]"
+      className="group/tech h-full overflow-hidden rounded-2xl border border-border bg-card p-0 outline-none transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-sm focus-within:-translate-y-1 focus-within:border-accent/60 focus-within:shadow-sm dark:hover:shadow-[0_0_24px_-6px_var(--accent)] dark:focus-within:shadow-[0_0_24px_-6px_var(--accent)]"
     >
       <CardContent className="flex h-full items-center gap-4 p-6">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-secondary ring-1 ring-border">

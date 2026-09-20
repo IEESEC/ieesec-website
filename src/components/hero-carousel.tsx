@@ -75,17 +75,19 @@ function TypingHeadline() {
 export function HeroCarousel() {
   const t = useTranslations("hero");
   const controls = useTranslations("controls");
-  const autoplayPlugin = React.useRef(
-    Autoplay({
+  const autoplayPlugin = React.useRef<ReturnType<typeof Autoplay> | null>(null);
+  if (autoplayPlugin.current === null) {
+    autoplayPlugin.current = Autoplay({
       delay: 5000,
       playOnInit: false,
       stopOnFocusIn: true,
       stopOnInteraction: true,
       stopOnMouseEnter: true,
-    }),
-  );
+    });
+  }
+  const autoplay = autoplayPlugin.current;
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplayPlugin.current]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplay]);
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [isAutoplaying, setIsAutoplaying] = React.useState(true);
@@ -96,25 +98,25 @@ export function HeroCarousel() {
   const toggleAutoplay = React.useCallback(() => {
     if (!emblaApi) return;
 
-    if (autoplayPlugin.current.isPlaying()) {
-      autoplayPlugin.current.stop();
+    if (autoplay.isPlaying()) {
+      autoplay.stop();
       setIsAutoplaying(false);
       return;
     }
 
-    autoplayPlugin.current.play();
+    autoplay.play();
     setIsAutoplaying(true);
-  }, [emblaApi]);
+  }, [autoplay, emblaApi]);
 
   React.useEffect(() => {
     if (!emblaApi) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const stopForReducedMotion = () => {
-      if (reducedMotion.matches) autoplayPlugin.current.stop();
+      if (reducedMotion.matches) autoplay.stop();
     };
     stopForReducedMotion();
-    if (!reducedMotion.matches) autoplayPlugin.current.play();
+    if (!reducedMotion.matches) autoplay.play();
     reducedMotion.addEventListener("change", stopForReducedMotion);
 
     const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -125,7 +127,7 @@ export function HeroCarousel() {
     emblaApi.on("autoplay:play", onAutoplayPlay);
     emblaApi.on("autoplay:stop", onAutoplayStop);
     onSelect();
-    setIsAutoplaying(autoplayPlugin.current.isPlaying());
+    setIsAutoplaying(autoplay.isPlaying());
 
     return () => {
       reducedMotion.removeEventListener("change", stopForReducedMotion);
@@ -133,14 +135,13 @@ export function HeroCarousel() {
       emblaApi.off("autoplay:play", onAutoplayPlay);
       emblaApi.off("autoplay:stop", onAutoplayStop);
     };
-  }, [emblaApi]);
+  }, [autoplay, emblaApi]);
 
   return (
     <section
       aria-label={t("regionLabel")}
       aria-roledescription="carousel"
       className="hero-carousel relative isolate min-h-dvh w-full min-w-0 max-w-full overflow-hidden"
-      role="region"
     >
       <div ref={emblaRef} className="min-h-dvh w-full overflow-hidden">
         <div className="flex min-h-dvh touch-pan-y">

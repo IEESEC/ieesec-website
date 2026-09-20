@@ -24,7 +24,7 @@ export function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
-  const sidebarRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLDialogElement>(null);
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
@@ -94,7 +94,6 @@ export function Navbar() {
     setActiveSection(getActiveSectionFromHash());
 
     const sectionIds = navItems.map((item) => item.sectionId);
-    const observers: IntersectionObserver[] = [];
     const syncActiveSection = (id: string) => {
       setActiveSection(id);
 
@@ -108,21 +107,23 @@ export function Navbar() {
       );
     };
 
-    const handleIntersect = (id: string) => (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) syncActiveSection(id);
-      });
-    };
+    const sectionByElement = new Map<Element, string>();
+    const observer = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        entries.forEach((entry) => {
+          const id = sectionByElement.get(entry.target);
+          if (entry.isIntersecting && id) syncActiveSection(id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" },
+    );
 
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
 
-      const observer = new IntersectionObserver(handleIntersect(id), {
-        rootMargin: "-40% 0px -55% 0px",
-      });
+      sectionByElement.set(el, id);
       observer.observe(el);
-      observers.push(observer);
     });
 
     const handleScroll = () => {
@@ -134,7 +135,7 @@ export function Navbar() {
     window.addEventListener("hashchange", handleHashChange);
 
     return () => {
-      observers.forEach((o) => o.disconnect());
+      observer.disconnect();
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("hashchange", handleHashChange);
     };
@@ -243,22 +244,24 @@ export function Navbar() {
 
       {/* Backdrop overlay */}
       {isSidebarOpen && (
-        <div
+        <button
+          type="button"
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={toggleSidebar}
+          aria-label={t("closeMenu")}
         />
       )}
 
       {/* Mobile Sidebar */}
-      <div
+      <dialog
         ref={sidebarRef}
-        role="dialog"
+        open
         aria-modal={isSidebarOpen || undefined}
         aria-label={t("openMenu")}
         id="mobile-navigation"
         aria-hidden={!isSidebarOpen}
         inert={!isSidebarOpen}
-        className={`fixed inset-y-0 right-0 z-60 w-[min(18rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain transform bg-card border-l border-border p-6 sm:p-8 shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`m-0 max-w-none fixed inset-y-0 right-0 z-60 w-[min(18rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain transform bg-card border-l border-border p-6 sm:p-8 shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -305,7 +308,7 @@ export function Navbar() {
             </Button>
           </div>
         </nav>
-      </div>
+      </dialog>
     </>
   );
 }

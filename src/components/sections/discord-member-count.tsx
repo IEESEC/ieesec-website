@@ -1,18 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Locale } from "@/i18n/routing";
 
 export function DiscordMemberCount({ locale, value }: { locale: Locale; value: number | null }) {
-  const [displayValue, setDisplayValue] = useState(value);
+  const [displayValue, setDisplayValue] = useState<number | null>(null);
   const countRef = useRef<HTMLSpanElement>(null);
+  const formatter = useMemo(() => new Intl.NumberFormat(locale), [locale]);
 
   useEffect(() => {
     if (value === null) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (reducedMotion.matches) {
-      setDisplayValue(value);
       return;
     }
 
@@ -54,7 +54,7 @@ export function DiscordMemberCount({ locale, value }: { locale: Locale; value: n
       observer.disconnect();
       cancelAnimationFrame(frame);
     };
-  }, [value]);
+  }, [formatter, value]);
 
   if (value === null) {
     return (
@@ -66,7 +66,7 @@ export function DiscordMemberCount({ locale, value }: { locale: Locale; value: n
 
   return (
     <span ref={countRef} data-testid="discord-member-count" aria-live="polite" aria-atomic="true">
-      {new Intl.NumberFormat(locale).format(displayValue ?? value)}
+      {formatter.format(displayValue ?? value)}
     </span>
   );
 }

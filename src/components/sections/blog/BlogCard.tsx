@@ -21,7 +21,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
 
   return (
     <article className="group block h-full">
-      <Card className="h-full overflow-hidden rounded-2xl border border-border bg-card p-0 transition-all duration-300 hover:border-primary/60 hover:shadow-sm dark:hover:shadow-lg">
+      <Card className="h-full overflow-hidden rounded-2xl border border-border bg-card p-0 transition-[border-color,box-shadow] duration-300 hover:border-primary/60 hover:shadow-sm dark:hover:shadow-lg">
         <div className="relative aspect-video overflow-hidden">
           <Image
             src={post.image}

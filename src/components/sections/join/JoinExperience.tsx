@@ -16,7 +16,7 @@ export function JoinExperience() {
     >
       <ScrollVideoBackground activeStep={activeStep} />
       <JoinHero />
-      <JoinForm onActiveStepChange={setActiveStep} />
+      <JoinForm activeStep={activeStep} onActiveStepChange={setActiveStep} />
     </main>
   );
 }
