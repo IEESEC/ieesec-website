@@ -18,7 +18,7 @@ test("localized layouts remain within the viewport and have no runtime errors", 
   for (const locale of ["el", "en"]) {
     await page.goto(`/${locale}`);
     await page.evaluate(() => document.fonts.ready);
-    for (const selector of ["#home", "#team", "#tech-stack", "#blog", "footer"]) {
+    for (const selector of ["#home", "#team", "#tech-stack", "#blog", "#faq", "footer"]) {
       const section = page.locator(selector);
       await section.scrollIntoViewIfNeeded();
       const overflow = await section.evaluate((root) =>
@@ -148,6 +148,30 @@ test("home content is readable at every viewport", async ({ page }) => {
       }),
     ),
   ).toBe(true);
+});
+
+test("FAQ accordion supports keyboard interaction and keeps one answer open", async ({ page }) => {
+  for (const locale of ["el", "en"]) {
+    await page.goto(`/${locale}`);
+    const faq = page.locator("#faq");
+    const triggers = faq.getByRole("button");
+    const contents = faq.locator(".faq-accordion-content");
+
+    await expect(faq.getByRole("heading", { level: 2 })).toBeVisible();
+    await expect(triggers).toHaveCount(8);
+
+    await triggers.first().focus();
+    await page.keyboard.press("Enter");
+    await expect(triggers.first()).toHaveAttribute("aria-expanded", "true");
+    await expect(contents.first()).toBeVisible();
+
+    await triggers.nth(1).click();
+    await expect(triggers.first()).toHaveAttribute("aria-expanded", "false");
+    await expect(triggers.nth(1)).toHaveAttribute("aria-expanded", "true");
+
+    await triggers.nth(1).click();
+    await expect(triggers.nth(1)).toHaveAttribute("aria-expanded", "false");
+  }
 });
 
 test("mobile navigation traps focus and closes with Escape", async ({ page }) => {
