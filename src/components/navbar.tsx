@@ -5,8 +5,7 @@ import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { ThemeToggle } from "./theme-toggle";
-import { LanguageToggle } from "./language-toggle";
+import { SettingsMenu } from "./settings-menu";
 import { Link, usePathname } from "@/i18n/navigation";
 
 const navItems = [
@@ -16,6 +15,7 @@ const navItems = [
   { labelKey: "stack", href: "/#tech-stack", sectionId: "tech-stack" },
   { labelKey: "events", href: "/#events", sectionId: "events" },
   { labelKey: "blog", href: "/#blog", sectionId: "blog" },
+  { labelKey: "discord", href: "/#discord", sectionId: "discord" },
 ] as const;
 
 export function Navbar() {
@@ -95,12 +95,22 @@ export function Navbar() {
 
     const sectionIds = navItems.map((item) => item.sectionId);
     const observers: IntersectionObserver[] = [];
+    const syncActiveSection = (id: string) => {
+      setActiveSection(id);
+
+      const nextHash = `#${id}`;
+      if (window.location.hash === nextHash) return;
+
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}${nextHash}`,
+      );
+    };
 
     const handleIntersect = (id: string) => (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(id);
-        }
+        if (entry.isIntersecting) syncActiveSection(id);
       });
     };
 
@@ -116,9 +126,7 @@ export function Navbar() {
     });
 
     const handleScroll = () => {
-      if (!window.location.hash && window.scrollY < window.innerHeight * 0.5) {
-        setActiveSection("home");
-      }
+      if (window.scrollY < window.innerHeight * 0.5) syncActiveSection("home");
     };
     const handleHashChange = () => setActiveSection(getActiveSectionFromHash());
 
@@ -208,8 +216,7 @@ export function Navbar() {
 
             {/* Desktop actions */}
             <div className="hidden lg:flex items-center gap-2">
-              <LanguageToggle />
-              <ThemeToggle />
+              <SettingsMenu />
               <Button
                 asChild
                 className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-white hover:bg-primary/85 transition-colors"
@@ -264,8 +271,7 @@ export function Navbar() {
             <X className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-1">
-            <LanguageToggle />
-            <ThemeToggle />
+            <SettingsMenu />
           </div>
         </div>
 

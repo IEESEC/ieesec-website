@@ -12,15 +12,18 @@
     "stack": "Τεχνολογίες",
     "events": "Εκδηλώσεις",
     "blog": "Blog",
+    "discord": "Discord",
     "join": "Γίνε μέλος",
     "homeLabel": "Αρχική σελίδα IEESEC",
     "openMenu": "Άνοιγμα μενού",
     "closeMenu": "Κλείσιμο μενού"
   },
   "controls": {
+    "settings": "Ρυθμίσεις",
+    "openSettings": "Άνοιγμα ρυθμίσεων",
     "theme": "Εναλλαγή θέματος",
-    "switchToEnglish": "Αλλαγή γλώσσας στα Αγγλικά",
-    "switchToGreek": "Αλλαγή γλώσσας στα Ελληνικά",
+    "switchToEnglish": "Αλλαγή γλώσσας",
+    "switchToGreek": "Αλλαγή γλώσσας",
     "previousSlide": "Προηγούμενη διαφάνεια",
     "nextSlide": "Επόμενη διαφάνεια",
     "carousel": "καρουζέλ",
@@ -102,6 +105,17 @@
       "Tools": "Εργαλεία",
       "Languages": "Γλώσσες"
     }
+  },
+  "discordCta": {
+    "title": "Τα πρότζεκτς συνεχίζονται στο Discord.",
+    "description": "Εκεί μοιραζόμαστε updates, οργανώνουμε workshops και μένουμε κοντά σε ό,τι χτίζει η κοινότητα.",
+    "serverLabel": "Discord server",
+    "serverDescription": "Κοινότητα Μηχανικής Λογισμικού",
+    "communityLabel": "Κοινότητα στο Discord",
+    "memberCountShort": "μέλη",
+    "join": "Μπες στον server",
+    "externalLabel": "Ανοίγει το Discord σε νέα καρτέλα",
+    "imageAlt": "Το κεντρικό κτήριο του Διεθνούς Πανεπιστημίου της Ελλάδος"
   },
   "team": {
     "socialLabel": "Ο/Η {name} στο {network}",

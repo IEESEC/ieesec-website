@@ -12,12 +12,15 @@
     "stack": "Stack",
     "events": "Events",
     "blog": "Blog",
+    "discord": "Discord",
     "join": "Join us",
     "homeLabel": "IEESEC home",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
   "controls": {
+    "settings": "Settings",
+    "openSettings": "Open settings",
     "theme": "Toggle theme",
     "switchToEnglish": "Switch language to English",
     "switchToGreek": "Switch language to Greek",
@@ -102,6 +105,17 @@
       "Tools": "Tools",
       "Languages": "Languages"
     }
+  },
+  "discordCta": {
+    "title": "Projects continue on Discord.",
+    "description": "That is where we share updates, organise workshops and stay close to what the community is building.",
+    "serverLabel": "Discord server",
+    "serverDescription": "Software Engineering community",
+    "communityLabel": "Discord community",
+    "memberCountShort": "members",
+    "join": "Go to server",
+    "externalLabel": "Opens Discord in a new tab",
+    "imageAlt": "The central building of the International Hellenic University"
   },
   "team": {
     "socialLabel": "{name} on {network}",
