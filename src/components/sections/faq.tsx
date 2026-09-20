@@ -71,9 +71,7 @@ export function FAQSection() {
             >
               {t("faqTitle")}
             </h2>
-            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-              {t("faqDescription")}
-            </p>
+            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("faqDescription")}</p>
           </Reveal>
 
           <Reveal direction="right" className="mt-8">
