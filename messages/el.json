@@ -26,7 +26,6 @@
     "switchToGreek": "Αλλαγή γλώσσας",
     "previousSlide": "Προηγούμενη διαφάνεια",
     "nextSlide": "Επόμενη διαφάνεια",
-    "carousel": "καρουζέλ",
     "slide": "διαφάνεια"
   },
   "hero": {
@@ -109,8 +108,6 @@
   "discordCta": {
     "title": "Τα πρότζεκτς συνεχίζονται στο Discord.",
     "description": "Εκεί μοιραζόμαστε updates, οργανώνουμε workshops και μένουμε κοντά σε ό,τι χτίζει η κοινότητα.",
-    "serverLabel": "Discord server",
-    "serverDescription": "Κοινότητα Μηχανικής Λογισμικού",
     "communityLabel": "Κοινότητα στο Discord",
     "memberCountShort": "μέλη",
     "join": "Μπες στον server",

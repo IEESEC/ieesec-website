@@ -26,7 +26,6 @@
     "switchToGreek": "Switch language",
     "previousSlide": "Previous slide",
     "nextSlide": "Next slide",
-    "carousel": "carousel",
     "slide": "slide"
   },
   "hero": {
@@ -109,8 +108,6 @@
   "discordCta": {
     "title": "Projects continue on Discord.",
     "description": "That is where we share updates, organise workshops and stay close to what the community is building.",
-    "serverLabel": "Discord server",
-    "serverDescription": "Software Engineering community",
     "communityLabel": "Discord community",
     "memberCountShort": "members",
     "join": "Go to server",
