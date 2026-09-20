@@ -6,6 +6,7 @@ test("updates the active section after returning from the join page", async ({
   test.skip(testInfo.project.name !== "desktop");
 
   await page.goto("/en");
+  await expect(page).toHaveURL(/\/en\/?#home$/);
   await page.getByRole("banner").getByRole("link", { name: "Join us", exact: true }).click();
   await expect(page).toHaveURL(/\/en\/join$/);
 
