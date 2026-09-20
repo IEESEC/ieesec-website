@@ -88,7 +88,7 @@ export function FAQSection() {
                     className="overflow-hidden rounded-2xl border border-border bg-card text-card-foreground transition-colors data-[state=open]:border-accent/60 data-[state=open]:bg-accent/5"
                   >
                     <Accordion.Header className="flex">
-                      <Accordion.Trigger className="group/faq-trigger flex min-h-11 w-full items-center justify-between gap-4 px-4 py-4 text-left text-base font-semibold text-foreground outline-none transition-colors hover:text-accent focus-visible:ring-3 focus-visible:ring-ring/30 sm:px-5">
+                      <Accordion.Trigger className="group/faq-trigger flex min-h-11 w-full touch-manipulation items-center justify-between gap-4 px-4 py-4 text-left text-base font-semibold text-foreground outline-none transition-colors hover:text-accent focus-visible:ring-3 focus-visible:ring-ring/30 sm:px-5">
                         <span>{item.question}</span>
                         <ChevronDown
                           aria-hidden="true"

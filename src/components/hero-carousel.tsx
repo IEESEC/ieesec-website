@@ -46,7 +46,7 @@ function TypingHeadline() {
   return (
     <h1
       aria-label={t("headlineLabel")}
-      className="max-w-4xl text-balance font-[var(--font-geist-sans)] text-[clamp(1.8rem,6vw,5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_30px_rgb(255,255,255,0.35)] dark:text-white dark:drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)]"
+      className="hero-headline max-w-4xl text-balance text-[clamp(1.8rem,6vw,5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_30px_rgb(255,255,255,0.35)] dark:text-white dark:drop-shadow-[0_8px_30px_rgb(0,0,0,0.5)]"
     >
       <span aria-hidden="true" className="hero-typewriter block">
         <span className="hero-typewriter-line" data-text={line1} style={typewriterStyle(line1)}>

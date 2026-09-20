@@ -75,7 +75,7 @@ export function SettingsMenu() {
           <Settings2 className="h-[1.2rem] w-[1.2rem]" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent align="end" className="z-70 w-56">
         <DropdownMenuLabel>{t("settings")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={switchLanguage}>

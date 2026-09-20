@@ -35,10 +35,15 @@
 
 @media (max-width: 767px) {
   .hero-carousel .hero-typewriter-line {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     grid-template-columns: minmax(0, 1fr);
   }
   .hero-carousel .hero-typewriter-line::before,
   .hero-carousel .hero-typewriter-line .hero-typewriter-reveal {
+    max-width: 100%;
+    overflow-wrap: anywhere;
     white-space: normal;
     min-width: 0;
   }
@@ -129,6 +134,8 @@
   }
   html {
     @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
     scroll-behavior: smooth;
   }
 }
@@ -291,6 +298,13 @@
 
 .faq-accordion-content[data-state="closed"] {
   animation: faq-accordion-up 180ms ease-out;
+}
+
+@media (max-width: 767px) {
+  .faq-accordion-content[data-state="open"],
+  .faq-accordion-content[data-state="closed"] {
+    animation: none;
+  }
 }
 
 @keyframes faq-accordion-down {
@@ -527,6 +541,11 @@ html:not(.dark) .light-theme-logo {
 
 .dark .join-video-fade {
   background: linear-gradient(to top, rgb(2 6 23 / 0.65), transparent);
+}
+
+/* Geist keeps its display character for Latin while Inter supplies stable Greek glyph metrics. */
+.hero-headline {
+  font-family: var(--font-geist-sans), var(--font-inter), Arial, sans-serif;
 }
 
 /* CSS-Tricks-inspired stepped reveal with one caret moving across three responsive lines. */

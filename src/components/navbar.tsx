@@ -24,7 +24,7 @@ export function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
-  const sidebarRef = useRef<HTMLDialogElement>(null);
+  const sidebarRef = useRef<HTMLElement>(null);
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
@@ -253,17 +253,20 @@ export function Navbar() {
       )}
 
       {/* Mobile Sidebar */}
-      <dialog
+      <aside
         ref={sidebarRef}
-        open
+        role="dialog"
         aria-modal={isSidebarOpen || undefined}
         aria-label={t("openMenu")}
         id="mobile-navigation"
         aria-hidden={!isSidebarOpen}
         inert={!isSidebarOpen}
-        className={`m-0 max-w-none fixed inset-y-0 right-0 z-60 w-[min(18rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain transform bg-card border-l border-border p-6 sm:p-8 shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
-          isSidebarOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={cn(
+          "fixed inset-y-0 right-0 z-60 h-dvh w-[min(18rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain border-l border-border bg-card p-6 shadow-2xl transition-transform duration-300 ease-in-out sm:p-8 lg:hidden",
+          isSidebarOpen
+            ? "visible pointer-events-auto translate-x-0"
+            : "invisible pointer-events-none translate-x-full",
+        )}
       >
         <div className="flex items-center justify-between mb-10">
           <button
@@ -308,7 +311,7 @@ export function Navbar() {
             </Button>
           </div>
         </nav>
-      </dialog>
+      </aside>
     </>
   );
 }
