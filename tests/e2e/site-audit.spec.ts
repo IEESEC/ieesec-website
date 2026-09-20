@@ -112,6 +112,44 @@ test("hero stays left aligned, vertically centered, and starts typing after its 
   expect(timing.typingDelay).toBeGreaterThanOrEqual(timing.mediaDuration);
 });
 
+test("mobile hero headline stays inside the viewport in both locales", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name === "desktop");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+
+  for (const locale of ["el", "en"]) {
+    await page.goto(`/${locale}`);
+    await page.evaluate(() => document.fonts.ready);
+
+    await expect(page.locator("html")).toHaveCSS("-webkit-text-size-adjust", "100%");
+    await expect(page.locator("h1")).toHaveCSS("font-family", /Inter/);
+
+    const metrics = await page.locator(".hero-typewriter-line").evaluateAll((lines) =>
+      lines.map((line) => {
+        const rect = line.getBoundingClientRect();
+        return {
+          left: rect.left,
+          right: rect.right,
+          width: rect.width,
+          scrollWidth: line.scrollWidth,
+          clientWidth: line.clientWidth,
+          viewportWidth: window.innerWidth,
+        };
+      }),
+    );
+
+    for (const line of metrics) {
+      expect(line.left, `${locale} headline left`).toBeGreaterThanOrEqual(-1);
+      expect(line.right, `${locale} headline right`).toBeLessThanOrEqual(line.viewportWidth + 1);
+      expect(line.scrollWidth, `${locale} headline scroll width`).toBeLessThanOrEqual(
+        line.clientWidth + 1,
+      );
+      expect(line.width, `${locale} headline width`).toBeGreaterThan(0);
+    }
+  }
+});
+
 test("tablet headings and navigation fit in both languages", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop");
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -172,6 +210,32 @@ test("FAQ accordion supports keyboard interaction and keeps one answer open", as
     await triggers.nth(1).click();
     await expect(triggers.nth(1)).toHaveAttribute("aria-expanded", "false");
   }
+});
+
+test("FAQ accordion remains stable after a mobile touch tap", async ({ page }, testInfo) => {
+  test.skip(
+    !testInfo.project.name.startsWith("mobile"),
+    "Touch regression coverage is mobile-only",
+  );
+
+  await page.goto("/el");
+  const faq = page.locator("#faq");
+  const trigger = faq.getByRole("button").first();
+  const content = faq.locator(".faq-accordion-content").first();
+
+  await trigger.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(500);
+  const before = await faq.boundingBox();
+  const scrollY = await page.evaluate(() => window.scrollY);
+
+  await trigger.tap();
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await expect(content).toBeVisible();
+  await expect.poll(() => content.boundingBox().then((box) => box?.height ?? 0)).toBeGreaterThan(0);
+
+  const after = await faq.boundingBox();
+  expect(after?.y).toBeCloseTo(before?.y ?? 0, 0);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(scrollY);
 });
 
 test("homepage ends with a localized Discord community CTA", async ({ page }) => {

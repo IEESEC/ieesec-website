@@ -16,7 +16,6 @@ import {
   YEAR_OPTIONS,
 } from "@/components/sections/join/data";
 
-const DISCORD_WEBHOOK_ENV = "DISCORD_JOIN_WEBHOOK_URL";
 const MAX_PAYLOAD_BYTES = 16 * 1024;
 const MAX_SHORT_TEXT_LENGTH = 160;
 const REQUEST_RATE_LIMIT_WINDOW_MS = 60 * 1000;
@@ -420,7 +419,7 @@ export async function POST(request: Request) {
     return jsonError(429, "rate-limited");
   }
 
-  const webhookUrl = process.env[DISCORD_WEBHOOK_ENV];
+  const webhookUrl = process.env.DISCORD_JOIN_WEBHOOK_URL;
 
   if (!webhookUrl || !DISCORD_WEBHOOK_PATTERN.test(webhookUrl)) {
     return jsonError(500, "service-unavailable");
