@@ -4,6 +4,74 @@
 
 @custom-variant dark (&:is(.dark *));
 
+.cms-editor-surface:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.cms-editor-surface p {
+  margin-block: 0 1rem;
+}
+
+.cms-editor-surface h2 {
+  margin-block: 2rem 0.75rem;
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.cms-editor-surface h3 {
+  margin-block: 1.5rem 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 650;
+}
+
+.cms-editor-surface ul,
+.cms-editor-surface ol {
+  margin-block: 0.75rem 1.25rem;
+  padding-left: 1.4rem;
+}
+
+.cms-editor-surface ul {
+  list-style: disc;
+}
+
+.cms-editor-surface ol {
+  list-style: decimal;
+}
+
+.cms-editor-surface blockquote {
+  margin-block: 1.5rem;
+  border-left: 2px solid var(--primary);
+  padding-left: 1rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.cms-editor-surface code {
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  background: var(--muted);
+  padding: 0.12rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+}
+
+.cms-editor-surface a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.cms-editor-surface hr {
+  margin-block: 2rem;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
 .skip-link {
   position: fixed;
   top: 0.75rem;
@@ -171,6 +239,8 @@
   --sidebar-accent-foreground: oklch(0.28 0.025 230);
   --sidebar-border: oklch(0.82 0.018 220);
   --sidebar-ring: oklch(0.588 0.065 220);
+  --admin-sidebar: oklch(0.165 0.022 235);
+  --admin-sidebar-foreground: oklch(0.96 0.006 220);
 }
 
 .dark {
@@ -210,6 +280,8 @@
   --sidebar-accent-foreground: oklch(0.9 0.008 220);
   --sidebar-border: oklch(0.22 0.012 230);
   --sidebar-ring: oklch(0.66 0.075 220);
+  --admin-sidebar: oklch(0.105 0.016 235);
+  --admin-sidebar-foreground: oklch(0.96 0.006 220);
 }
 
 /* Ambient background layer: the rays stay behind content and become brighter on navy surfaces. */

@@ -16,15 +16,17 @@ No application database is used. Homepage content and translations are versioned
 
 ## Containers and responsibilities
 
-| Area                           | Responsibility                                                                 |
-| ------------------------------ | ------------------------------------------------------------------------------ |
-| `src/app/[locale]`             | Localized pages, metadata and static route generation                          |
-| `src/components`               | Shared navigation, footer, UI primitives and page sections                     |
-| `src/i18n`                     | Supported locales, locale-aware links and request configuration                |
-| `messages`                     | Greek and English user-visible copy                                            |
-| `src/app/api/join-application` | Trust boundary for application validation, abuse controls and Discord delivery |
-| `src/lib/seo.ts`               | Canonical production URL and social image metadata                             |
-| `tests`                        | Logic, asset-budget, accessibility, responsive and browser behavior contracts  |
+| Area                           | Responsibility                                                                  |
+| ------------------------------ | ------------------------------------------------------------------------------- |
+| `src/app/[locale]`             | Localized pages, metadata and static route generation                           |
+| `src/components`               | Shared navigation, footer, UI primitives and page sections                      |
+| `src/i18n`                     | Supported locales, locale-aware links and request configuration                 |
+| `messages`                     | Greek and English user-visible copy                                             |
+| `src/app/api/join-application` | Trust boundary for application validation, abuse controls and Discord delivery  |
+| `src/lib/seo.ts`               | Canonical production URL and social image metadata                              |
+| `tests`                        | Logic, asset-budget, accessibility, responsive and browser behavior contracts   |
+| `src/app/(admin)/admin`        | Frontend-only administration prototype, isolated from localized public routes   |
+| `src/features` / `src/mocks`   | Typed admin feature contracts and deterministic mock repository implementations |
 
 ## Rendering and routing
 
@@ -33,6 +35,8 @@ The project uses the Next.js App Router. All user-facing pages live under the dy
 `src/proxy.ts` applies `next-intl` routing to non-API, non-static requests. Pages call `setRequestLocale` so they can be statically rendered. Locale-aware internal navigation must use `Link` from `src/i18n/navigation.ts` rather than hard-coded locale prefixes.
 
 The locale layout provides fonts, theme state, the skip link, navbar, footer and the translation provider. Pages supply their own `<main id="main-content">` landmark.
+
+The `/admin` prototype uses a separate root layout so its dense workspace shell does not inherit the public navbar, footer or locale routing. `src/proxy.ts` excludes `/admin`; the prototype is explicitly `noindex`, is omitted from the sitemap and does not provide authentication or production authorization.
 
 ## Content model
 

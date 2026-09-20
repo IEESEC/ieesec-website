@@ -55,6 +55,7 @@ Open <http://localhost:3000>. The middleware redirects unprefixed URLs to the de
 | `/el/privacy`, `/en/privacy`  | Join-application privacy notice  |
 | `/api/join-application`       | Server-side application endpoint |
 | `/robots.txt`, `/sitemap.xml` | Crawler metadata                 |
+| `/admin`                      | Frontend-only admin prototype    |
 
 ## Commands
 
@@ -95,6 +96,7 @@ docs/                     Architecture, operations and team guides
 - [Operations and join applications](docs/operations.md)
 - [Product direction](PRODUCT.md)
 - [Design system](DESIGN.md)
+- [Admin prototype](docs/admin-prototype.md)
 - [Architecture decisions](docs/adr/README.md)
 
 ### Documentation language
