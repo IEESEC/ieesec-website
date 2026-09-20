@@ -58,9 +58,9 @@ test("groups language and theme controls under the settings menu", async ({ page
 
   await settings.click();
 
-  await expect(page.getByRole("menuitem", { name: "Switch language to Greek" })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: "Switch language" })).toBeVisible();
   await expect(page.getByRole("menuitem", { name: "Toggle theme" })).toBeVisible();
-  await expect(banner.getByRole("button", { name: "Switch language to Greek" })).toHaveCount(0);
+  await expect(banner.getByRole("button", { name: "Switch language" })).toHaveCount(0);
   await expect(banner.getByRole("button", { name: "Toggle theme" })).toHaveCount(0);
 });
 
@@ -73,6 +73,6 @@ test("keeps settings available in the mobile navigation", async ({ page }, testI
   const sidebar = page.locator("#mobile-navigation");
   await sidebar.getByRole("button", { name: "Open settings" }).click();
 
-  await expect(page.getByRole("menuitem", { name: "Switch language to Greek" })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: "Switch language" })).toBeVisible();
   await expect(page.getByRole("menuitem", { name: "Toggle theme" })).toBeVisible();
 });
