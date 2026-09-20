@@ -61,6 +61,7 @@ Do not read every document for every task. Select the relevant ones based on the
 - For meaningful user-facing or visual changes, include screenshots or recordings when practical.
 - Do not mark checklist items as complete or claim tests passed unless they were actually verified.
 - Set the assignee to the user who opened the PR unless the user explicitly requests another assignee.
+- When returning a copy-pasteable PR body that contains a fenced commands block, wrap the full Markdown body in a fence using four or more backticks so the nested triple-backtick fence remains intact.
 
 ````md
 ## 📜 Summary

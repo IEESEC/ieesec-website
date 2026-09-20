@@ -2,7 +2,18 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { Moon, Settings2, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { localizePathname, type Locale } from "@/i18n/routing";
 
 function GreekFlag() {
@@ -38,12 +49,18 @@ function BritishFlag() {
   );
 }
 
-export function LanguageToggle() {
+export function SettingsMenu() {
   const locale = useLocale() as Locale;
   const router = useRouter();
   const t = useTranslations("controls");
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
   const targetLocale: Locale = locale === "el" ? "en" : "el";
-  const label = targetLocale === "en" ? t("switchToEnglish") : t("switchToGreek");
+  const languageLabel = targetLocale === "en" ? t("switchToEnglish") : t("switchToGreek");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const switchLanguage = () => {
     const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
@@ -51,17 +68,35 @@ export function LanguageToggle() {
   };
 
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      size="icon"
-      onClick={switchLanguage}
-      aria-label={label}
-      title={label}
-      data-language-icon={locale}
-      className="relative"
-    >
-      {locale === "el" ? <GreekFlag /> : <BritishFlag />}
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label={t("openSettings")}
+          title={t("settings")}
+          className="relative"
+        >
+          <Settings2 className="h-[1.2rem] w-[1.2rem]" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>{t("settings")}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={switchLanguage}>
+          {locale === "el" ? <GreekFlag /> : <BritishFlag />}
+          <span>{languageLabel}</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
+          {mounted && resolvedTheme === "dark" ? (
+            <Sun className="h-4 w-4" />
+          ) : (
+            <Moon className="h-4 w-4" />
+          )}
+          <span>{t("theme")}</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

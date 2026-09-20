@@ -5,7 +5,7 @@ test("defaults to Greek and exposes localized metadata", async ({ page }, testIn
 
   await page.goto("/");
 
-  await expect(page).toHaveURL(/\/el$/);
+  await expect(page).toHaveURL(/\/el#home$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "el");
   await expect(
     page.getByRole("heading", { name: "Μετατρέπουμε τη θεωρία σε λογισμικό που λειτουργεί." }),
@@ -25,18 +25,16 @@ test("switches language while preserving route, query and hash", async ({ page }
   test.skip(testInfo.project.name !== "desktop");
 
   await page.goto("/el/?source=test#team");
-  const toggle = page.getByRole("button", { name: "Αλλαγή γλώσσας στα Αγγλικά" });
+  await page.getByRole("button", { name: "Άνοιγμα ρυθμίσεων" }).click();
+  const toggle = page.getByRole("menuitem", { name: "Αλλαγή γλώσσας" });
 
-  await expect(toggle).toHaveAttribute("data-language-icon", "el");
   await toggle.click();
 
   await expect(page).toHaveURL(/\/en\?source=test#team$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByRole("link", { name: "Join us", exact: true }).first()).toBeVisible();
-  await expect(page.getByRole("button", { name: "Switch language to Greek" })).toHaveAttribute(
-    "data-language-icon",
-    "en",
-  );
+  await page.getByRole("button", { name: "Open settings" }).click();
+  await expect(page.getByRole("menuitem", { name: "Switch language" })).toBeVisible();
 });
 
 test("serves the join experience in Greek", async ({ page }, testInfo) => {

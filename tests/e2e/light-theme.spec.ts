@@ -104,7 +104,8 @@ test("one click switches a system-resolved dark theme to light", async ({ page }
   await page.goto("/en");
 
   await expect(page.locator("html")).toHaveClass(/dark/);
-  await page.getByRole("button", { name: "Toggle theme" }).click();
+  await page.getByRole("button", { name: "Open settings" }).click();
+  await page.getByRole("menuitem", { name: "Toggle theme" }).click();
   await expect(page.locator("html")).toHaveClass(/light/);
 });
 

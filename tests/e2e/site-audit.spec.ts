@@ -18,7 +18,7 @@ test("localized layouts remain within the viewport and have no runtime errors", 
   for (const locale of ["el", "en"]) {
     await page.goto(`/${locale}`);
     await page.evaluate(() => document.fonts.ready);
-    for (const selector of ["#home", "#team", "#tech-stack", "#blog", "footer"]) {
+    for (const selector of ["#home", "#team", "#tech-stack", "#blog", "#faq", "footer"]) {
       const section = page.locator(selector);
       await section.scrollIntoViewIfNeeded();
       const overflow = await section.evaluate((root) =>
@@ -148,6 +148,150 @@ test("home content is readable at every viewport", async ({ page }) => {
       }),
     ),
   ).toBe(true);
+});
+
+test("FAQ accordion supports keyboard interaction and keeps one answer open", async ({ page }) => {
+  for (const locale of ["el", "en"]) {
+    await page.goto(`/${locale}`);
+    const faq = page.locator("#faq");
+    const triggers = faq.getByRole("button");
+    const contents = faq.locator(".faq-accordion-content");
+
+    await expect(faq.getByRole("heading", { level: 2 })).toBeVisible();
+    await expect(triggers).toHaveCount(8);
+
+    await triggers.first().focus();
+    await page.keyboard.press("Enter");
+    await expect(triggers.first()).toHaveAttribute("aria-expanded", "true");
+    await expect(contents.first()).toBeVisible();
+
+    await triggers.nth(1).click();
+    await expect(triggers.first()).toHaveAttribute("aria-expanded", "false");
+    await expect(triggers.nth(1)).toHaveAttribute("aria-expanded", "true");
+
+    await triggers.nth(1).click();
+    await expect(triggers.nth(1)).toHaveAttribute("aria-expanded", "false");
+  }
+});
+
+test("homepage ends with a localized Discord community CTA", async ({ page }) => {
+  for (const locale of ["el", "en"]) {
+    await page.goto(`/${locale}`);
+    const section = page.locator("#discord");
+    const title =
+      locale === "el" ? "Τα πρότζεκτς συνεχίζονται στο Discord." : "Projects continue on Discord.";
+    const description =
+      locale === "el"
+        ? "Εκεί μοιραζόμαστε updates, οργανώνουμε workshops και μένουμε κοντά σε ό,τι χτίζει η κοινότητα."
+        : "That is where we share updates, organise workshops and stay close to what the community is building.";
+    const card = page.locator("#discord > div > div > div").last();
+
+    await expect(section).toBeVisible();
+    await expect(section.locator("#discord-title")).toHaveText(title);
+    await expect(card.getByText(description, { exact: true })).toBeVisible();
+    const [descriptionBox, controlsBox] = await Promise.all([
+      card.getByText(description, { exact: true }).boundingBox(),
+      card.getByRole("link").boundingBox(),
+    ]);
+    expect(descriptionBox, `${locale} description should be measurable`).not.toBeNull();
+    expect(controlsBox, `${locale} controls should be measurable`).not.toBeNull();
+    expect(descriptionBox!.y + descriptionBox!.height).toBeLessThan(controlsBox!.y);
+    await expect(
+      section.locator("#discord-title").locator("..").getByText(description, { exact: true }),
+    ).toHaveCount(0);
+    await expect(section.getByTestId("discord-member-count")).toHaveText(/^(\d+|—)$/);
+    await expect(section.getByRole("link")).toHaveAttribute(
+      "href",
+      "https://discord.gg/2xHBsHMKy7",
+    );
+    await expect(section.getByTestId("discord-member-count")).toHaveAttribute(
+      "aria-live",
+      "polite",
+    );
+  }
+});
+
+test("places the FAQ section below Discord", async ({ page }) => {
+  await page.goto("/en");
+
+  await expect
+    .poll(() =>
+      page.locator("#discord").evaluate((discord) => {
+        const faq = document.getElementById("faq");
+        return faq
+          ? Boolean(discord.compareDocumentPosition(faq) & Node.DOCUMENT_POSITION_FOLLOWING)
+          : false;
+      }),
+    )
+    .toBe(true);
+});
+
+test("Discord member count and join button stay inline", async ({ page }) => {
+  for (const viewport of [
+    { width: 1280, height: 720 },
+    { width: 390, height: 844 },
+    { width: 320, height: 568 },
+  ]) {
+    await page.setViewportSize(viewport);
+
+    for (const locale of ["el", "en"]) {
+      await page.goto(`/${locale}`);
+      const card = page.locator("#discord > div > div > div").last();
+      const count = card.getByTestId("discord-member-count");
+      const join = card.getByRole("link");
+
+      await card.scrollIntoViewIfNeeded();
+      const [countBox, joinBox] = await Promise.all([count.boundingBox(), join.boundingBox()]);
+
+      expect(countBox, `${locale} member count should be measurable`).not.toBeNull();
+      expect(joinBox, `${locale} join button should be measurable`).not.toBeNull();
+      expect(await card.locator("h3").count()).toBe(0);
+      expect(joinBox!.x).toBeLessThan(countBox!.x);
+      expect(joinBox!.y).toBeLessThan(countBox!.y + countBox!.height);
+      expect(countBox!.y).toBeLessThan(joinBox!.y + joinBox!.height);
+    }
+  }
+});
+
+test("Discord CTA reveals on entry and starts the counter on entry", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/en");
+
+  const section = page.locator("#discord");
+  const card = page.locator("#discord > div > div > div").last();
+  const count = section.getByTestId("discord-member-count");
+
+  await page.waitForTimeout(1400);
+  const beforeEntry = await count.textContent();
+  if (beforeEntry !== "—") expect(beforeEntry).toBe("0");
+
+  await section.scrollIntoViewIfNeeded();
+  await expect
+    .poll(async () => {
+      const value = await count.textContent();
+      return value === "—" ? 0 : Number(value?.replaceAll(",", "") ?? 0);
+    })
+    .toBeGreaterThan(0);
+  await expect
+    .poll(() => card.evaluate((element) => element.getAnimations().length))
+    .toBeGreaterThan(0);
+});
+
+test("Discord section leaves room for the footbar in the final viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("/en");
+
+  const metrics = await page.locator("#discord").evaluate((element) => {
+    const styles = getComputedStyle(element);
+    return {
+      minHeight: styles.minHeight,
+      flexDirection: styles.flexDirection,
+    };
+  });
+
+  expect(metrics.minHeight).toBe("540px");
+  expect(metrics.flexDirection).toBe("column");
 });
 
 test("mobile navigation traps focus and closes with Escape", async ({ page }) => {

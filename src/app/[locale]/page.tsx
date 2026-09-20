@@ -5,6 +5,8 @@ import { ProjectsSection } from "@/components/sections/projects";
 import { TechStackSection } from "@/components/sections/tech-stack";
 import { EventsSection } from "@/components/sections/events";
 import { BlogSection } from "@/components/sections/blog";
+import { FAQSection } from "@/components/sections/faq";
+import { DiscordCtaSection } from "@/components/sections/discord-cta";
 import { LightRays } from "@/components/ui/light-rays";
 import type { Locale } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/seo";
@@ -51,6 +53,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <TechStackSection />
         <EventsSection />
         <BlogSection />
+        <DiscordCtaSection locale={locale} />
+        <FAQSection />
       </div>
     </main>
   );

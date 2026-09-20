@@ -12,18 +12,20 @@
     "stack": "Stack",
     "events": "Events",
     "blog": "Blog",
+    "discord": "Discord",
     "join": "Join us",
     "homeLabel": "IEESEC home",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
   "controls": {
+    "settings": "Settings",
+    "openSettings": "Open settings",
     "theme": "Toggle theme",
-    "switchToEnglish": "Switch language to English",
-    "switchToGreek": "Switch language to Greek",
+    "switchToEnglish": "Switch language",
+    "switchToGreek": "Switch language",
     "previousSlide": "Previous slide",
     "nextSlide": "Next slide",
-    "carousel": "carousel",
     "slide": "slide"
   },
   "hero": {
@@ -58,6 +60,42 @@
     "techDescription": "The languages, frameworks and tools we use to design, build and ship our projects.",
     "showMore": "Show more",
     "blogTitle": "Blog",
+    "faqTitle": "Frequently asked questions",
+    "faqDescription": "A few short answers about the community, joining IEESEC and learning together.",
+    "faq": {
+      "whatIs": {
+        "question": "What is IEESEC?",
+        "answer": "IEESEC is the Software Engineering student community of the Department of Information and Electronic Engineering at the International Hellenic University. We build projects, share knowledge and grow together."
+      },
+      "whoCanJoin": {
+        "question": "Who can join IEESEC?",
+        "answer": "Students of the department who want to explore Software Engineering, build projects and learn with others can apply to join the community."
+      },
+      "previousExperience": {
+        "question": "Do I need previous experience?",
+        "answer": "No. You do not need to know specific technologies or have extensive experience. Curiosity about Software Engineering and a willingness to learn, collaborate and grow with the team are enough."
+      },
+      "timeCommitment": {
+        "question": "How much time do I need to commit?",
+        "answer": "IEESEC is not a fast-paced environment. You decide how much time you want to dedicate to projects after discussing it with the project managers."
+      },
+      "howToJoin": {
+        "question": "How do I join?",
+        "answer": "Open the <link>Join us page</link>, complete the application and tell us about your interests. Someone from the team will review it and contact you."
+      },
+      "whatCanIWorkOn": {
+        "question": "What can I work on?",
+        "answer": "In the application you can share your interests; from web and mobile development to data and AI, embedded systems, games, testing, DevOps, cloud computing, data structures and algorithms. Our projects take shape over time, depending on the interests and capacity of each period."
+      },
+      "whatHappensNext": {
+        "question": "What happens after I apply?",
+        "answer": "A member of the team reads every application and we aim to reply to the email you provide within about a week."
+      },
+      "whereToFindUpdates": {
+        "question": "Where can I find updates and discussions?",
+        "answer": "The <link>Discord server</link> is where we share project conversations, workshop announcements and team discussions."
+      }
+    },
     "filters": {
       "all": "All",
       "Frontend": "Frontend",
@@ -66,6 +104,15 @@
       "Tools": "Tools",
       "Languages": "Languages"
     }
+  },
+  "discordCta": {
+    "title": "Projects continue on Discord.",
+    "description": "That is where we share updates, organise workshops and stay close to what the community is building.",
+    "communityLabel": "Discord community",
+    "memberCountShort": "members",
+    "join": "Go to server",
+    "externalLabel": "Opens Discord in a new tab",
+    "imageAlt": "The central building of the International Hellenic University"
   },
   "team": {
     "socialLabel": "{name} on {network}",

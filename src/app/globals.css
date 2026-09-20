@@ -285,6 +285,32 @@
   contain-intrinsic-block-size: auto 900px;
 }
 
+.faq-accordion-content[data-state="open"] {
+  animation: faq-accordion-down 220ms ease-out;
+}
+
+.faq-accordion-content[data-state="closed"] {
+  animation: faq-accordion-up 180ms ease-out;
+}
+
+@keyframes faq-accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes faq-accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
 /* WebKit and small screens pay a high cost for many large blurred animated layers. */
 @media (max-width: 767px) {
   .light-rays-ray:nth-child(n + 5) {
