@@ -68,20 +68,14 @@ export function SettingsMenu({ mobile = false }: SettingsMenuProps) {
   const languageIcon = locale === "el" ? <GreekFlag /> : <BritishFlag />;
   const themeIcon = (
     <>
-      <Sun className="hidden size-5 lg:size-4 dark:block" />
-      <Moon className="size-5 lg:size-4 dark:hidden" />
+      <Sun className="hidden size-5 dark:block" />
+      <Moon className="size-5 dark:hidden" />
     </>
   );
 
   if (mobile) {
     return (
       <section aria-labelledby="mobile-settings-heading" className="w-full">
-        <p
-          id="mobile-settings-heading"
-          className="mb-2 px-4 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground"
-        >
-          {t("settings")}
-        </p>
         <div className="flex flex-col gap-1">
           <button
             type="button"
