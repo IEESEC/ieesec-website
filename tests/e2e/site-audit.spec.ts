@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test("localized layouts remain within the viewport and have no runtime errors", async ({ page }) => {
+test("localized layouts remain within the viewport and have no runtime errors", async ({
+  page,
+}) => {
   const errors: string[] = [];
   const scriptWarnings: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
