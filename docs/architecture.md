@@ -42,7 +42,8 @@ The repository currently acts as the content system:
 - Member identity, profile URLs and image paths live in `src/components/sections/team/Member.ts`.
 - Technology entries live in `src/components/sections/tech-stack/data.ts`.
 - Blog-card metadata lives in `src/components/sections/blog/BlogPost.ts`; there are no article routes yet.
-- Projects and events are presentation placeholders rather than structured content collections.
+- Project placeholder metadata lives in `src/components/sections/projects/data.ts`; project cards have no internal detail routes.
+- Events remain a presentation placeholder rather than a structured content collection.
 
 See [content-guide.md](content-guide.md) before changing these areas.
 

@@ -1,5 +1,7 @@
 import { Reveal } from "@/components/ui/animations/fade-up";
 import { useTranslations } from "next-intl";
+import { ProjectCard } from "@/components/project-card";
+import { projects } from "./projects/data";
 
 export function ProjectsSection() {
   const t = useTranslations("sections");
@@ -18,6 +20,14 @@ export function ProjectsSection() {
               {t("projectsDescription")}
             </p>
           </Reveal>
+
+          <div className="mt-8 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 md:grid-cols-3">
+            {projects.map((project, index) => (
+              <Reveal key={project.id} direction="up" delay={index * 0.06} className="h-full">
+                <ProjectCard project={project} />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>

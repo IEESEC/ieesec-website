@@ -61,7 +61,7 @@ The current site displays preview cards only. There are no `/blog/[slug]` articl
 
 ## Projects and events
 
-`ProjectsSection` and `EventsSection` currently contain headings and introductory copy only. Before publishing entries, define a typed content model that includes stable ID, status/date, links, image and localized copy. Add the route or detail interaction, sitemap behavior and tests in the same feature pull request.
+`ProjectsSection` uses the typed placeholder data in `src/components/sections/projects/data.ts`; `EventsSection` still contains headings and introductory copy only. Before replacing project placeholders with published entries, verify the stable ID, status, links, image, localized copy and content owner. Add a route or detail interaction, sitemap behavior and tests in the same feature pull request when projects need internal pages.
 
 Do not add one-off hard-coded cards directly inside the section component; establish the shared data shape first.
 
