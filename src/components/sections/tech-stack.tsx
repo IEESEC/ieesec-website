@@ -66,7 +66,7 @@ export function TechStackSection() {
                 key={item.name}
                 direction="up"
                 delay={i * 0.05}
-                className={cn("h-full", i >= 3 && !showAllOnMobile && "hidden md:block")}
+                className={cn("h-full", i >= 3 && !showAllOnMobile && "hidden lg:block")}
               >
                 <TechCard item={item} />
               </Reveal>
@@ -78,7 +78,7 @@ export function TechStackSection() {
               type="button"
               onClick={() => setShowAllOnMobile(true)}
               aria-controls="tech-stack-grid"
-              className="mt-6 min-h-11 w-full rounded-full border border-border px-5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground md:hidden"
+              className="mt-6 min-h-11 w-full rounded-full border border-border px-5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground lg:hidden"
             >
               {t("showMore")}
             </button>

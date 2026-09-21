@@ -26,7 +26,7 @@ test("switches language while preserving route, query and hash", async ({ page }
 
   await page.goto("/el/?source=test#team");
   await page.getByRole("button", { name: "Άνοιγμα ρυθμίσεων" }).click();
-  const toggle = page.getByRole("menuitem", { name: "Αλλαγή γλώσσας" });
+  const toggle = page.getByRole("menuitem", { name: "Εναλλαγή γλώσσας" });
 
   await toggle.click();
 

@@ -1,9 +1,7 @@
-"use client";
-
-import * as React from "react";
+import type { CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
-type LightRayStyle = React.CSSProperties & Record<`--ray-${string}`, string>;
+type LightRayStyle = CSSProperties & Record<`--ray-${string}`, string>;
 
 export type LightRaysProps = {
   count?: number;
@@ -13,7 +11,7 @@ export type LightRaysProps = {
   speed?: number;
   length?: string | number;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 };
 
 function getRayStyle(index: number, count: number, speed: number): LightRayStyle {
@@ -52,7 +50,7 @@ export function LightRays({
     "--light-rays-opacity": `${Math.min(Math.max(opacity, 0), 1)}`,
     "--light-rays-speed": `${raySpeed}s`,
     "--light-rays-length": typeof length === "number" ? `${length}px` : length,
-  } as React.CSSProperties;
+  } as CSSProperties;
 
   return (
     <div

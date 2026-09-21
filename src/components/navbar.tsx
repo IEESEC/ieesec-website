@@ -24,9 +24,10 @@ export function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
-  const sidebarRef = useRef<HTMLDivElement>(null);
+  const sidebarRef = useRef<HTMLElement>(null);
 
-  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+  const openSidebar = () => setIsSidebarOpen(true);
+  const closeSidebar = () => setIsSidebarOpen(false);
 
   useEffect(() => {
     if (!isSidebarOpen) return;
@@ -94,7 +95,6 @@ export function Navbar() {
     setActiveSection(getActiveSectionFromHash());
 
     const sectionIds = navItems.map((item) => item.sectionId);
-    const observers: IntersectionObserver[] = [];
     const syncActiveSection = (id: string) => {
       setActiveSection(id);
 
@@ -108,21 +108,23 @@ export function Navbar() {
       );
     };
 
-    const handleIntersect = (id: string) => (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) syncActiveSection(id);
-      });
-    };
+    const sectionByElement = new Map<Element, string>();
+    const observer = new IntersectionObserver(
+      (entries: IntersectionObserverEntry[]) => {
+        entries.forEach((entry) => {
+          const id = sectionByElement.get(entry.target);
+          if (entry.isIntersecting && id) syncActiveSection(id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" },
+    );
 
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
 
-      const observer = new IntersectionObserver(handleIntersect(id), {
-        rootMargin: "-40% 0px -55% 0px",
-      });
+      sectionByElement.set(el, id);
       observer.observe(el);
-      observers.push(observer);
     });
 
     const handleScroll = () => {
@@ -134,7 +136,7 @@ export function Navbar() {
     window.addEventListener("hashchange", handleHashChange);
 
     return () => {
-      observers.forEach((o) => o.disconnect());
+      observer.disconnect();
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("hashchange", handleHashChange);
     };
@@ -229,7 +231,7 @@ export function Navbar() {
             <div className="flex lg:hidden items-center gap-2">
               <button
                 className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground hover:bg-muted cursor-pointer"
-                onClick={toggleSidebar}
+                onClick={openSidebar}
                 aria-label={t("openMenu")}
                 aria-controls="mobile-navigation"
                 aria-expanded={isSidebarOpen}
@@ -243,14 +245,16 @@ export function Navbar() {
 
       {/* Backdrop overlay */}
       {isSidebarOpen && (
-        <div
+        <button
+          type="button"
           className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
-          onClick={toggleSidebar}
+          onClick={closeSidebar}
+          aria-label={t("closeMenu")}
         />
       )}
 
       {/* Mobile Sidebar */}
-      <div
+      <aside
         ref={sidebarRef}
         role="dialog"
         aria-modal={isSidebarOpen || undefined}
@@ -258,31 +262,31 @@ export function Navbar() {
         id="mobile-navigation"
         aria-hidden={!isSidebarOpen}
         inert={!isSidebarOpen}
-        className={`fixed inset-y-0 right-0 z-60 w-[min(18rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain transform bg-card border-l border-border p-6 sm:p-8 shadow-2xl transition-transform duration-300 ease-in-out lg:hidden ${
-          isSidebarOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={cn(
+          "fixed inset-y-0 right-0 z-60 flex h-dvh w-[min(18rem,calc(100vw-1rem))] flex-col overflow-y-auto overscroll-contain border-l border-border bg-card p-6 shadow-2xl transition-transform duration-300 ease-in-out sm:p-8 lg:hidden",
+          isSidebarOpen
+            ? "visible pointer-events-auto translate-x-0"
+            : "invisible pointer-events-none translate-x-full",
+        )}
       >
-        <div className="flex items-center justify-between mb-10">
+        <div className="mb-8 flex items-center">
           <button
-            onClick={toggleSidebar}
+            onClick={closeSidebar}
             className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
             aria-label={t("closeMenu")}
           >
             <X className="h-5 w-5" />
           </button>
-          <div className="flex items-center gap-1">
-            <SettingsMenu />
-          </div>
         </div>
 
-        <nav className="flex flex-col gap-1">
+        <nav className="flex min-h-0 flex-1 flex-col gap-1">
           {navItems.map((item) => (
             <Link
               key={item.sectionId}
               href={item.href}
               onClick={(e) => {
                 handleNavClick(e, item.sectionId);
-                toggleSidebar();
+                closeSidebar();
               }}
               className={cn(
                 "px-4 py-3 text-base font-medium rounded-xl transition-colors",
@@ -294,18 +298,21 @@ export function Navbar() {
               {t(item.labelKey)}
             </Link>
           ))}
-          <div className="mt-6 px-4">
+          <div className="mt-6 border-y border-border py-6">
+            <SettingsMenu mobile />
+          </div>
+          <div className="mt-auto px-4 pt-6">
             <Button
               asChild
               className="w-full h-10 rounded-full bg-primary text-white font-semibold hover:bg-primary/85 transition-colors"
             >
-              <Link href="/join" onClick={toggleSidebar}>
+              <Link href="/join" onClick={closeSidebar}>
                 {t("join")}
               </Link>
             </Button>
           </div>
         </nav>
-      </div>
+      </aside>
     </>
   );
 }

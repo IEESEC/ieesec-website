@@ -1,6 +1,4 @@
-"use client";
-
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
 const quickLinks = [
@@ -10,8 +8,8 @@ const quickLinks = [
   { labelKey: "discord", href: "https://discord.gg/2xHBsHMKy7" },
 ] as const;
 
-export function Footbar() {
-  const t = useTranslations("footer");
+export async function Footbar() {
+  const t = await getTranslations("footer");
   return (
     <footer className="relative z-10 w-full bg-background">
       <div className="mx-auto max-w-7xl px-6 pt-20 pb-12">
