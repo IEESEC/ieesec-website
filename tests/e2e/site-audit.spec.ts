@@ -18,7 +18,15 @@ test("localized layouts remain within the viewport and have no runtime errors", 
   for (const locale of ["el", "en"]) {
     await page.goto(`/${locale}`);
     await page.evaluate(() => document.fonts.ready);
-    for (const selector of ["#home", "#team", "#tech-stack", "#blog", "#faq", "footer"]) {
+    for (const selector of [
+      "#home",
+      "#team",
+      "#projects",
+      "#tech-stack",
+      "#blog",
+      "#faq",
+      "footer",
+    ]) {
       const section = page.locator(selector);
       await section.scrollIntoViewIfNeeded();
       const overflow = await section.evaluate((root) =>
@@ -43,6 +51,17 @@ test("content remains readable without JavaScript", async ({ browser, baseURL })
   await expect(page.locator("#team h2")).toHaveCSS("opacity", "1");
   await expect(page.locator("#team h2").locator("..")).toHaveCSS("opacity", "1");
   await context.close();
+});
+
+test("projects render three localized cards", async ({ page }) => {
+  for (const locale of ["el", "en"]) {
+    await page.goto(`/${locale}#projects`);
+    const section = page.locator("#projects");
+
+    await expect(section.getByTestId("project-card")).toHaveCount(3);
+    await expect(section.getByRole("heading", { level: 3 }).first()).toHaveText("StudyMate");
+    await expect(section.getByText(locale === "el" ? "Σε εξέλιξη" : "In progress")).toBeVisible();
+  }
 });
 
 test("FAQ accordion supports keyboard interaction and keeps one answer open", async ({ page }) => {

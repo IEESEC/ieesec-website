@@ -105,6 +105,36 @@
       "Languages": "Languages"
     }
   },
+  "projects": {
+    "status": {
+      "in-progress": "In progress",
+      "completed": "Completed",
+      "maintained": "Maintained"
+    },
+    "links": {
+      "github": "GitHub",
+      "live": "Live demo",
+      "githubLabel": "Open the GitHub repository for {project}",
+      "liveLabel": "Open the live demo for {project}"
+    },
+    "items": {
+      "studyMate": {
+        "title": "StudyMate",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer consequat, sapien at aliquam efficitur, nibh arcu pretium justo.",
+        "imageAlt": "Students working together on a software project"
+      },
+      "roverKit": {
+        "title": "RoverKit",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, libero sed porttitor cursus, nibh lacus posuere erat.",
+        "imageAlt": "Students experimenting with a technical project on campus"
+      },
+      "eventHub": {
+        "title": "EventHub",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo, nisl at tincidunt gravida, erat justo cursus neque.",
+        "imageAlt": "Students attending a technical community event"
+      }
+    }
+  },
   "discordCta": {
     "title": "Projects continue on Discord.",
     "description": "That is where we share updates, organise workshops and stay close to what the community is building.",
