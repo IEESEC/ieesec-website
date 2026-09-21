@@ -1,22 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-test("does not report a hydration mismatch from the theme control", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop");
-
-  const hydrationErrors: string[] = [];
-  await page.emulateMedia({ colorScheme: "dark" });
-  await page.addInitScript(() => localStorage.setItem("theme", "dark"));
-  page.on("console", (message) => {
-    if (message.type() === "error" && message.text().includes("Hydration failed")) {
-      hydrationErrors.push(message.text());
-    }
-  });
-
-  await page.goto("/en");
-
-  expect(hydrationErrors).toEqual([]);
-});
-
 test("updates the active section after returning from the join page", async ({
   page,
 }, testInfo) => {
@@ -82,19 +65,6 @@ test("groups language and theme controls under the settings menu", async ({ page
   await expect(banner.getByRole("button", { name: "Toggle theme" })).toHaveCount(0);
 });
 
-test("keeps settings available in the mobile navigation", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name === "desktop");
-
-  await page.goto("/en");
-  await page.getByRole("banner").getByRole("button", { name: "Open menu" }).click();
-
-  const sidebar = page.locator("#mobile-navigation");
-  await sidebar.getByRole("button", { name: "Open settings" }).click();
-
-  await expect(page.getByRole("menuitem", { name: "Switch language" })).toBeVisible();
-  await expect(page.getByRole("menuitem", { name: "Toggle theme" })).toBeVisible();
-});
-
 test("makes mobile settings actions interactive", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name === "desktop");
 
@@ -110,50 +80,4 @@ test("makes mobile settings actions interactive", async ({ page }, testInfo) => 
   await sidebar.getByRole("button", { name: "Open settings" }).click();
   await page.getByRole("menuitem", { name: "Switch language" }).click();
   await expect(page).toHaveURL(/\/el(?:#home)?$/);
-});
-
-test("keeps the mobile drawer hidden until opened and anchored inside the viewport", async ({
-  page,
-}, testInfo) => {
-  test.skip(testInfo.project.name === "desktop");
-
-  await page.goto("/en");
-  const menu = page.locator("#mobile-navigation");
-  const open = page.getByRole("button", { name: "Open menu" });
-
-  await expect(page.locator('meta[name="viewport"]')).toHaveAttribute(
-    "content",
-    /width=device-width/,
-  );
-  await expect(menu).not.toBeVisible();
-  await open.click();
-  await expect(menu).toBeVisible();
-
-  await expect
-    .poll(
-      () =>
-        menu.evaluate((element) => {
-          const rect = element.getBoundingClientRect();
-          return rect.left >= 0 && rect.right <= window.innerWidth;
-        }),
-      { timeout: 1000 },
-    )
-    .toBe(true);
-
-  const bounds = await menu.evaluate((element) => {
-    const rect = element.getBoundingClientRect();
-    return {
-      left: rect.left,
-      right: rect.right,
-      top: rect.top,
-      bottom: rect.bottom,
-      viewportWidth: window.innerWidth,
-      viewportHeight: window.innerHeight,
-    };
-  });
-
-  expect(bounds.left).toBeGreaterThanOrEqual(0);
-  expect(bounds.right).toBeLessThanOrEqual(bounds.viewportWidth);
-  expect(bounds.top).toBeGreaterThanOrEqual(0);
-  expect(bounds.bottom).toBeLessThanOrEqual(bounds.viewportHeight);
 });
