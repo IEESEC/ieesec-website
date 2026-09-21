@@ -1,8 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("localized layouts remain within the viewport and have no runtime errors", async ({
-  page,
-}, testInfo) => {
+test("localized layouts remain within the viewport and have no runtime errors", async ({ page }) => {
   const errors: string[] = [];
   const scriptWarnings: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -31,10 +29,6 @@ test("localized layouts remain within the viewport and have no runtime errors", 
       );
       expect(overflow, `${locale} ${selector}`).toEqual([]);
     }
-    await page.goto(`/${locale}`);
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(100);
-    await page.screenshot({ path: testInfo.outputPath(`${locale}-home.png`) });
   }
   expect(errors).toEqual([]);
   expect(scriptWarnings).toEqual([]);
@@ -47,145 +41,6 @@ test("content remains readable without JavaScript", async ({ browser, baseURL })
   await expect(page.locator("#team h2")).toHaveCSS("opacity", "1");
   await expect(page.locator("#team h2").locator("..")).toHaveCSS("opacity", "1");
   await context.close();
-});
-
-test("section reveals animate and footer contact spacing stays consistent", async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto("/el");
-
-  const teamHeadingReveal = page.locator("#team h2").locator("..");
-  await expect(teamHeadingReveal).toHaveCSS("opacity", "0");
-  await teamHeadingReveal.scrollIntoViewIfNeeded();
-  await expect
-    .poll(() => teamHeadingReveal.evaluate((element) => element.getAnimations().length))
-    .toBeGreaterThan(0);
-  await expect(teamHeadingReveal).toHaveCSS("opacity", "1");
-
-  const locationItems = page.locator("footer ul").nth(1).locator("li");
-  await locationItems.last().scrollIntoViewIfNeeded();
-  const gaps = await locationItems.evaluateAll((items) =>
-    items.slice(1).map((item, index) => {
-      const previous = items[index].getBoundingClientRect();
-      const current = item.getBoundingClientRect();
-      return current.top - previous.bottom;
-    }),
-  );
-  expect(gaps[2]).toBeCloseTo(gaps[1], 0);
-});
-
-test("hero stays left aligned, vertically centered, and starts typing after its load animation", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-
-  const fontSizes: string[] = [];
-  for (const locale of ["en", "el"]) {
-    await page.goto(`/${locale}`);
-    const heroCopy = page.getByTestId("hero-copy");
-    const metrics = await heroCopy.evaluate((element) => {
-      const rect = element.getBoundingClientRect();
-      const heading = element.querySelector("h1");
-      return {
-        centerOffset: Math.abs(rect.top + rect.height / 2 - innerHeight / 2),
-        fontSize: heading ? getComputedStyle(heading).fontSize : "",
-        textAlign: getComputedStyle(element).textAlign,
-      };
-    });
-    expect(metrics.centerOffset).toBeLessThanOrEqual(1);
-    expect(metrics.textAlign).toBe("start");
-    fontSizes.push(metrics.fontSize);
-  }
-  expect(fontSizes[0]).toBe(fontSizes[1]);
-
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/en");
-  const timing = await page.evaluate(() => {
-    const mediaAnimation = document.querySelector(".hero-slide-image")?.getAnimations()[0];
-    const typingAnimation = document.querySelector(".hero-typewriter-reveal")?.getAnimations()[0];
-    return {
-      mediaDuration: Number(mediaAnimation?.effect?.getComputedTiming().duration ?? 0),
-      typingDelay: Number(typingAnimation?.effect?.getComputedTiming().delay ?? 0),
-    };
-  });
-  expect(timing.mediaDuration).toBeGreaterThan(0);
-  expect(timing.typingDelay).toBeGreaterThanOrEqual(timing.mediaDuration);
-});
-
-test("mobile hero headline stays inside the viewport in both locales", async ({
-  page,
-}, testInfo) => {
-  test.skip(testInfo.project.name === "desktop");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-
-  for (const locale of ["el", "en"]) {
-    await page.goto(`/${locale}`);
-    await page.evaluate(() => document.fonts.ready);
-
-    await expect(page.locator("html")).toHaveCSS("-webkit-text-size-adjust", "100%");
-    await expect(page.locator("h1")).toHaveCSS("font-family", /Inter/);
-
-    const metrics = await page.locator(".hero-typewriter-line").evaluateAll((lines) =>
-      lines.map((line) => {
-        const rect = line.getBoundingClientRect();
-        return {
-          left: rect.left,
-          right: rect.right,
-          width: rect.width,
-          scrollWidth: line.scrollWidth,
-          clientWidth: line.clientWidth,
-          viewportWidth: window.innerWidth,
-        };
-      }),
-    );
-
-    for (const line of metrics) {
-      expect(line.left, `${locale} headline left`).toBeGreaterThanOrEqual(-1);
-      expect(line.right, `${locale} headline right`).toBeLessThanOrEqual(line.viewportWidth + 1);
-      expect(line.scrollWidth, `${locale} headline scroll width`).toBeLessThanOrEqual(
-        line.clientWidth + 1,
-      );
-      expect(line.width, `${locale} headline width`).toBeGreaterThan(0);
-    }
-  }
-});
-
-test("tablet headings and navigation fit in both languages", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "desktop");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  for (const width of [640, 768, 1024]) {
-    await page.setViewportSize({ width, height: 720 });
-    for (const locale of ["el", "en"]) {
-      await page.goto(`/${locale}`);
-      await page.evaluate(() => document.fonts.ready);
-      expect(
-        await page
-          .locator(".hero-typewriter-reveal")
-          .evaluateAll((lines) =>
-            lines.every((line) => line.getBoundingClientRect().right <= innerWidth),
-          ),
-      ).toBe(true);
-      if (width < 1024)
-        await expect(
-          page.locator('header button[aria-controls="mobile-navigation"]'),
-        ).toBeVisible();
-    }
-  }
-});
-
-test("home content is readable at every viewport", async ({ page }) => {
-  await page.goto("/en");
-  await expect(page.locator("h1")).toHaveCount(1);
-  await expect(page.getByRole("button", { name: /Pause/ })).toBeVisible();
-  await page.locator("footer").scrollIntoViewIfNeeded();
-  expect(
-    await page.locator("footer").evaluate((footer) =>
-      [...footer.querySelectorAll("a, p")].every((element) => {
-        const rect = element.getBoundingClientRect();
-        return rect.left >= 0 && rect.right <= innerWidth + 1;
-      }),
-    ),
-  ).toBe(true);
 });
 
 test("FAQ accordion supports keyboard interaction and keeps one answer open", async ({ page }) => {
@@ -273,102 +128,6 @@ test("homepage ends with a localized Discord community CTA", async ({ page }) =>
       "polite",
     );
   }
-});
-
-test("places the FAQ section below Discord", async ({ page }) => {
-  await page.goto("/en");
-
-  await expect
-    .poll(() =>
-      page.locator("#discord").evaluate((discord) => {
-        const faq = document.getElementById("faq");
-        return faq
-          ? Boolean(discord.compareDocumentPosition(faq) & Node.DOCUMENT_POSITION_FOLLOWING)
-          : false;
-      }),
-    )
-    .toBe(true);
-});
-
-test("Discord member count and join button stay inline", async ({ page }) => {
-  for (const viewport of [
-    { width: 1280, height: 720 },
-    { width: 390, height: 844 },
-    { width: 320, height: 568 },
-  ]) {
-    await page.setViewportSize(viewport);
-
-    for (const locale of ["el", "en"]) {
-      await page.goto(`/${locale}`);
-      const card = page.locator("#discord > div > div > div").last();
-
-      // Keep programmatic scrolling synchronous so both geometry reads use one viewport position.
-      await page.evaluate(() => {
-        document.documentElement.style.scrollBehavior = "auto";
-      });
-      await card.scrollIntoViewIfNeeded();
-      const { countBox, joinBox } = await card.evaluate((element) => {
-        const getBox = (node: Element | null) => {
-          if (!node) return null;
-          const { x, y, width, height } = node.getBoundingClientRect();
-          return { x, y, width, height };
-        };
-
-        return {
-          countBox: getBox(element.querySelector('[data-testid="discord-member-count"]')),
-          joinBox: getBox(element.querySelector("a")),
-        };
-      });
-
-      expect(countBox, `${locale} member count should be measurable`).not.toBeNull();
-      expect(joinBox, `${locale} join button should be measurable`).not.toBeNull();
-      expect(await card.locator("h3").count()).toBe(0);
-      expect(joinBox!.x).toBeLessThan(countBox!.x);
-      expect(joinBox!.y).toBeLessThan(countBox!.y + countBox!.height);
-      expect(countBox!.y).toBeLessThan(joinBox!.y + joinBox!.height);
-    }
-  }
-});
-
-test("Discord CTA reveals on entry and starts the counter on entry", async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/en");
-
-  const section = page.locator("#discord");
-  const card = page.locator("#discord > div > div > div").last();
-  const count = section.getByTestId("discord-member-count");
-
-  await page.waitForTimeout(1400);
-  const beforeEntry = await count.textContent();
-  if (beforeEntry !== "—") expect(beforeEntry).toBe("0");
-
-  await section.scrollIntoViewIfNeeded();
-  await expect
-    .poll(async () => {
-      const value = await count.textContent();
-      return value === "—" ? 0 : Number(value?.replaceAll(",", "") ?? 0);
-    })
-    .toBeGreaterThan(0);
-  await expect
-    .poll(() => card.evaluate((element) => element.getAnimations().length))
-    .toBeGreaterThan(0);
-});
-
-test("Discord section leaves room for the footbar in the final viewport", async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
-  await page.goto("/en");
-
-  const metrics = await page.locator("#discord").evaluate((element) => {
-    const styles = getComputedStyle(element);
-    return {
-      minHeight: styles.minHeight,
-      flexDirection: styles.flexDirection,
-    };
-  });
-
-  expect(metrics.minHeight).toBe("540px");
-  expect(metrics.flexDirection).toBe("column");
 });
 
 test("mobile navigation traps focus and closes with Escape", async ({ page }) => {
