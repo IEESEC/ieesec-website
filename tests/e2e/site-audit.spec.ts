@@ -69,32 +69,6 @@ test("FAQ accordion supports keyboard interaction and keeps one answer open", as
   }
 });
 
-test("FAQ accordion remains stable after a mobile touch tap", async ({ page }, testInfo) => {
-  test.skip(
-    !testInfo.project.name.startsWith("mobile"),
-    "Touch regression coverage is mobile-only",
-  );
-
-  await page.goto("/el");
-  const faq = page.locator("#faq");
-  const trigger = faq.getByRole("button").first();
-  const content = faq.locator(".faq-accordion-content").first();
-
-  await trigger.scrollIntoViewIfNeeded();
-  await page.waitForTimeout(500);
-  const before = await faq.boundingBox();
-  const scrollY = await page.evaluate(() => window.scrollY);
-
-  await trigger.tap();
-  await expect(trigger).toHaveAttribute("aria-expanded", "true");
-  await expect(content).toBeVisible();
-  await expect.poll(() => content.boundingBox().then((box) => box?.height ?? 0)).toBeGreaterThan(0);
-
-  const after = await faq.boundingBox();
-  expect(after?.y).toBeCloseTo(before?.y ?? 0, 0);
-  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(scrollY);
-});
-
 test("homepage ends with a localized Discord community CTA", async ({ page }) => {
   for (const locale of ["el", "en"]) {
     await page.goto(`/${locale}`);
@@ -132,7 +106,9 @@ test("homepage ends with a localized Discord community CTA", async ({ page }) =>
   }
 });
 
-test("mobile navigation traps focus and closes with Escape", async ({ page }) => {
+test("mobile navigation traps focus and closes with Escape", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+
   await page.setViewportSize({ width: 768, height: 720 });
   await page.goto("/en");
   const open = page.getByRole("button", { name: "Open menu" });

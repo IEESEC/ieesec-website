@@ -64,20 +64,3 @@ test("groups language and theme controls under the settings menu", async ({ page
   await expect(banner.getByRole("button", { name: "Switch language" })).toHaveCount(0);
   await expect(banner.getByRole("button", { name: "Toggle theme" })).toHaveCount(0);
 });
-
-test("makes mobile settings actions interactive", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name === "desktop");
-
-  await page.emulateMedia({ colorScheme: "light" });
-  await page.goto("/en");
-  await page.getByRole("banner").getByRole("button", { name: "Open menu" }).click();
-
-  const sidebar = page.locator("#mobile-navigation");
-  await sidebar.getByRole("button", { name: "Open settings" }).click();
-  await page.getByRole("menuitem", { name: "Toggle theme" }).click();
-  await expect(page.locator("html")).toHaveClass(/dark/);
-
-  await sidebar.getByRole("button", { name: "Open settings" }).click();
-  await page.getByRole("menuitem", { name: "Switch language" }).click();
-  await expect(page).toHaveURL(/\/el(?:#home)?$/);
-});

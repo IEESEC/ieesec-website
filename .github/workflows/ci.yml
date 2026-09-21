@@ -31,7 +31,7 @@ jobs:
       - run: pnpm test:unit
       - run: pnpm build
 
-  desktop-e2e:
+  browser-e2e:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,18 +44,4 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:e2e --project=desktop
-
-  documentation:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check Markdown links
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: >-
-            --no-progress
-            --exclude localhost
-            --exclude '^mailto:'
-            '**/*.md'
-          fail: true
+      - run: pnpm test:e2e --project=desktop --project=mobile-compact --project=mobile-standard

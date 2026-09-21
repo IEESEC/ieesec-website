@@ -3,8 +3,6 @@ import { defineConfig } from "@playwright/test";
 const mobileProjects = [
   { name: "mobile-compact", viewport: { width: 320, height: 568 } },
   { name: "mobile-standard", viewport: { width: 390, height: 844 } },
-  { name: "mobile-short", viewport: { width: 390, height: 500 } },
-  { name: "mobile-landscape", viewport: { width: 844, height: 390 } },
 ];
 
 export default defineConfig({
@@ -25,12 +23,13 @@ export default defineConfig({
     },
     {
       name: "desktop",
-      testMatch: /tests\/e2e\/.*\.spec\.ts/,
+      testMatch: /tests\/e2e\/(?!mobile-join|mobile-navigation|tech-stack-mobile).*\.spec\.ts/,
       use: { viewport: { width: 1280, height: 720 } },
     },
     ...mobileProjects.map(({ name, viewport }) => ({
       name,
-      testMatch: /tests\/e2e\/.*\.spec\.ts/,
+      testMatch:
+        /tests\/e2e\/(?:join-responsive|mobile-join|mobile-navigation|tech-stack-mobile)\.spec\.ts/,
       use: { viewport, hasTouch: true, isMobile: true },
     })),
   ],

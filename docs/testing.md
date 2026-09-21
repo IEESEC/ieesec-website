@@ -8,7 +8,7 @@ The project uses Playwright for pure TypeScript checks and browser-level tests. 
 | ---------------- | ------------ | -------------------------------------------------------------------------------------------------- |
 | Unit-style       | `tests/unit` | Routing logic, form flow, API validation, asset constraints and source-level performance contracts |
 | Desktop E2E      | `tests/e2e`  | Rendering, navigation, accessibility, metadata, themes and complete interactions at 1280×720       |
-| Mobile E2E       | `tests/e2e`  | Compact, standard, short and landscape touch layouts                                               |
+| Mobile E2E       | `tests/e2e`  | Compact and standard portrait touch layouts                                                        |
 | Production build | `pnpm build` | Type checking, route generation and production compilation                                         |
 
 ## First-time setup
@@ -29,6 +29,7 @@ pnpm exec playwright install --with-deps chromium
 ```bash
 pnpm test:unit
 pnpm test:e2e --project=desktop
+pnpm test:e2e --project=mobile-compact --project=mobile-standard
 pnpm test
 pnpm lint
 pnpm format:check
@@ -49,13 +50,11 @@ Run `pnpm test` before handoff or release, and whenever a change crosses boundar
 
 ## Viewport matrix
 
-| Project            | Viewport | Input model    |
-| ------------------ | -------- | -------------- |
-| `desktop`          | 1280×720 | Mouse/keyboard |
-| `mobile-compact`   | 320×568  | Touch          |
-| `mobile-standard`  | 390×844  | Touch          |
-| `mobile-short`     | 390×500  | Touch          |
-| `mobile-landscape` | 844×390  | Touch          |
+| Project           | Viewport | Input model    |
+| ----------------- | -------- | -------------- |
+| `desktop`         | 1280×720 | Mouse/keyboard |
+| `mobile-compact`  | 320×568  | Touch          |
+| `mobile-standard` | 390×844  | Touch          |
 
 Use the complete matrix for changes to layout, navigation, the join wizard, scroll behavior, responsive media or localized copy.
 
@@ -104,4 +103,4 @@ On failure, Playwright stores screenshots and traces under ignored output direct
 
 ## Documentation verification
 
-CI checks Markdown links. Reviewers must also execute changed setup and operations commands where practical. Any code change that invalidates an example, route, limit or data flow must update its documentation in the same pull request.
+Reviewers should execute changed setup and operations commands where practical. Any code change that invalidates an example, route, limit or data flow must update its documentation in the same pull request.
