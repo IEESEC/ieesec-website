@@ -1,5 +1,22 @@
 import { expect, test } from "@playwright/test";
 
+test("does not report a hydration mismatch from the theme control", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop");
+
+  const hydrationErrors: string[] = [];
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.addInitScript(() => localStorage.setItem("theme", "dark"));
+  page.on("console", (message) => {
+    if (message.type() === "error" && message.text().includes("Hydration failed")) {
+      hydrationErrors.push(message.text());
+    }
+  });
+
+  await page.goto("/en");
+
+  expect(hydrationErrors).toEqual([]);
+});
+
 test("updates the active section after returning from the join page", async ({
   page,
 }, testInfo) => {

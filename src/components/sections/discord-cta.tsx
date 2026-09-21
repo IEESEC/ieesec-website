@@ -58,7 +58,7 @@ export async function DiscordCtaSection({ locale }: { locale: Locale }) {
                 <p className="mt-4 text-sm leading-6 text-muted-foreground sm:text-base">
                   {t("description")}
                 </p>
-                <div className="mt-4 flex flex-wrap items-center gap-3">
+                <div className="mt-4 flex flex-nowrap items-center gap-3">
                   <a
                     href={DISCORD_INVITE_URL}
                     target="_blank"

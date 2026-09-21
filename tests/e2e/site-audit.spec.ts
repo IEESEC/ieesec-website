@@ -301,11 +301,24 @@ test("Discord member count and join button stay inline", async ({ page }) => {
     for (const locale of ["el", "en"]) {
       await page.goto(`/${locale}`);
       const card = page.locator("#discord > div > div > div").last();
-      const count = card.getByTestId("discord-member-count");
-      const join = card.getByRole("link");
 
+      // Keep programmatic scrolling synchronous so both geometry reads use one viewport position.
+      await page.evaluate(() => {
+        document.documentElement.style.scrollBehavior = "auto";
+      });
       await card.scrollIntoViewIfNeeded();
-      const [countBox, joinBox] = await Promise.all([count.boundingBox(), join.boundingBox()]);
+      const { countBox, joinBox } = await card.evaluate((element) => {
+        const getBox = (node: Element | null) => {
+          if (!node) return null;
+          const { x, y, width, height } = node.getBoundingClientRect();
+          return { x, y, width, height };
+        };
+
+        return {
+          countBox: getBox(element.querySelector('[data-testid="discord-member-count"]')),
+          joinBox: getBox(element.querySelector("a")),
+        };
+      });
 
       expect(countBox, `${locale} member count should be measurable`).not.toBeNull();
       expect(joinBox, `${locale} join button should be measurable`).not.toBeNull();
