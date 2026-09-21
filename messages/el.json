@@ -105,6 +105,36 @@
       "Languages": "Γλώσσες"
     }
   },
+  "projects": {
+    "status": {
+      "in-progress": "Σε εξέλιξη",
+      "completed": "Ολοκληρωμένο",
+      "maintained": "Σε συντήρηση"
+    },
+    "links": {
+      "github": "GitHub",
+      "live": "Live demo",
+      "githubLabel": "Άνοιγμα του GitHub repository για το {project}",
+      "liveLabel": "Άνοιγμα του live demo για το {project}"
+    },
+    "items": {
+      "studyMate": {
+        "title": "StudyMate",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer consequat, sapien at aliquam efficitur, nibh arcu pretium justo.",
+        "imageAlt": "Φοιτητές συνεργάζονται σε ένα project λογισμικού"
+      },
+      "roverKit": {
+        "title": "RoverKit",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, libero sed porttitor cursus, nibh lacus posuere erat.",
+        "imageAlt": "Φοιτητές πειραματίζονται με ένα τεχνικό project στην πανεπιστημιούπολη"
+      },
+      "eventHub": {
+        "title": "EventHub",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo, nisl at tincidunt gravida, erat justo cursus neque.",
+        "imageAlt": "Φοιτητές συμμετέχουν σε μια τεχνική εκδήλωση της κοινότητας"
+      }
+    }
+  },
   "discordCta": {
     "title": "Τα πρότζεκτς συνεχίζονται στο Discord.",
     "description": "Εκεί μοιραζόμαστε updates, οργανώνουμε workshops και μένουμε κοντά σε ό,τι χτίζει η κοινότητα.",
