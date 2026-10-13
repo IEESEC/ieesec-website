@@ -105,6 +105,64 @@
       "Languages": "Γλώσσες"
     }
   },
+  "events": {
+    "carouselLabel": "Χρονολόγιο εκδηλώσεων",
+    "slideLabel": "Εκδήλωση {current} από {total}",
+    "previousEvent": "Προηγούμενη εκδήλωση",
+    "nextEvent": "Επόμενη εκδήλωση",
+    "upcomingTitle": "Επερχόμενες εκδηλώσεις",
+    "pastTitle": "Προηγούμενες εκδηλώσεις",
+    "emptyUpcoming": "Δεν υπάρχουν αυτή τη στιγμή επερχόμενες εκδηλώσεις.",
+    "emptyPast": "Οι προηγούμενες εκδηλώσεις θα εμφανιστούν εδώ μετά την πρώτη συνάντηση της κοινότητας.",
+    "register": "Δήλωση συμμετοχής",
+    "registerLabel": "Δήλωση συμμετοχής για το {event}",
+    "eventStarted": "Η εκδήλωση ξεκίνησε",
+    "duration": "{value}",
+    "countdownLabel": "Ξεκινά σε {days} ημέρες, {hours} ώρες, {minutes} λεπτά και {seconds} δευτερόλεπτα",
+    "status": {
+      "upcoming": "Επερχόμενη",
+      "started": "Σε εξέλιξη",
+      "past": "Προηγούμενη"
+    },
+    "units": {
+      "days": "ημέρες",
+      "hours": "ώρες",
+      "minutes": "λεπτά",
+      "seconds": "δευτ."
+    },
+    "items": {
+      "futureWorkshop": {
+        "title": "Lorem ipsum workshop",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer consequat, sapien at aliquam efficitur, nibh arcu pretium justo.",
+        "location": "Πανεπιστημιούπολη ΔΙΠΑΕ, Σίνδος",
+        "imageAlt": "Κτήριο του Διεθνούς Πανεπιστημίου της Ελλάδος"
+      },
+      "futureMeetup": {
+        "title": "Lorem ipsum meetup",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, libero sed porttitor cursus, nibh lacus posuere erat.",
+        "location": "Πανεπιστημιούπολη ΔΙΠΑΕ, Σίνδος",
+        "imageAlt": "Η πανεπιστημιούπολη του Διεθνούς Πανεπιστημίου της Ελλάδος"
+      },
+      "pastTalk": {
+        "title": "Lorem ipsum talk",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo, nisl at tincidunt gravida, erat justo cursus neque.",
+        "location": "Πανεπιστημιούπολη ΔΙΠΑΕ, Σίνδος",
+        "imageAlt": "Εξωτερικός χώρος του Διεθνούς Πανεπιστημίου της Ελλάδος"
+      },
+      "pastWorkshop": {
+        "title": "Lorem ipsum community session",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "location": "Πανεπιστημιούπολη ΔΙΠΑΕ, Σίνδος",
+        "imageAlt": "Κτήριο του Διεθνούς Πανεπιστημίου της Ελλάδος"
+      },
+      "pastLab": {
+        "title": "Lorem ipsum lab session",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "location": "Πανεπιστημιούπολη ΔΙΠΑΕ, Σίνδος",
+        "imageAlt": "Η πανεπιστημιούπολη του Διεθνούς Πανεπιστημίου της Ελλάδος"
+      }
+    }
+  },
   "projects": {
     "status": {
       "in-progress": "Σε εξέλιξη",

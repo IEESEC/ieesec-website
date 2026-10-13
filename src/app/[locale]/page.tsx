@@ -7,7 +7,6 @@ import { EventsSection } from "@/components/sections/events";
 import { BlogSection } from "@/components/sections/blog";
 import { FAQSection } from "@/components/sections/faq";
 import { DiscordCtaSection } from "@/components/sections/discord-cta";
-import { LightRays } from "@/components/ui/light-rays";
 import type { Locale } from "@/i18n/routing";
 import { SITE_URL } from "@/lib/seo";
 
@@ -35,14 +34,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             sameAs: ["https://github.com/IEESEC"],
           }).replace(/</g, "\\u003c"),
         }}
-      />
-      <LightRays
-        className="light-rays-page"
-        count={8}
-        blur={44}
-        opacity={0.58}
-        speed={18}
-        length="90vh"
       />
       <div className="relative z-10">
         <div id="home">

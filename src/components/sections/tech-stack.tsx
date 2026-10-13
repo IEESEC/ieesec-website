@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import * as m from "framer-motion/m";
 import { Reveal } from "@/components/ui/animations/fade-up";
 import { cn } from "@/lib/utils";
 import type { TechCategory } from "@/types/tech";
@@ -39,20 +40,20 @@ export function TechStackSection() {
           <Reveal direction="right" className="mt-8">
             <div className="flex flex-wrap gap-2">
               {(["All", ...CATEGORIES] as Filter[]).map((category) => (
-                <button
+                <m.button
                   key={category}
                   type="button"
                   onClick={() => setFilter(category)}
                   aria-pressed={filter === category}
                   className={cn(
-                    "min-h-11 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors",
+                    "transition-colors duration-(--motion-duration-hover) min-h-11 rounded-full border px-4 py-1.5 text-sm font-medium",
                     filter === category
                       ? "border-accent bg-accent text-accent-foreground"
                       : "border-border text-muted-foreground hover:border-accent/50 hover:text-foreground",
                   )}
                 >
                   {category === "All" ? t("filters.all") : t(`filters.${category}`)}
-                </button>
+                </m.button>
               ))}
             </div>
           </Reveal>
@@ -74,14 +75,14 @@ export function TechStackSection() {
           </div>
 
           {!showAllOnMobile && filtered.length > 3 && (
-            <button
+            <m.button
               type="button"
               onClick={() => setShowAllOnMobile(true)}
               aria-controls="tech-stack-grid"
-              className="mt-6 min-h-11 w-full rounded-full border border-border px-5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground lg:hidden"
+              className="transition-colors duration-(--motion-duration-hover) mt-6 min-h-11 w-full rounded-full border border-border px-5 py-2 text-sm font-medium text-muted-foreground hover:border-accent/50 hover:text-foreground lg:hidden"
             >
               {t("showMore")}
-            </button>
+            </m.button>
           )}
         </div>
       </div>

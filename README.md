@@ -23,7 +23,7 @@ The site presents the community, its members and technical interests, and provid
 ## Prerequisites
 
 - Node.js 20.9 or newer
-- pnpm 11.19.0
+- pnpm 12.11.2
 - A Discord webhook URL only when testing successful application delivery
 
 pnpm is the canonical package manager. Do not create or commit npm, Yarn or Bun lockfiles.
@@ -34,7 +34,7 @@ pnpm is the canonical package manager. Do not create or commit npm, Yarn or Bun 
 git clone https://github.com/IEESEC/ieesec-website.git
 cd ieesec-website
 corepack enable
-corepack prepare pnpm@11.19.0 --activate
+corepack prepare pnpm@12.11.2 --activate
 pnpm install --frozen-lockfile
 cp .env.example .env.local
 pnpm dev

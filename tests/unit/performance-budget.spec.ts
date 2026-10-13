@@ -12,6 +12,6 @@ test("homepage initial media stays within the Safari performance budget", () => 
   expect(hero).toContain("quality={60}");
   expect(nextConfig).toContain("qualities: [60, 65, 75]");
   expect(styles).toContain(".home-section-lazy");
-  expect(styles).toContain(".light-rays-ray:nth-child(n + 5)");
+  expect(styles).not.toContain("light-rays");
   expect(styles).not.toMatch(/\.hero-slide-image\s*\{[^}]*filter:/);
 });
