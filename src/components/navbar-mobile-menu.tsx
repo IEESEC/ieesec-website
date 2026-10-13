@@ -149,7 +149,7 @@ export function NavbarMobileMenu({
               className={cn(
                 "px-4 py-3 text-base font-medium rounded-xl",
                 activeSection === item.sectionId
-                  ? "bg-primary text-white"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-primary hover:bg-primary/15",
               )}
             >
@@ -162,7 +162,7 @@ export function NavbarMobileMenu({
           <div className="mt-auto px-4 pt-6">
             <Button
               asChild
-              className="w-full h-10 rounded-full bg-primary text-white font-semibold hover:bg-primary/85"
+              className="w-full h-10 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/85"
             >
               <Link href="/join" onClick={onClose}>
                 {t("join")}

@@ -63,7 +63,7 @@ export function NavbarHeader({
                 className={cn(
                   "px-3.5 py-1.5 text-sm font-medium rounded-lg",
                   activeSection === item.sectionId
-                    ? "bg-primary text-white"
+                    ? "bg-primary text-primary-foreground"
                     : "text-foreground/80 hover:text-primary hover:bg-primary/25",
                 )}
               >
@@ -76,7 +76,7 @@ export function NavbarHeader({
             <SettingsMenu />
             <Button
               asChild
-              className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-white hover:bg-primary/85"
+              className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary/85"
             >
               <Link href="/join">{t("join")}</Link>
             </Button>

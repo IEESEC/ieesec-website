@@ -46,8 +46,8 @@ function EventCardMedia({ event, phase }: Pick<EventCardProps, "event" | "phase"
       <div className="absolute inset-x-4 top-4 flex items-start justify-between gap-3">
         <span
           className={cn(
-            "rounded-full border border-white/30 bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-sm",
-            phase === "past" && "bg-slate-700/90 text-white",
+            "rounded-full border border-foreground/10 bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-sm",
+            phase === "past" && "bg-secondary text-secondary-foreground",
             phase === "started" && "bg-accent text-accent-foreground",
           )}
         >

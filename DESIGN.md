@@ -2,14 +2,14 @@
 
 ## Visual direction
 
-An image-led student engineering community site built around IHU campus photography, steel-blue accents, deep navy ink and direct geometric typography. Light mode uses crisp opaque surfaces; dark mode uses restrained translucency over deep navy.
+An image-led student engineering community site built around IHU campus photography, the school's deep blue logo color, blue-gray surfaces and direct geometric typography. Light mode uses crisp opaque surfaces; dark mode uses restrained translucency over deep navy.
 
 ## Design tokens
 
 Implementation tokens are CSS custom properties in `src/app/globals.css`. Components must consume semantic tokens instead of introducing one-off colours.
 
-- Brand primary: `#508CA4`, represented by `--primary`.
-- Accent: cobalt blue through `--accent` for selected states and primary calls to action.
+- Brand primary: `#284168`, represented by `--primary` in light mode and a brighter related blue in dark mode.
+- Accent: `--accent` follows the active theme's primary blue for selected states and primary calls to action.
 - Surfaces: `--background`, `--card`, `--secondary` and `--muted`.
 - Text: `--foreground`, `--card-foreground` and `--muted-foreground`.
 - Structure and focus: `--border`, `--input` and `--ring`.

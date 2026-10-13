@@ -12,7 +12,7 @@ export function JoinExperience() {
     <main
       id="main-content"
       tabIndex={-1}
-      className="relative isolate flex flex-1 flex-col bg-background dark:bg-slate-950/10"
+      className="relative isolate flex flex-1 flex-col bg-background dark:bg-background/10"
     >
       <ScrollVideoBackground activeStep={activeStep} />
       <JoinHero />

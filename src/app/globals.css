@@ -35,17 +35,13 @@
 
 @media (max-width: 767px) {
   .hero-carousel .hero-typewriter-line {
-    width: 100%;
+    width: fit-content;
     max-width: 100%;
-    min-width: 0;
-    grid-template-columns: minmax(0, 1fr);
   }
   .hero-carousel .hero-typewriter-line::before,
   .hero-carousel .hero-typewriter-line .hero-typewriter-reveal {
     max-width: 100%;
-    overflow-wrap: anywhere;
-    white-space: normal;
-    min-width: 0;
+    white-space: nowrap;
   }
 }
 
@@ -160,80 +156,76 @@
   --faq-expand-duration: 220ms;
   --faq-collapse-duration: 180ms;
 
-  /* Brand: #508CA4 (steel-blue teal) */
-  --background: oklch(0.985 0.002 220);
-  --foreground: oklch(0.185 0.02 230);
-  --card: oklch(0.995 0.001 220);
-  --card-foreground: oklch(0.185 0.02 230);
-  --popover: oklch(0.995 0.001 220);
-  --popover-foreground: oklch(0.185 0.02 230);
-  /* Primary = brand color #508CA4 */
-  --primary: oklch(0.588 0.065 220);
-  --primary-foreground: oklch(0.185 0.02 230);
-  /* Secondary = desaturated cool slate */
-  --secondary: oklch(0.94 0.012 230);
-  --secondary-foreground: oklch(0.28 0.025 230);
-  --muted: oklch(0.955 0.008 220);
-  --muted-foreground: oklch(0.39 0.025 230);
-  /* Accent follows the light-theme brand primary */
+  /* Brand primary follows the school's logo blue. */
+  --background: oklch(0.985 0.006 259);
+  --foreground: oklch(0.23 0.035 259);
+  --card: oklch(0.997 0.003 259);
+  --card-foreground: oklch(0.23 0.035 259);
+  --popover: oklch(0.997 0.003 259);
+  --popover-foreground: oklch(0.23 0.035 259);
+  --primary: #284168;
+  --primary-foreground: oklch(0.99 0.003 259);
+  /* Supporting surfaces and text use related blue-gray shades. */
+  --secondary: oklch(0.945 0.014 259);
+  --secondary-foreground: oklch(0.31 0.045 259);
+  --muted: oklch(0.96 0.009 259);
+  --muted-foreground: oklch(0.44 0.035 259);
+  /* Accent follows the active theme's primary blue. */
   --accent: var(--primary);
-  --accent-foreground: oklch(0.185 0.02 230);
+  --accent-foreground: oklch(0.99 0.003 259);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.82 0.018 220);
-  --input: oklch(0.62 0.025 220);
-  --ring: oklch(0.588 0.065 220);
-  --chart-1: oklch(0.588 0.065 220);
-  --chart-2: oklch(0.58 0.14 245);
-  --chart-3: oklch(0.52 0.06 230);
-  --chart-4: oklch(0.65 0.09 180);
-  --chart-5: oklch(0.55 0.1 30);
+  --border: oklch(0.84 0.025 259);
+  --input: oklch(0.58 0.035 259);
+  --ring: var(--primary);
+  --chart-1: var(--primary);
+  --chart-2: oklch(0.54 0.09 259);
+  --chart-3: oklch(0.67 0.07 257);
+  --chart-4: oklch(0.46 0.05 264);
+  --chart-5: oklch(0.78 0.08 253);
   --radius: 0.625rem;
-  --sidebar: oklch(0.975 0.005 220);
-  --sidebar-foreground: oklch(0.185 0.02 230);
-  --sidebar-primary: oklch(0.588 0.065 220);
-  --sidebar-primary-foreground: oklch(0.185 0.02 230);
-  --sidebar-accent: oklch(0.94 0.012 230);
-  --sidebar-accent-foreground: oklch(0.28 0.025 230);
-  --sidebar-border: oklch(0.82 0.018 220);
-  --sidebar-ring: oklch(0.588 0.065 220);
+  --sidebar: oklch(0.975 0.005 259);
+  --sidebar-foreground: oklch(0.23 0.035 259);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--secondary);
+  --sidebar-accent-foreground: var(--secondary-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
 }
 
 .dark {
-  /* Brand-aware dark mode: deep navy #0c1219 */
-  --background: oklch(0.13 0.015 235);
-  --foreground: oklch(0.93 0.008 220);
-  --card: oklch(0.17 0.016 232);
-  --card-foreground: oklch(0.93 0.008 220);
-  --popover: oklch(0.17 0.016 232);
-  --popover-foreground: oklch(0.93 0.008 220);
-  /* Primary = luminous brand blue */
-  --primary: oklch(0.66 0.075 220);
-  --primary-foreground: oklch(0.13 0.015 235);
-  /* Secondary = deep cool slate */
-  --secondary: oklch(0.22 0.016 230);
-  --secondary-foreground: oklch(0.9 0.008 220);
-  --muted: oklch(0.2 0.012 232);
-  --muted-foreground: oklch(0.62 0.015 220);
-  /* Accent = lighter cobalt blue for dark surfaces */
-  --accent: oklch(0.72 0.12 230);
-  --accent-foreground: oklch(0.13 0.015 235);
+  /* Dark surfaces stay navy; interactive blues brighten for readable contrast. */
+  --background: oklch(0.18 0.02 259);
+  --foreground: oklch(0.94 0.012 259);
+  --card: oklch(0.22 0.024 259);
+  --card-foreground: oklch(0.94 0.012 259);
+  --popover: oklch(0.22 0.024 259);
+  --popover-foreground: oklch(0.94 0.012 259);
+  --primary: oklch(0.73 0.09 259);
+  --primary-foreground: oklch(0.18 0.02 259);
+  --secondary: oklch(0.27 0.025 259);
+  --secondary-foreground: oklch(0.91 0.012 259);
+  --muted: oklch(0.24 0.02 259);
+  --muted-foreground: oklch(0.7 0.025 259);
+  --accent: var(--primary);
+  --accent-foreground: var(--primary-foreground);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(0.22 0.012 230);
-  --input: oklch(0.55 0.014 230);
-  --ring: oklch(0.66 0.075 220);
-  --chart-1: oklch(0.66 0.075 220);
-  --chart-2: oklch(0.72 0.12 230);
-  --chart-3: oklch(0.55 0.06 230);
-  --chart-4: oklch(0.65 0.09 180);
-  --chart-5: oklch(0.58 0.1 30);
-  --sidebar: oklch(0.15 0.014 232);
-  --sidebar-foreground: oklch(0.93 0.008 220);
-  --sidebar-primary: oklch(0.66 0.075 220);
-  --sidebar-primary-foreground: oklch(0.99 0.002 220);
-  --sidebar-accent: oklch(0.22 0.016 230);
-  --sidebar-accent-foreground: oklch(0.9 0.008 220);
-  --sidebar-border: oklch(0.22 0.012 230);
-  --sidebar-ring: oklch(0.66 0.075 220);
+  --border: oklch(0.32 0.025 259);
+  --input: oklch(0.52 0.035 259);
+  --ring: var(--primary);
+  --chart-1: var(--primary);
+  --chart-2: oklch(0.82 0.08 258);
+  --chart-3: oklch(0.65 0.095 260);
+  --chart-4: oklch(0.56 0.07 253);
+  --chart-5: oklch(0.46 0.06 262);
+  --sidebar: oklch(0.2 0.022 259);
+  --sidebar-foreground: oklch(0.94 0.012 259);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--secondary);
+  --sidebar-accent-foreground: var(--secondary-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
 }
 
 /* Keep below-the-fold sections out of the initial paint and layout work. */
@@ -277,7 +269,7 @@
 
 /* Hero carousel: light mode keeps the campus imagery bright and editorial. */
 .hero-overlay {
-  background: oklch(0.99 0.002 220 / 0.52);
+  background: oklch(0.99 0.002 259 / 0.52);
 }
 
 .dark .hero-overlay {
@@ -291,8 +283,8 @@
 
 /* External SVG images cannot inherit currentColor, so tint the light logos to the same brand hue. */
 html:not(.dark) .light-theme-logo {
-  filter: brightness(0) saturate(100%) invert(55%) sepia(12%) saturate(903%) hue-rotate(153deg)
-    brightness(91%) contrast(87%);
+  filter: brightness(0) saturate(100%) invert(25%) sepia(17%) saturate(1550%) hue-rotate(182deg)
+    brightness(92%) contrast(91%);
 }
 
 /* Hero carousel: bottom gradient fade into page background */
@@ -336,8 +328,8 @@ html:not(.dark) .light-theme-logo {
 .hero-content-wash {
   background: linear-gradient(
     90deg,
-    oklch(0.99 0.002 220 / 0.78) 0%,
-    oklch(0.99 0.002 220 / 0.38) 46%,
+    oklch(0.99 0.002 259 / 0.78) 0%,
+    oklch(0.99 0.002 259 / 0.38) 46%,
     transparent 78%
   );
   animation: hero-wash-enter var(--hero-wash-duration) var(--ease-hero-enter) both;
@@ -346,8 +338,8 @@ html:not(.dark) .light-theme-logo {
 .dark .hero-content-wash {
   background: linear-gradient(
     90deg,
-    oklch(0.05 0.02 230 / 0.78) 0%,
-    oklch(0.05 0.02 230 / 0.38) 46%,
+    oklch(0.05 0.02 259 / 0.78) 0%,
+    oklch(0.05 0.02 259 / 0.38) 46%,
     transparent 78%
   );
 }
@@ -410,31 +402,36 @@ html:not(.dark) .light-theme-logo {
 
 /* Join video background: light mode uses an airy wash that still lets the campus footage lead. */
 .join-video-overlay {
-  background: oklch(0.99 0.002 220 / 0.52);
+  background: oklch(0.99 0.002 259 / 0.52);
 }
 
 .dark .join-video-overlay {
-  background: rgb(2 6 23 / 0.58);
+  background: oklch(0.14 0.025 259 / 0.58);
 }
 
 .join-video-wash {
   background: linear-gradient(
     90deg,
-    oklch(0.99 0.002 220 / 0.68),
+    oklch(0.99 0.002 259 / 0.68),
     transparent 55%,
-    oklch(0.99 0.002 220 / 0.34)
+    oklch(0.99 0.002 259 / 0.34)
   );
 }
 
 .dark .join-video-wash {
-  background: linear-gradient(90deg, rgba(2, 6, 23, 0.48), transparent 55%, rgba(2, 6, 23, 0.3));
+  background: linear-gradient(
+    90deg,
+    oklch(0.14 0.025 259 / 0.48),
+    transparent 55%,
+    oklch(0.14 0.025 259 / 0.3)
+  );
 }
 
 .join-video-fade {
   background: linear-gradient(
     to top,
     var(--background) 0%,
-    oklch(0.99 0.002 220 / 0.72) 55%,
+    oklch(0.99 0.002 259 / 0.72) 55%,
     transparent 100%
   );
 }
