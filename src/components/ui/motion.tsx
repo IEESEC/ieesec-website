@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 // Keep these values aligned with the CSS motion tokens in globals.css.
 export const MOTION_EASE_OUT = [0.23, 1, 0.32, 1] as const;
@@ -20,6 +20,6 @@ export const MOTION_EASE_SECTION_REVEAL = [0.21, 0.47, 0.32, 0.98] as const;
 export const MOTION_EASE_EVENT_REVEAL = [0.22, 1, 0.36, 1] as const;
 export const MOTION_DURATION_PHOTO_HOVER = 0.7;
 
-export const MotionA = motion.a;
-export const MotionDiv = motion.div;
-export const MotionSpan = motion.span;
+export const MotionA = m.a;
+export const MotionDiv = m.div;
+export const MotionSpan = m.span;

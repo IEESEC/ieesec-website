@@ -2,12 +2,12 @@
 
 import { MOTION_DURATION_STANDARD } from "@/components/ui/motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 import type { TechItem } from "@/types/tech";
 
 export function TechCard({ item }: { item: TechItem }) {
   return (
-    <motion.div
+    <m.div
       whileHover={{ y: -4 }}
       transition={{ duration: MOTION_DURATION_STANDARD, ease: "easeOut" }}
     >
@@ -24,6 +24,6 @@ export function TechCard({ item }: { item: TechItem }) {
           <h3 className="text-base font-semibold text-foreground">{item.name}</h3>
         </CardContent>
       </Card>
-    </motion.div>
+    </m.div>
   );
 }

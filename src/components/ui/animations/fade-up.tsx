@@ -1,7 +1,8 @@
 "use client";
 
 import { MOTION_DURATION_REVEAL, MOTION_EASE_SECTION_REVEAL } from "@/components/ui/motion";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
+import { useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 
 export type FadeDirection = "up" | "down" | "left" | "right" | "none";
@@ -31,7 +32,7 @@ export function Reveal({
   const reducedMotion = useReducedMotion();
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       className={className}
       initial={false}
@@ -47,6 +48,6 @@ export function Reveal({
       }}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

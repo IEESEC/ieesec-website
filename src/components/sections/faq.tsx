@@ -2,7 +2,7 @@
 
 import { MOTION_DURATION_HOVER } from "@/components/ui/motion";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 import { Accordion } from "radix-ui";
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -96,17 +96,17 @@ export function FAQSection() {
                     className="overflow-hidden rounded-2xl border border-border bg-card text-card-foreground data-[state=open]:border-accent/60 data-[state=open]:bg-accent/5"
                   >
                     <Accordion.Header className="flex">
-                      <motion.div className="flex w-full">
+                      <m.div className="flex w-full">
                         <Accordion.Trigger className="group/faq-trigger flex min-h-11 w-full touch-manipulation items-center justify-between gap-4 px-4 py-4 text-left text-base font-semibold text-foreground outline-none transition-colors duration-(--motion-duration-hover) hover:text-accent focus-visible:ring-3 focus-visible:ring-ring/30 sm:px-5">
                           <span>{item.question}</span>
-                          <motion.span
+                          <m.span
                             animate={{ rotate: openItem === item.id ? 180 : 0 }}
                             transition={{ duration: MOTION_DURATION_HOVER }}
                           >
                             <ChevronDown aria-hidden="true" className="size-5 shrink-0" />
-                          </motion.span>
+                          </m.span>
                         </Accordion.Trigger>
-                      </motion.div>
+                      </m.div>
                     </Accordion.Header>
                     <Accordion.Content className="faq-accordion-content overflow-hidden text-muted-foreground">
                       <p className="border-t border-border/60 px-4 pb-5 pt-4 leading-7 sm:px-5">

@@ -32,7 +32,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { motion, useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
+import { useReducedMotion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { Reveal } from "@/components/ui/animations/fade-up";
 import { Button } from "@/components/ui/button";
@@ -153,7 +154,7 @@ function YearSlider({ id, value, onChange }: YearSliderProps) {
         />
         <div className="mt-3 grid grid-cols-5 gap-1 text-center text-[0.68rem] font-medium text-muted-foreground">
           {YEAR_OPTIONS.map((year, index) => (
-            <motion.button
+            <m.button
               key={year}
               type="button"
               onClick={() => onChange(year)}
@@ -165,7 +166,7 @@ function YearSlider({ id, value, onChange }: YearSliderProps) {
               transition={{ duration: MOTION_DURATION_HOVER }}
             >
               {t(`short${index + 1}${index === 4 ? "plus" : ""}`)}
-            </motion.button>
+            </m.button>
           ))}
         </div>
       </div>
@@ -184,7 +185,7 @@ function InterestCard({ area, selected, onClick }: InterestCardProps) {
   const t = useTranslations("join.interests");
 
   return (
-    <motion.button
+    <m.button
       type="button"
       onClick={onClick}
       aria-pressed={selected}
@@ -195,16 +196,16 @@ function InterestCard({ area, selected, onClick }: InterestCardProps) {
           : "border-border bg-background text-foreground hover:border-primary/60 hover:bg-primary/5 dark:bg-background/70",
       )}
     >
-      <motion.span
+      <m.span
         className={cn(
           "flex size-8 shrink-0 items-center justify-center rounded-md transition-colors duration-(--motion-duration-hover)",
           selected ? "bg-white/18" : "bg-primary/10 text-primary group-hover:bg-primary/15",
         )}
       >
         <Icon aria-hidden className="size-4" />
-      </motion.span>
+      </m.span>
       <span className="leading-snug">{t(area)}</span>
-    </motion.button>
+    </m.button>
   );
 }
 
@@ -242,7 +243,7 @@ function ExperienceScale({ value, onChange }: ExperienceScaleProps) {
               aria-label={t("level", { level })}
               className="peer absolute inset-0 z-10 size-full cursor-pointer opacity-0"
             />
-            <motion.span
+            <m.span
               aria-hidden
               className="size-5 rounded-full border border-input bg-background transition-[background-color,border-color,box-shadow] duration-(--motion-duration-hover) peer-checked:border-primary peer-checked:bg-primary peer-checked:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_15%,transparent)] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-ring"
             />
@@ -301,11 +302,11 @@ function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
                 aria-label={participation(preference) + ": " + ratings(rating)}
                 className="peer absolute inset-0 z-10 size-full cursor-pointer opacity-0"
               />
-              <motion.span
+              <m.span
                 aria-hidden
                 className="flex size-5 items-center justify-center rounded-full border border-input bg-background peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-ring"
               >
-                <motion.span
+                <m.span
                   aria-hidden
                   className="size-2.5 rounded-full bg-primary"
                   animate={{
@@ -317,7 +318,7 @@ function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
                     ease: MOTION_EASE_OUT,
                   }}
                 />
-              </motion.span>
+              </m.span>
             </label>
           ))}
         </div>
@@ -354,7 +355,7 @@ export function JoinFormProgress({ activeStep, blockedMessage }: JoinFormProgres
         aria-valuenow={activeStep + 1}
         className="h-1 overflow-hidden bg-foreground/15 dark:bg-white/15"
       >
-        <motion.div
+        <m.div
           className="h-full origin-left bg-primary"
           initial={false}
           animate={{ scaleX: progress / 100 }}

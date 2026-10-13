@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 import { Reveal } from "@/components/ui/animations/fade-up";
 import { cn } from "@/lib/utils";
 import type { TechCategory } from "@/types/tech";
@@ -40,7 +40,7 @@ export function TechStackSection() {
           <Reveal direction="right" className="mt-8">
             <div className="flex flex-wrap gap-2">
               {(["All", ...CATEGORIES] as Filter[]).map((category) => (
-                <motion.button
+                <m.button
                   key={category}
                   type="button"
                   onClick={() => setFilter(category)}
@@ -53,7 +53,7 @@ export function TechStackSection() {
                   )}
                 >
                   {category === "All" ? t("filters.all") : t(`filters.${category}`)}
-                </motion.button>
+                </m.button>
               ))}
             </div>
           </Reveal>
@@ -75,14 +75,14 @@ export function TechStackSection() {
           </div>
 
           {!showAllOnMobile && filtered.length > 3 && (
-            <motion.button
+            <m.button
               type="button"
               onClick={() => setShowAllOnMobile(true)}
               aria-controls="tech-stack-grid"
               className="transition-colors duration-(--motion-duration-hover) mt-6 min-h-11 w-full rounded-full border border-border px-5 py-2 text-sm font-medium text-muted-foreground hover:border-accent/50 hover:text-foreground lg:hidden"
             >
               {t("showMore")}
-            </motion.button>
+            </m.button>
           )}
         </div>
       </div>

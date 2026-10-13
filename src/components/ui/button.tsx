@@ -4,7 +4,8 @@ import { MOTION_DURATION_PRESS, MOTION_EASE_OUT } from "@/components/ui/motion";
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "radix-ui";
-import { motion, useReducedMotion } from "framer-motion";
+import * as m from "framer-motion/m";
+import { useReducedMotion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
@@ -55,7 +56,7 @@ function Button({
   }) {
   const reducedMotion = useReducedMotion();
   const buttonClassName = cn(buttonVariants({ variant, size, className }));
-  const motionProps = props as React.ComponentPropsWithoutRef<typeof motion.button>;
+  const motionProps = props as React.ComponentPropsWithoutRef<typeof m.button>;
 
   if (asChild) {
     return (
@@ -70,7 +71,7 @@ function Button({
   }
 
   return (
-    <motion.button
+    <m.button
       data-slot="button"
       data-variant={variant}
       data-size={size}

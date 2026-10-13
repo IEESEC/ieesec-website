@@ -2,7 +2,7 @@
 
 import { MOTION_DURATION_MEDIA, MOTION_DURATION_STANDARD } from "@/components/ui/motion";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 import { ArrowUpRight } from "lucide-react";
 import { LuGlobe } from "react-icons/lu";
 import { SiGithub } from "react-icons/si";
@@ -15,7 +15,7 @@ export function ProjectCard({ project }: { project: Project }) {
   const title = t(project.titleKey);
 
   return (
-    <motion.article
+    <m.article
       aria-labelledby={`project-${project.id}-title`}
       className="h-full"
       whileHover={{ y: -4 }}
@@ -26,7 +26,7 @@ export function ProjectCard({ project }: { project: Project }) {
         className="h-full overflow-hidden rounded-2xl border border-border bg-card p-0 hover:border-primary/50 hover:shadow-sm dark:hover:shadow-lg"
       >
         <div className="relative aspect-[16/10] overflow-hidden">
-          <motion.div
+          <m.div
             className="absolute inset-0"
             whileHover={{ scale: 1.05 }}
             transition={{ duration: MOTION_DURATION_MEDIA }}
@@ -39,7 +39,7 @@ export function ProjectCard({ project }: { project: Project }) {
               sizes="(min-width: 768px) 33vw, 100vw"
               className="object-cover"
             />
-          </motion.div>
+          </m.div>
         </div>
 
         <CardContent className="flex flex-1 flex-col p-6">
@@ -71,7 +71,7 @@ export function ProjectCard({ project }: { project: Project }) {
         {(project.githubUrl || project.liveUrl) && (
           <CardFooter className="mt-auto flex flex-wrap gap-4 border-t border-border/70 px-6 py-4">
             {project.githubUrl && (
-              <motion.a
+              <m.a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
@@ -81,10 +81,10 @@ export function ProjectCard({ project }: { project: Project }) {
                 <SiGithub aria-hidden="true" className="size-4" />
                 {t("links.github")}
                 <ArrowUpRight aria-hidden="true" className="size-4" />
-              </motion.a>
+              </m.a>
             )}
             {project.liveUrl && (
-              <motion.a
+              <m.a
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
@@ -94,11 +94,11 @@ export function ProjectCard({ project }: { project: Project }) {
                 <LuGlobe aria-hidden="true" className="size-4" />
                 {t("links.live")}
                 <ArrowUpRight aria-hidden="true" className="size-4" />
-              </motion.a>
+              </m.a>
             )}
           </CardFooter>
         )}
       </Card>
-    </motion.article>
+    </m.article>
   );
 }

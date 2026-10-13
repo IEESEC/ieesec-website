@@ -7,7 +7,7 @@ import {
   MOTION_EASE_OUT,
 } from "@/components/ui/motion";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 import { Fragment, type ReactNode } from "react";
 import { Card } from "@/components/ui/card";
 import type { Member } from "./Member";
@@ -25,7 +25,7 @@ function SocialLink({
   if (!href) return null;
 
   return (
-    <motion.a
+    <m.a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
@@ -35,7 +35,7 @@ function SocialLink({
       transition={{ duration: MOTION_DURATION_STANDARD }}
     >
       {children}
-    </motion.a>
+    </m.a>
   );
 }
 
@@ -48,14 +48,14 @@ export default function MemberCard({ member }: { member: Member }) {
   const specializationLabel = specialization.replace(/\s+developer$/i, "");
 
   return (
-    <motion.div
+    <m.div
       className="h-full"
       whileHover={{ y: -4 }}
       transition={{ duration: MOTION_DURATION_MEDIA, ease: "easeOut" }}
     >
       <Card className="group relative isolate mx-auto h-full w-full max-w-sm gap-0 overflow-hidden rounded-3xl border border-border/80 bg-card p-0 shadow-sm hover:border-primary/40 hover:shadow-sm focus-within:border-primary/50 dark:hover:shadow-xl dark:hover:shadow-primary/10">
         <div className="relative aspect-video overflow-hidden bg-muted">
-          <motion.div
+          <m.div
             className="absolute inset-0"
             whileHover={{ filter: "grayscale(0%)" }}
             transition={{ duration: MOTION_DURATION_PHOTO_HOVER, ease: "easeOut" }}
@@ -68,7 +68,7 @@ export default function MemberCard({ member }: { member: Member }) {
               sizes="(min-width: 1024px) 320px, (min-width: 640px) 384px, 100vw"
               className="object-cover grayscale-[15%] contrast-[1.04]"
             />
-          </motion.div>
+          </m.div>
           <div
             aria-hidden="true"
             className="absolute inset-0 bg-linear-to-t from-card via-transparent to-transparent opacity-70"
@@ -134,7 +134,7 @@ export default function MemberCard({ member }: { member: Member }) {
         </div>
 
         <div className="relative flex flex-1 flex-col px-5 pb-5 pt-4">
-          <motion.span
+          <m.span
             aria-hidden="true"
             className="absolute left-5 top-0 h-0.5 w-20 origin-left bg-primary"
             initial={{ transform: "scaleX(0.6)" }}
@@ -165,6 +165,6 @@ export default function MemberCard({ member }: { member: Member }) {
           </p>
         </div>
       </Card>
-    </motion.div>
+    </m.div>
   );
 }

@@ -1,97 +1,18 @@
 "use client";
 
-import {
-  MOTION_DURATION_HOVER,
-  MOTION_DURATION_STANDARD,
-  MOTION_EASE_DRAWER,
-} from "@/components/ui/motion";
-import { useTranslations } from "next-intl";
-import { Button } from "./ui/button";
-import { Menu, X } from "lucide-react";
-import { useState, useEffect, useCallback, useRef } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { SettingsMenu } from "./settings-menu";
-import { Link, usePathname } from "@/i18n/navigation";
-
-const navItems = [
-  { labelKey: "home", href: "/#home", sectionId: "home" },
-  { labelKey: "team", href: "/#team", sectionId: "team" },
-  { labelKey: "projects", href: "/#projects", sectionId: "projects" },
-  { labelKey: "stack", href: "/#tech-stack", sectionId: "tech-stack" },
-  { labelKey: "events", href: "/#events", sectionId: "events" },
-  { labelKey: "blog", href: "/#blog", sectionId: "blog" },
-  { labelKey: "discord", href: "/#discord", sectionId: "discord" },
-] as const;
+import { useState, useEffect, useCallback } from "react";
+import { usePathname } from "@/i18n/navigation";
+import { NavbarHeader } from "./navbar-header";
+import { NavbarMobileMenu } from "./navbar-mobile-menu";
+import { navbarItems, type NavbarClickHandler } from "./navbar-links";
 
 export function Navbar() {
   const pathname = usePathname();
-  const t = useTranslations("navigation");
-  const reducedMotion = useReducedMotion();
-  const drawerTransition = {
-    duration: reducedMotion ? 0 : MOTION_DURATION_STANDARD,
-    ease: MOTION_EASE_DRAWER,
-  };
-  const fadeTransition = { duration: reducedMotion ? 0 : MOTION_DURATION_HOVER };
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
-  const sidebarRef = useRef<HTMLElement>(null);
-
-  const openSidebar = () => setIsSidebarOpen(true);
-  const closeSidebar = () => setIsSidebarOpen(false);
-
-  useEffect(() => {
-    if (!isSidebarOpen) return;
-    const sidebar = sidebarRef.current;
-    if (!sidebar) return;
-    const previousFocus = document.activeElement as HTMLElement | null;
-    const overflow = document.body.style.overflow;
-    const background = [...document.querySelectorAll<HTMLElement>("header, main, footer")].filter(
-      (element) => !sidebar.contains(element),
-    );
-    const previousInert = background.map((element) => element.inert);
-    background.forEach((element) => {
-      element.inert = true;
-    });
-    document.body.style.overflow = "hidden";
-    sidebar.querySelector<HTMLButtonElement>("button")?.focus();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        setIsSidebarOpen(false);
-      }
-      if (event.key !== "Tab") return;
-      const controls = [...sidebar.querySelectorAll<HTMLElement>("a[href], button:not(:disabled)")];
-      const first = controls[0];
-      const last = controls.at(-1);
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last?.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first?.focus();
-      }
-    };
-    const desktop = window.matchMedia("(min-width: 1024px)");
-    const closeOnDesktop = () => {
-      if (desktop.matches) setIsSidebarOpen(false);
-    };
-    document.addEventListener("keydown", onKeyDown);
-    desktop.addEventListener("change", closeOnDesktop);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      desktop.removeEventListener("change", closeOnDesktop);
-      document.body.style.overflow = overflow;
-      background.forEach((element, index) => {
-        element.inert = previousInert[index];
-      });
-      if (previousFocus?.isConnected && previousFocus.getClientRects().length) {
-        previousFocus.focus({ preventScroll: true });
-      }
-    };
-  }, [isSidebarOpen]);
+  const openSidebar = useCallback(() => setIsSidebarOpen(true), []);
+  const closeSidebar = useCallback(() => setIsSidebarOpen(false), []);
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -101,12 +22,12 @@ export function Navbar() {
 
     const getActiveSectionFromHash = () => {
       const sectionId = window.location.hash.slice(1);
-      return navItems.some((item) => item.sectionId === sectionId) ? sectionId : "home";
+      return navbarItems.some((item) => item.sectionId === sectionId) ? sectionId : "home";
     };
 
     setActiveSection(getActiveSectionFromHash());
 
-    const sectionIds = navItems.map((item) => item.sectionId);
+    const sectionIds = navbarItems.map((item) => item.sectionId);
     const syncActiveSection = (id: string) => {
       setActiveSection(id);
 
@@ -132,11 +53,11 @@ export function Navbar() {
     );
 
     sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
+      const element = document.getElementById(id);
+      if (!element) return;
 
-      sectionByElement.set(el, id);
-      observer.observe(el);
+      sectionByElement.set(element, id);
+      observer.observe(element);
     });
 
     const handleScroll = () => {
@@ -161,18 +82,25 @@ export function Navbar() {
     if (sectionId === "home") {
       window.scrollTo({ top: 0, behavior });
     } else {
-      const el = document.getElementById(sectionId);
-      el?.scrollIntoView({ behavior });
+      document.getElementById(sectionId)?.scrollIntoView({ behavior });
     }
   }, []);
 
-  const handleNavClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+  const handleNavClick = useCallback<NavbarClickHandler>(
+    (event, sectionId) => {
       // Let the root hash URL navigate from secondary pages such as /join.
-      if (pathname !== "/" || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0)
+      if (
+        pathname !== "/" ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        event.button !== 0
+      ) {
         return;
+      }
 
-      e.preventDefault();
+      event.preventDefault();
       window.history.pushState(null, "", `#${sectionId}`);
       setActiveSection(sectionId);
       scrollTo(sectionId);
@@ -182,161 +110,18 @@ export function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 w-full max-w-full overflow-x-clip">
-        <div className="mx-auto max-w-7xl px-4 pt-3">
-          <div
-            data-testid="navbar-surface"
-            className="relative flex h-14 items-center justify-between rounded-2xl border border-foreground/15 bg-background/68 px-5 shadow-lg shadow-foreground/5 backdrop-blur-md backdrop-saturate-150 dark:border-primary/10 dark:bg-background/30 dark:shadow-lg dark:shadow-black/20 dark:backdrop-blur-md dark:backdrop-saturate-150"
-          >
-            <div className="absolute -bottom-px left-1/2 -translate-x-1/2 w-1/2 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
-            {/* Logo */}
-            <Link
-              href="/#home"
-              onClick={(e) => handleNavClick(e, "home")}
-              aria-label={t("homeLabel")}
-              className="group flex items-center gap-3"
-            >
-              <motion.div
-                whileHover={{ opacity: 0.8 }}
-                transition={{ duration: MOTION_DURATION_HOVER }}
-              >
-                <img
-                  src="/images/brand/ieesec-navbar.svg"
-                  alt="IEESEC"
-                  width={178}
-                  height={44}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="sync"
-                  className="light-theme-logo h-7 w-auto text-transparent brightness-0 dark:brightness-100"
-                />
-              </motion.div>
-            </Link>
-
-            {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center gap-0.5">
-              {navItems.map((item) => (
-                <Link
-                  key={item.sectionId}
-                  aria-current={activeSection === item.sectionId ? "location" : undefined}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.sectionId)}
-                  className={cn(
-                    "px-3.5 py-1.5 text-sm font-medium rounded-lg",
-                    activeSection === item.sectionId
-                      ? "bg-primary text-white"
-                      : "text-foreground/80 hover:text-primary hover:bg-primary/25",
-                  )}
-                >
-                  {t(item.labelKey)}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Desktop actions */}
-            <div className="hidden lg:flex items-center gap-2">
-              <SettingsMenu />
-              <Button
-                asChild
-                className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-white hover:bg-primary/85"
-              >
-                <Link href="/join">{t("join")}</Link>
-              </Button>
-            </div>
-
-            {/* Mobile actions */}
-            <div className="flex lg:hidden items-center gap-2">
-              <motion.button
-                className="transition-colors duration-(--motion-duration-hover) flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer"
-                onClick={openSidebar}
-                aria-label={t("openMenu")}
-                aria-controls="mobile-navigation"
-                aria-expanded={isSidebarOpen}
-              >
-                <Menu className="h-5 w-5" />
-              </motion.button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Backdrop overlay */}
-      <AnimatePresence>
-        {isSidebarOpen && (
-          <motion.button
-            type="button"
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={fadeTransition}
-            onClick={closeSidebar}
-            aria-label={t("closeMenu")}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Mobile Sidebar */}
-      <motion.aside
-        ref={sidebarRef}
-        role="dialog"
-        aria-modal={isSidebarOpen || undefined}
-        aria-label={t("openMenu")}
-        id="mobile-navigation"
-        aria-hidden={!isSidebarOpen}
-        inert={!isSidebarOpen}
-        className={cn(
-          "fixed inset-y-0 right-0 z-60 flex h-dvh w-[min(18rem,calc(100vw-1rem))] flex-col overflow-y-auto overscroll-contain border-l border-border bg-card p-6 shadow-2xl sm:p-8 lg:hidden",
-          isSidebarOpen ? "visible pointer-events-auto" : "invisible pointer-events-none",
-        )}
-        initial={false}
-        animate={{ transform: isSidebarOpen ? "translateX(0)" : "translateX(100%)" }}
-        transition={drawerTransition}
-      >
-        <div className="mb-8 flex items-center">
-          <motion.button
-            onClick={closeSidebar}
-            className="transition-colors duration-(--motion-duration-hover) flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer"
-            aria-label={t("closeMenu")}
-          >
-            <X className="h-5 w-5" />
-          </motion.button>
-        </div>
-
-        <nav className="flex min-h-0 flex-1 flex-col gap-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.sectionId}
-              href={item.href}
-              onClick={(e) => {
-                handleNavClick(e, item.sectionId);
-                closeSidebar();
-              }}
-              className={cn(
-                "px-4 py-3 text-base font-medium rounded-xl",
-                activeSection === item.sectionId
-                  ? "bg-primary text-white"
-                  : "text-muted-foreground hover:text-primary hover:bg-primary/15",
-              )}
-            >
-              {t(item.labelKey)}
-            </Link>
-          ))}
-          <div className="mt-6 border-y border-border py-6">
-            <SettingsMenu mobile />
-          </div>
-          <div className="mt-auto px-4 pt-6">
-            <Button
-              asChild
-              className="w-full h-10 rounded-full bg-primary text-white font-semibold hover:bg-primary/85"
-            >
-              <Link href="/join" onClick={closeSidebar}>
-                {t("join")}
-              </Link>
-            </Button>
-          </div>
-        </nav>
-      </motion.aside>
+      <NavbarHeader
+        activeSection={activeSection}
+        isMenuOpen={isSidebarOpen}
+        onNavClick={handleNavClick}
+        onOpenMenu={openSidebar}
+      />
+      <NavbarMobileMenu
+        activeSection={activeSection}
+        isOpen={isSidebarOpen}
+        onClose={closeSidebar}
+        onNavClick={handleNavClick}
+      />
     </>
   );
 }

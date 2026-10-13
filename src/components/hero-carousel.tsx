@@ -5,7 +5,7 @@ import * as React from "react";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
@@ -188,7 +188,7 @@ export function HeroCarousel() {
               {t("description")}
             </p>
             <div className="hero-actions mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 sm:gap-x-6 sm:gap-y-4">
-              <motion.a
+              <m.a
                 href="#projects"
                 className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-lg shadow-accent/20 transition-colors duration-(--motion-duration-standard) hover:bg-accent/90 hover:shadow-accent/30 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
                 whileHover={{ y: -2 }}
@@ -196,25 +196,22 @@ export function HeroCarousel() {
                 transition={{ duration: MOTION_DURATION_STANDARD }}
               >
                 {t("projectsCta")}
-                <motion.span
+                <m.span
                   whileHover={{ x: 2, y: -2 }}
                   transition={{ duration: MOTION_DURATION_STANDARD }}
                 >
                   <ArrowUpRight className="h-4 w-4" />
-                </motion.span>
-              </motion.a>
-              <motion.a
+                </m.span>
+              </m.a>
+              <m.a
                 href="#team"
                 className="group inline-flex min-h-11 items-center gap-2 py-2 text-sm font-semibold text-foreground/85 transition-colors duration-(--motion-duration-standard) hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground dark:text-white/85 dark:hover:text-white dark:focus-visible:outline-white"
               >
                 {t("teamCta")}
-                <motion.span
-                  whileHover={{ x: 4 }}
-                  transition={{ duration: MOTION_DURATION_STANDARD }}
-                >
+                <m.span whileHover={{ x: 4 }} transition={{ duration: MOTION_DURATION_STANDARD }}>
                   <ArrowRight className="h-4 w-4" />
-                </motion.span>
-              </motion.a>
+                </m.span>
+              </m.a>
             </div>
           </div>
         </div>
@@ -242,7 +239,7 @@ export function HeroCarousel() {
                 onClick={() => scrollTo(index)}
                 className="group flex h-11 w-11 items-center justify-center rounded-full px-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground dark:focus-visible:outline-white"
               >
-                <motion.span
+                <m.span
                   className={cn(
                     "block h-1.5 w-6 origin-center rounded-full transition-colors duration-(--motion-duration-standard)",
                     selectedIndex === index ? "bg-primary" : "bg-foreground/25 dark:bg-white/30",
@@ -256,14 +253,14 @@ export function HeroCarousel() {
             ))}
           </div>
           <div className="ml-0.5 flex items-center gap-0.5 border-l border-foreground/15 pl-0.5 sm:ml-1 sm:gap-1 sm:pl-1 dark:border-white/15">
-            <motion.button
+            <m.button
               aria-label={controls("previousSlide")}
               className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-(--motion-duration-hover) hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
               onClick={scrollPrev}
             >
               <ChevronLeft className="h-4 w-4" />
-            </motion.button>
-            <motion.button
+            </m.button>
+            <m.button
               aria-label={isAutoplaying ? t("pause") : t("play")}
               aria-pressed={isAutoplaying}
               className="flex h-11 w-11 items-center justify-center rounded-full bg-foreground/10 text-foreground transition-colors duration-(--motion-duration-hover) hover:bg-foreground/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground dark:bg-white/10 dark:text-white dark:hover:bg-white/20 dark:focus-visible:outline-white"
@@ -274,14 +271,14 @@ export function HeroCarousel() {
               ) : (
                 <Play className="ml-0.5 h-3.5 w-3.5" />
               )}
-            </motion.button>
-            <motion.button
+            </m.button>
+            <m.button
               aria-label={controls("nextSlide")}
               className="flex h-11 w-11 items-center justify-center rounded-full text-foreground/70 transition-colors duration-(--motion-duration-hover) hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:outline-white"
               onClick={scrollNext}
             >
               <ChevronRight className="h-4 w-4" />
-            </motion.button>
+            </m.button>
           </div>
         </div>
       </div>
