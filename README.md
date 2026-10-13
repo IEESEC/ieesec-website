@@ -70,7 +70,7 @@ Open <http://localhost:3000>. The middleware redirects unprefixed URLs to the de
 | `pnpm test:e2e --project=desktop` | Run desktop browser tests                  |
 | `pnpm test`                       | Run the complete Playwright project matrix |
 
-Install Chromium before the first E2E run with `pnpm exec playwright install chromium`. On Linux CI or a fresh Linux workstation, use `pnpm exec playwright install --with-deps chromium`.
+Install Chromium and WebKit before the first E2E run with `pnpm exec playwright install chromium webkit`. On Linux CI or a fresh Linux workstation, use `pnpm exec playwright install --with-deps chromium webkit`.
 
 ## Repository map
 

@@ -15,13 +15,13 @@ The project uses Playwright for pure TypeScript checks and browser-level tests. 
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm exec playwright install chromium
+pnpm exec playwright install chromium webkit
 ```
 
 On Linux CI or a fresh Linux workstation:
 
 ```bash
-pnpm exec playwright install --with-deps chromium
+pnpm exec playwright install --with-deps chromium webkit
 ```
 
 ## Commands
@@ -37,6 +37,8 @@ pnpm build
 ```
 
 `PLAYWRIGHT_BASE_URL` may point E2E tests at an already-running environment. Otherwise Playwright starts the local Next.js server at `http://localhost:3000`. CI retries failed tests twice; local runs do not retry.
+
+The `hero-webkit` project checks the homepage typing reveal in Safari's browser engine for both locales at desktop and phone widths, including reduced motion. Run it with `pnpm test:e2e --project=hero-webkit`.
 
 ## Targeted execution policy
 

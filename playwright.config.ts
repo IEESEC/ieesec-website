@@ -26,6 +26,11 @@ export default defineConfig({
       testMatch: /tests\/e2e\/(?!mobile-join|mobile-navigation|tech-stack-mobile).*\.spec\.ts/,
       use: { viewport: { width: 1280, height: 720 } },
     },
+    {
+      name: "hero-webkit",
+      testMatch: /tests\/e2e\/hero-typing\.spec\.ts/,
+      use: { browserName: "webkit" },
+    },
     ...mobileProjects.map(({ name, viewport }) => ({
       name,
       testMatch:

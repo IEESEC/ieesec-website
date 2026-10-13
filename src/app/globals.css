@@ -483,9 +483,10 @@ html:not(.dark) .light-theme-logo {
 .hero-typewriter-reveal {
   width: 100%;
   overflow: visible;
-  clip-path: inset(-0.2em 100% -0.2em 0);
+  /* Release the clipping mask after typing so WebKit can paint the entire final glyph. */
+  clip-path: none;
   animation: hero-typing var(--typewriter-duration) steps(var(--typewriter-characters), end)
-    var(--typewriter-delay) forwards;
+    var(--typewriter-delay) backwards;
 }
 
 .hero-typewriter-caret {
