@@ -46,7 +46,7 @@ Organization membership alone does not guarantee repository write access. If you
 
 ```bash
 corepack enable
-corepack prepare pnpm@11.19.0 --activate
+corepack prepare pnpm@12.11.2 --activate
 pnpm install --frozen-lockfile
 cp .env.example .env.local
 pnpm dev
