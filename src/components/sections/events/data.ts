@@ -1,0 +1,56 @@
+import type { Event } from "@/types/event";
+
+// Temporary lorem ipsum content until the community publishes the event calendar.
+export const events: readonly Event[] = [
+  {
+    id: "future-workshop",
+    titleKey: "items.futureWorkshop.title",
+    descriptionKey: "items.futureWorkshop.description",
+    locationKey: "items.futureWorkshop.location",
+    image: "/images/hero/campus1.jpg",
+    imageAltKey: "items.futureWorkshop.imageAlt",
+    startsAt: "2026-10-17T10:00:00+03:00",
+    duration: "2h",
+    registrationUrl: "https://discord.gg/2xHBsHMKy7",
+  },
+  {
+    id: "future-meetup",
+    titleKey: "items.futureMeetup.title",
+    descriptionKey: "items.futureMeetup.description",
+    locationKey: "items.futureMeetup.location",
+    image: "/images/hero/campus2.jpg",
+    imageAltKey: "items.futureMeetup.imageAlt",
+    startsAt: "2026-11-14T17:30:00+02:00",
+    duration: "1.5h",
+  },
+  {
+    id: "past-talk",
+    titleKey: "items.pastTalk.title",
+    descriptionKey: "items.pastTalk.description",
+    locationKey: "items.pastTalk.location",
+    image: "/images/hero/campus3.jpg",
+    imageAltKey: "items.pastTalk.imageAlt",
+    startsAt: "2026-04-18T10:00:00+03:00",
+    duration: "1h",
+  },
+  {
+    id: "past-workshop",
+    titleKey: "items.pastWorkshop.title",
+    descriptionKey: "items.pastWorkshop.description",
+    locationKey: "items.pastWorkshop.location",
+    image: "/images/hero/campus1.jpg",
+    imageAltKey: "items.pastWorkshop.imageAlt",
+    startsAt: "2026-03-07T11:00:00+02:00",
+    duration: "30m",
+  },
+  {
+    id: "past-lab",
+    titleKey: "items.pastLab.title",
+    descriptionKey: "items.pastLab.description",
+    locationKey: "items.pastLab.location",
+    image: "/images/hero/campus2.jpg",
+    imageAltKey: "items.pastLab.imageAlt",
+    startsAt: "2026-02-14T11:00:00+02:00",
+    duration: "1h",
+  },
+];

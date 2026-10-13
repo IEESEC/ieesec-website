@@ -29,7 +29,7 @@ export default defineConfig({
     ...mobileProjects.map(({ name, viewport }) => ({
       name,
       testMatch:
-        /tests\/e2e\/(?:join-responsive|mobile-join|mobile-navigation|tech-stack-mobile)\.spec\.ts/,
+        /tests\/e2e\/(?:events|join-responsive|mobile-join|mobile-navigation|tech-stack-mobile)\.spec\.ts/,
       use: { viewport, hasTouch: true, isMobile: true },
     })),
   ],

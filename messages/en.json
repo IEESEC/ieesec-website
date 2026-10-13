@@ -105,6 +105,64 @@
       "Languages": "Languages"
     }
   },
+  "events": {
+    "carouselLabel": "Events timeline",
+    "slideLabel": "Event {current} of {total}",
+    "previousEvent": "Previous event",
+    "nextEvent": "Next event",
+    "upcomingTitle": "Upcoming events",
+    "pastTitle": "Past events",
+    "emptyUpcoming": "There are no upcoming events at the moment.",
+    "emptyPast": "Past events will appear here after the first community session.",
+    "register": "Register for the event",
+    "registerLabel": "Register for {event}",
+    "eventStarted": "Event started",
+    "duration": "{value}",
+    "countdownLabel": "Starts in {days} days, {hours} hours, {minutes} minutes and {seconds} seconds",
+    "status": {
+      "upcoming": "Upcoming",
+      "started": "Live now",
+      "past": "Past"
+    },
+    "units": {
+      "days": "days",
+      "hours": "hours",
+      "minutes": "minutes",
+      "seconds": "seconds"
+    },
+    "items": {
+      "futureWorkshop": {
+        "title": "Lorem ipsum workshop",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer consequat, sapien at aliquam efficitur, nibh arcu pretium justo.",
+        "location": "IHU Sindos Campus",
+        "imageAlt": "International Hellenic University campus building"
+      },
+      "futureMeetup": {
+        "title": "Lorem ipsum meetup",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, libero sed porttitor cursus, nibh lacus posuere erat.",
+        "location": "IHU Sindos Campus",
+        "imageAlt": "International Hellenic University campus viewed from the surrounding grounds"
+      },
+      "pastTalk": {
+        "title": "Lorem ipsum talk",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo, nisl at tincidunt gravida, erat justo cursus neque.",
+        "location": "IHU Sindos Campus",
+        "imageAlt": "International Hellenic University campus exterior"
+      },
+      "pastWorkshop": {
+        "title": "Lorem ipsum community session",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "location": "IHU Sindos Campus",
+        "imageAlt": "International Hellenic University campus building"
+      },
+      "pastLab": {
+        "title": "Lorem ipsum lab session",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "location": "IHU Sindos Campus",
+        "imageAlt": "International Hellenic University campus viewed from the surrounding grounds"
+      }
+    }
+  },
   "projects": {
     "status": {
       "in-progress": "In progress",
