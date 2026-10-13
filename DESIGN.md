@@ -77,6 +77,8 @@ The browser tests in `tests/e2e/light-theme.spec.ts`, `site-audit.spec.ts`, `joi
 
 ## Motion
 
+- Animate semantic colors and `color-mix()` values with CSS transitions; keep color properties out of Motion animation props because computed `lab()`/`oklch()` values are not supported by its color mixer.
+- Shared CSS motion curves and durations live in `src/app/globals.css`; client animation consumers use matching constants from `src/components/ui/motion.tsx`. Keep intentional hero, photographic hover and entrance timing exceptions named and documented. Server Components must not read primitive constants from the client motion module.
 - Keep the carousel and purposeful micro-interactions, but avoid continuous motion without controls.
 - Theme changes disable transitions to prevent mixed-theme frames.
 - Respect `prefers-reduced-motion`; background video remains on its poster frame.
