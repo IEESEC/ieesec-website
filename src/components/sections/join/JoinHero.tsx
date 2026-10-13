@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/ui/animations/fade-up";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
 export function JoinHero() {
@@ -21,15 +22,15 @@ export function JoinHero() {
           </p>
         </Reveal>
 
-        <a
+        <motion.a
           href="#join-application"
-          className="absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 flex min-h-11 -translate-x-1/2 flex-col items-center justify-center gap-1 text-center text-[0.68rem] font-medium uppercase tracking-[0.18em] text-foreground/75 transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-none dark:text-white/80 dark:hover:text-white dark:focus-visible:text-white sm:bottom-10 sm:gap-2"
+          className="transition-colors duration-(--motion-duration-hover) absolute bottom-[calc(1.5rem+env(safe-area-inset-bottom))] left-1/2 flex min-h-11 -translate-x-1/2 flex-col items-center justify-center gap-1 text-center text-[0.68rem] font-medium uppercase tracking-[0.18em] text-foreground/75 hover:text-foreground focus-visible:text-foreground focus-visible:outline-none dark:text-white/80 dark:hover:text-white dark:focus-visible:text-white sm:bottom-10 sm:gap-2"
         >
           <span className="whitespace-nowrap">{t("scroll")}</span>
           <span aria-hidden className="animate-bounce text-xl leading-none">
             ↓
           </span>
-        </a>
+        </motion.a>
       </div>
     </section>
   );

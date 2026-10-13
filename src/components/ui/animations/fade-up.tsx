@@ -1,6 +1,8 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { MOTION_DURATION_REVEAL, MOTION_EASE_SECTION_REVEAL } from "@/components/ui/motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
 
 export type FadeDirection = "up" | "down" | "left" | "right" | "none";
 export interface RevealProps {
@@ -10,86 +12,41 @@ export interface RevealProps {
   duration?: number;
   className?: string;
 }
-const OFFSET: Record<FadeDirection, string> = {
-  up: "translateY(124px)",
-  down: "translateY(-124px)",
-  left: "translateX(-124px)",
-  right: "translateX(124px)",
-  none: "none",
+const OFFSET: Record<FadeDirection, { x?: number; y?: number }> = {
+  up: { y: 124 },
+  down: { y: -124 },
+  left: { x: -124 },
+  right: { x: 124 },
+  none: {},
 };
 export function Reveal({
   children,
   direction = "up",
   delay = 0,
-  duration = 0.8,
+  duration = MOTION_DURATION_REVEAL,
   className,
 }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  useLayoutEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let animation: Animation | undefined;
-    const showElement = () => {
-      element.style.opacity = "1";
-      element.style.transform = "none";
-      element.style.removeProperty("will-change");
-    };
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -15% 0px" });
+  const reducedMotion = useReducedMotion();
 
-    // Apply the initial state before paint while keeping server and no-JavaScript HTML visible.
-    if (reducedMotion.matches || document.hidden) {
-      showElement();
-      return;
-    }
-    element.style.opacity = "0";
-    element.style.transform = OFFSET[direction];
-    element.style.willChange = "opacity, transform";
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-        animation = element.animate(
-          [
-            { opacity: 0, transform: OFFSET[direction] },
-            { opacity: 1, transform: "none" },
-          ],
-          {
-            duration: duration * 1000,
-            delay: delay * 1000,
-            easing: "cubic-bezier(0.21,0.47,0.32,0.98)",
-            fill: "forwards",
-          },
-        );
-        void animation.finished
-          .then(() => {
-            showElement();
-            animation?.cancel();
-          })
-          .catch(() => undefined);
-      },
-      { rootMargin: "0px 0px -15% 0px", threshold: 0 },
-    );
-    const stopMotion = () => {
-      if (!reducedMotion.matches && !document.hidden) return;
-      observer.disconnect();
-      animation?.cancel();
-      showElement();
-    };
-    observer.observe(element);
-    reducedMotion.addEventListener("change", stopMotion);
-    document.addEventListener("visibilitychange", stopMotion);
-    return () => {
-      observer.disconnect();
-      animation?.cancel();
-      showElement();
-      reducedMotion.removeEventListener("change", stopMotion);
-      document.removeEventListener("visibilitychange", stopMotion);
-    };
-  }, [direction, delay, duration]);
   return (
-    <div ref={ref} className={className}>
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={false}
+      animate={
+        reducedMotion || isInView
+          ? { opacity: 1, x: 0, y: 0 }
+          : { opacity: 0, ...OFFSET[direction] }
+      }
+      transition={{
+        duration: reducedMotion ? 0 : duration,
+        delay: reducedMotion ? 0 : delay,
+        ease: MOTION_EASE_SECTION_REVEAL,
+      }}
+    >
       {children}
-    </div>
+    </motion.div>
   );
 }

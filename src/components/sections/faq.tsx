@@ -1,3 +1,8 @@
+"use client";
+
+import { MOTION_DURATION_HOVER } from "@/components/ui/motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { Accordion } from "radix-ui";
 import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -24,10 +29,11 @@ const FAQ_ITEM_KEYS = [
 type FAQItemKey = (typeof FAQ_ITEM_KEYS)[number];
 
 const externalLinkClassName =
-  "font-semibold text-primary underline underline-offset-4 transition-colors hover:text-foreground";
+  "font-semibold text-primary underline underline-offset-4 hover:text-foreground";
 
 export function FAQSection() {
   const t = useTranslations("sections");
+  const [openItem, setOpenItem] = useState<string>("");
   const items = FAQ_ITEM_KEYS.map((key): FAQItem & { id: FAQItemKey } => ({
     id: key,
     question: t(`faq.${key}.question`),
@@ -78,6 +84,8 @@ export function FAQSection() {
             <Accordion.Root
               type="single"
               collapsible
+              value={openItem}
+              onValueChange={setOpenItem}
               aria-labelledby="faq-title"
               className="space-y-3"
             >
@@ -85,16 +93,20 @@ export function FAQSection() {
                 <Reveal key={item.id} direction="up" delay={index * 0.06}>
                   <Accordion.Item
                     value={item.id}
-                    className="overflow-hidden rounded-2xl border border-border bg-card text-card-foreground transition-colors data-[state=open]:border-accent/60 data-[state=open]:bg-accent/5"
+                    className="overflow-hidden rounded-2xl border border-border bg-card text-card-foreground data-[state=open]:border-accent/60 data-[state=open]:bg-accent/5"
                   >
                     <Accordion.Header className="flex">
-                      <Accordion.Trigger className="group/faq-trigger flex min-h-11 w-full touch-manipulation items-center justify-between gap-4 px-4 py-4 text-left text-base font-semibold text-foreground outline-none transition-colors hover:text-accent focus-visible:ring-3 focus-visible:ring-ring/30 sm:px-5">
-                        <span>{item.question}</span>
-                        <ChevronDown
-                          aria-hidden="true"
-                          className="size-5 shrink-0 transition-transform duration-200 group-data-[state=open]/faq-trigger:rotate-180"
-                        />
-                      </Accordion.Trigger>
+                      <motion.div className="flex w-full">
+                        <Accordion.Trigger className="group/faq-trigger flex min-h-11 w-full touch-manipulation items-center justify-between gap-4 px-4 py-4 text-left text-base font-semibold text-foreground outline-none transition-colors duration-(--motion-duration-hover) hover:text-accent focus-visible:ring-3 focus-visible:ring-ring/30 sm:px-5">
+                          <span>{item.question}</span>
+                          <motion.span
+                            animate={{ rotate: openItem === item.id ? 180 : 0 }}
+                            transition={{ duration: MOTION_DURATION_HOVER }}
+                          >
+                            <ChevronDown aria-hidden="true" className="size-5 shrink-0" />
+                          </motion.span>
+                        </Accordion.Trigger>
+                      </motion.div>
                     </Accordion.Header>
                     <Accordion.Content className="faq-accordion-content overflow-hidden text-muted-foreground">
                       <p className="border-t border-border/60 px-4 pb-5 pt-4 leading-7 sm:px-5">

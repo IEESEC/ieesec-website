@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { MotionSpan } from "@/components/ui/motion";
 
 const quickLinks = [
   { labelKey: "join", href: "/join" },
@@ -42,12 +43,14 @@ export async function Footbar() {
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
               {t("descriptionStart")}&nbsp;
-              <Link
-                href="https://iee.ihu.gr"
-                className="light-theme-accent font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline"
-              >
-                {t("department")}
-              </Link>
+              <MotionSpan>
+                <Link
+                  href="https://iee.ihu.gr"
+                  className="light-theme-accent font-medium text-foreground underline-offset-4 transition-colors duration-(--motion-duration-hover) hover:text-primary hover:underline"
+                >
+                  {t("department")}
+                </Link>
+              </MotionSpan>
               &nbsp;{t("descriptionEnd")}
             </p>
           </div>
@@ -61,9 +64,9 @@ export async function Footbar() {
               {quickLinks.map((item) => (
                 <li key={item.labelKey}>
                   <Link href={item.href} className="inline-flex items-center">
-                    <span className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                    <MotionSpan className="transition-colors duration-(--motion-duration-hover) text-sm text-muted-foreground hover:text-foreground">
                       {item.labelKey === "github" ? "GitHub" : t(item.labelKey)}
-                    </span>
+                    </MotionSpan>
                   </Link>
                 </li>
               ))}

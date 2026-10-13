@@ -1,9 +1,15 @@
 "use client";
 
+import {
+  MOTION_DURATION_HOVER,
+  MOTION_DURATION_STANDARD,
+  MOTION_EASE_DRAWER,
+} from "@/components/ui/motion";
 import { useTranslations } from "next-intl";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { SettingsMenu } from "./settings-menu";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -21,6 +27,12 @@ const navItems = [
 export function Navbar() {
   const pathname = usePathname();
   const t = useTranslations("navigation");
+  const reducedMotion = useReducedMotion();
+  const drawerTransition = {
+    duration: reducedMotion ? 0 : MOTION_DURATION_STANDARD,
+    ease: MOTION_EASE_DRAWER,
+  };
+  const fadeTransition = { duration: reducedMotion ? 0 : MOTION_DURATION_HOVER };
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
@@ -184,16 +196,21 @@ export function Navbar() {
               aria-label={t("homeLabel")}
               className="group flex items-center gap-3"
             >
-              <img
-                src="/images/brand/ieesec-navbar.svg"
-                alt="IEESEC"
-                width={178}
-                height={44}
-                loading="eager"
-                fetchPriority="high"
-                decoding="sync"
-                className="light-theme-logo h-7 w-auto text-transparent brightness-0 transition-opacity group-hover:opacity-80 dark:brightness-100"
-              />
+              <motion.div
+                whileHover={{ opacity: 0.8 }}
+                transition={{ duration: MOTION_DURATION_HOVER }}
+              >
+                <img
+                  src="/images/brand/ieesec-navbar.svg"
+                  alt="IEESEC"
+                  width={178}
+                  height={44}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="sync"
+                  className="light-theme-logo h-7 w-auto text-transparent brightness-0 dark:brightness-100"
+                />
+              </motion.div>
             </Link>
 
             {/* Desktop nav */}
@@ -205,7 +222,7 @@ export function Navbar() {
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.sectionId)}
                   className={cn(
-                    "px-3.5 py-1.5 text-sm font-medium rounded-lg transition-colors duration-200",
+                    "px-3.5 py-1.5 text-sm font-medium rounded-lg",
                     activeSection === item.sectionId
                       ? "bg-primary text-white"
                       : "text-foreground/80 hover:text-primary hover:bg-primary/25",
@@ -221,7 +238,7 @@ export function Navbar() {
               <SettingsMenu />
               <Button
                 asChild
-                className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-white hover:bg-primary/85 transition-colors"
+                className="h-8 rounded-full bg-primary px-5 text-sm font-semibold text-white hover:bg-primary/85"
               >
                 <Link href="/join">{t("join")}</Link>
               </Button>
@@ -229,32 +246,38 @@ export function Navbar() {
 
             {/* Mobile actions */}
             <div className="flex lg:hidden items-center gap-2">
-              <button
-                className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground hover:bg-muted cursor-pointer"
+              <motion.button
+                className="transition-colors duration-(--motion-duration-hover) flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer"
                 onClick={openSidebar}
                 aria-label={t("openMenu")}
                 aria-controls="mobile-navigation"
                 aria-expanded={isSidebarOpen}
               >
                 <Menu className="h-5 w-5" />
-              </button>
+              </motion.button>
             </div>
           </div>
         </div>
       </header>
 
       {/* Backdrop overlay */}
-      {isSidebarOpen && (
-        <button
-          type="button"
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
-          onClick={closeSidebar}
-          aria-label={t("closeMenu")}
-        />
-      )}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.button
+            type="button"
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={fadeTransition}
+            onClick={closeSidebar}
+            aria-label={t("closeMenu")}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Mobile Sidebar */}
-      <aside
+      <motion.aside
         ref={sidebarRef}
         role="dialog"
         aria-modal={isSidebarOpen || undefined}
@@ -263,20 +286,21 @@ export function Navbar() {
         aria-hidden={!isSidebarOpen}
         inert={!isSidebarOpen}
         className={cn(
-          "fixed inset-y-0 right-0 z-60 flex h-dvh w-[min(18rem,calc(100vw-1rem))] flex-col overflow-y-auto overscroll-contain border-l border-border bg-card p-6 shadow-2xl transition-transform duration-300 ease-in-out sm:p-8 lg:hidden",
-          isSidebarOpen
-            ? "visible pointer-events-auto translate-x-0"
-            : "invisible pointer-events-none translate-x-full",
+          "fixed inset-y-0 right-0 z-60 flex h-dvh w-[min(18rem,calc(100vw-1rem))] flex-col overflow-y-auto overscroll-contain border-l border-border bg-card p-6 shadow-2xl sm:p-8 lg:hidden",
+          isSidebarOpen ? "visible pointer-events-auto" : "invisible pointer-events-none",
         )}
+        initial={false}
+        animate={{ transform: isSidebarOpen ? "translateX(0)" : "translateX(100%)" }}
+        transition={drawerTransition}
       >
         <div className="mb-8 flex items-center">
-          <button
+          <motion.button
             onClick={closeSidebar}
-            className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+            className="transition-colors duration-(--motion-duration-hover) flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer"
             aria-label={t("closeMenu")}
           >
             <X className="h-5 w-5" />
-          </button>
+          </motion.button>
         </div>
 
         <nav className="flex min-h-0 flex-1 flex-col gap-1">
@@ -289,7 +313,7 @@ export function Navbar() {
                 closeSidebar();
               }}
               className={cn(
-                "px-4 py-3 text-base font-medium rounded-xl transition-colors",
+                "px-4 py-3 text-base font-medium rounded-xl",
                 activeSection === item.sectionId
                   ? "bg-primary text-white"
                   : "text-muted-foreground hover:text-primary hover:bg-primary/15",
@@ -304,7 +328,7 @@ export function Navbar() {
           <div className="mt-auto px-4 pt-6">
             <Button
               asChild
-              className="w-full h-10 rounded-full bg-primary text-white font-semibold hover:bg-primary/85 transition-colors"
+              className="w-full h-10 rounded-full bg-primary text-white font-semibold hover:bg-primary/85"
             >
               <Link href="/join" onClick={closeSidebar}>
                 {t("join")}
@@ -312,7 +336,7 @@ export function Navbar() {
             </Button>
           </div>
         </nav>
-      </aside>
+      </motion.aside>
     </>
   );
 }

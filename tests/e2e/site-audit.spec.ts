@@ -23,6 +23,7 @@ test("localized layouts remain within the viewport and have no runtime errors", 
       "#team",
       "#projects",
       "#tech-stack",
+      "#events",
       "#blog",
       "#faq",
       "footer",
@@ -32,6 +33,7 @@ test("localized layouts remain within the viewport and have no runtime errors", 
       const overflow = await section.evaluate((root) =>
         [...root.querySelectorAll("h1, h2, h3, p, a, button, .hero-typewriter-reveal")]
           .filter((element) => {
+            if (element.closest('[aria-roledescription="carousel"]')) return false;
             const rect = element.getBoundingClientRect();
             return rect.width > 0 && (rect.left < -1 || rect.right > innerWidth + 1);
           })
