@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Moon, Settings2, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import * as m from "framer-motion/m";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -77,22 +78,22 @@ export function SettingsMenu({ mobile = false }: SettingsMenuProps) {
     return (
       <section aria-labelledby="mobile-settings-heading" className="w-full">
         <div className="flex flex-col gap-1">
-          <button
+          <m.button
             type="button"
             onClick={switchLanguage}
-            className="flex min-h-11 w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-base font-medium text-muted-foreground transition-colors hover:bg-primary/15 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="transition-colors duration-(--motion-duration-hover) flex min-h-11 w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-base font-medium text-muted-foreground hover:bg-primary/15 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {languageIcon}
             <span>{languageLabel}</span>
-          </button>
-          <button
+          </m.button>
+          <m.button
             type="button"
             onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-            className="flex min-h-11 w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-base font-medium text-muted-foreground transition-colors hover:bg-primary/15 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="transition-colors duration-(--motion-duration-hover) flex min-h-11 w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-base font-medium text-muted-foreground hover:bg-primary/15 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {themeIcon}
             <span>{t("theme")}</span>
-          </button>
+          </m.button>
         </div>
       </section>
     );

@@ -1,5 +1,11 @@
 "use client";
 
+import {
+  MOTION_DURATION_HOVER,
+  MOTION_DURATION_MEDIA,
+  MOTION_DURATION_PRESS,
+  MOTION_EASE_OUT,
+} from "@/components/ui/motion";
 import { useId } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import type {
@@ -26,6 +32,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import * as m from "framer-motion/m";
+import { useReducedMotion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { Reveal } from "@/components/ui/animations/fade-up";
 import { Button } from "@/components/ui/button";
@@ -146,17 +154,19 @@ function YearSlider({ id, value, onChange }: YearSliderProps) {
         />
         <div className="mt-3 grid grid-cols-5 gap-1 text-center text-[0.68rem] font-medium text-muted-foreground">
           {YEAR_OPTIONS.map((year, index) => (
-            <button
+            <m.button
               key={year}
               type="button"
               onClick={() => onChange(year)}
               className={cn(
-                "min-h-11 rounded-md px-1 py-1 transition-colors cursor-pointer",
+                "min-h-11 rounded-md px-1 py-1 cursor-pointer transition-colors duration-(--motion-duration-hover) hover:bg-primary/10 hover:text-primary",
                 selectedIndex === index && "bg-primary/10 text-primary",
               )}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: MOTION_DURATION_HOVER }}
             >
               {t(`short${index + 1}${index === 4 ? "plus" : ""}`)}
-            </button>
+            </m.button>
           ))}
         </div>
       </div>
@@ -175,27 +185,27 @@ function InterestCard({ area, selected, onClick }: InterestCardProps) {
   const t = useTranslations("join.interests");
 
   return (
-    <button
+    <m.button
       type="button"
       onClick={onClick}
       aria-pressed={selected}
       className={cn(
-        "group flex min-h-16 items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-xs font-semibold transition-all cursor-pointer",
+        "group flex min-h-16 items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-xs font-semibold cursor-pointer",
         selected
           ? "border-primary bg-primary text-primary-foreground shadow-sm"
           : "border-border bg-background text-foreground hover:border-primary/60 hover:bg-primary/5 dark:bg-background/70",
       )}
     >
-      <span
+      <m.span
         className={cn(
-          "flex size-8 shrink-0 items-center justify-center rounded-md transition-colors",
+          "flex size-8 shrink-0 items-center justify-center rounded-md transition-colors duration-(--motion-duration-hover)",
           selected ? "bg-white/18" : "bg-primary/10 text-primary group-hover:bg-primary/15",
         )}
       >
         <Icon aria-hidden className="size-4" />
-      </span>
+      </m.span>
       <span className="leading-snug">{t(area)}</span>
-    </button>
+    </m.button>
   );
 }
 
@@ -233,9 +243,9 @@ function ExperienceScale({ value, onChange }: ExperienceScaleProps) {
               aria-label={t("level", { level })}
               className="peer absolute inset-0 z-10 size-full cursor-pointer opacity-0"
             />
-            <span
+            <m.span
               aria-hidden
-              className="size-5 rounded-full border border-input bg-background transition-colors peer-checked:border-primary peer-checked:bg-primary peer-checked:ring-4 peer-checked:ring-primary/15 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-ring"
+              className="size-5 rounded-full border border-input bg-background transition-[background-color,border-color,box-shadow] duration-(--motion-duration-hover) peer-checked:border-primary peer-checked:bg-primary peer-checked:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_15%,transparent)] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-ring"
             />
           </label>
         ))}
@@ -254,6 +264,7 @@ interface ParticipationMatrixProps {
 }
 
 function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
+  const reducedMotion = useReducedMotion();
   const ratings = useTranslations("join.ratings");
   const groupName = useId();
   const participation = useTranslations("join.participation");
@@ -291,17 +302,23 @@ function ParticipationMatrix({ values, onChange }: ParticipationMatrixProps) {
                 aria-label={participation(preference) + ": " + ratings(rating)}
                 className="peer absolute inset-0 z-10 size-full cursor-pointer opacity-0"
               />
-              <span
+              <m.span
                 aria-hidden
                 className="flex size-5 items-center justify-center rounded-full border border-input bg-background peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-ring"
               >
-                <span
-                  className={cn(
-                    "size-2.5 rounded-full transition-transform",
-                    values[preference] === rating ? "scale-100 bg-primary" : "scale-0",
-                  )}
+                <m.span
+                  aria-hidden
+                  className="size-2.5 rounded-full bg-primary"
+                  animate={{
+                    opacity: values[preference] === rating ? 1 : 0,
+                    transform: values[preference] === rating ? "scale(1)" : "scale(0.97)",
+                  }}
+                  transition={{
+                    duration: reducedMotion ? 0 : MOTION_DURATION_PRESS,
+                    ease: MOTION_EASE_OUT,
+                  }}
                 />
-              </span>
+              </m.span>
             </label>
           ))}
         </div>
@@ -338,9 +355,11 @@ export function JoinFormProgress({ activeStep, blockedMessage }: JoinFormProgres
         aria-valuenow={activeStep + 1}
         className="h-1 overflow-hidden bg-foreground/15 dark:bg-white/15"
       >
-        <div
-          className="h-full origin-left bg-primary transition-transform duration-500 ease-out motion-reduce:transition-none"
-          style={{ transform: `scaleX(${progress / 100})` }}
+        <m.div
+          className="h-full origin-left bg-primary"
+          initial={false}
+          animate={{ scaleX: progress / 100 }}
+          transition={{ duration: MOTION_DURATION_MEDIA, ease: "easeOut" }}
         />
       </div>
       <div className="join-form-progress-meta px-4 py-2.5 md:px-6">

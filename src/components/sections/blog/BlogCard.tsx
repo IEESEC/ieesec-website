@@ -1,4 +1,8 @@
+"use client";
+
+import { MOTION_DURATION_STANDARD } from "@/components/ui/motion";
 import Image from "next/image";
+import * as m from "framer-motion/m";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { BlogPost } from "./BlogPost";
 import { useFormatter, useTranslations } from "next-intl";
@@ -20,17 +24,27 @@ export default function BlogCard({ post }: { post: BlogPost }) {
   const tags = [t(`posts.${post.id}.tag1`), t(`posts.${post.id}.tag2`)];
 
   return (
-    <article className="group block h-full">
-      <Card className="h-full overflow-hidden rounded-2xl border border-border bg-card p-0 transition-[border-color,box-shadow] duration-300 hover:border-primary/60 hover:shadow-sm dark:hover:shadow-lg">
+    <m.article
+      className="block h-full"
+      whileHover={{ y: -4 }}
+      transition={{ duration: MOTION_DURATION_STANDARD }}
+    >
+      <Card className="h-full overflow-hidden rounded-2xl border border-border bg-card p-0 hover:border-primary/60 hover:shadow-sm dark:hover:shadow-lg">
         <div className="relative aspect-video overflow-hidden">
-          <Image
-            src={post.image}
-            alt={title}
-            fill
-            quality={65}
-            sizes="(min-width: 768px) 33vw, 100vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-          />
+          <m.div
+            className="absolute inset-0"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: MOTION_DURATION_STANDARD }}
+          >
+            <Image
+              src={post.image}
+              alt={title}
+              fill
+              quality={65}
+              sizes="(min-width: 768px) 33vw, 100vw"
+              className="object-cover"
+            />
+          </m.div>
         </div>
 
         <CardContent className="pt-6">
@@ -72,6 +86,6 @@ export default function BlogCard({ post }: { post: BlogPost }) {
           </div>
         </CardFooter>
       </Card>
-    </article>
+    </m.article>
   );
 }

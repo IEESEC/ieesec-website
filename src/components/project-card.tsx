@@ -1,4 +1,8 @@
+"use client";
+
+import { MOTION_DURATION_MEDIA, MOTION_DURATION_STANDARD } from "@/components/ui/motion";
 import Image from "next/image";
+import * as m from "framer-motion/m";
 import { ArrowUpRight } from "lucide-react";
 import { LuGlobe } from "react-icons/lu";
 import { SiGithub } from "react-icons/si";
@@ -11,20 +15,31 @@ export function ProjectCard({ project }: { project: Project }) {
   const title = t(project.titleKey);
 
   return (
-    <article aria-labelledby={`project-${project.id}-title`} className="group h-full">
+    <m.article
+      aria-labelledby={`project-${project.id}-title`}
+      className="h-full"
+      whileHover={{ y: -4 }}
+      transition={{ duration: MOTION_DURATION_STANDARD, ease: "easeOut" }}
+    >
       <Card
         data-testid="project-card"
-        className="h-full overflow-hidden rounded-2xl border border-border bg-card p-0 transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-sm motion-reduce:transform-none dark:hover:shadow-lg"
+        className="h-full overflow-hidden rounded-2xl border border-border bg-card p-0 hover:border-primary/50 hover:shadow-sm dark:hover:shadow-lg"
       >
         <div className="relative aspect-[16/10] overflow-hidden">
-          <Image
-            src={project.image}
-            alt={t(project.imageAltKey)}
-            fill
-            quality={65}
-            sizes="(min-width: 768px) 33vw, 100vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
-          />
+          <m.div
+            className="absolute inset-0"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: MOTION_DURATION_MEDIA }}
+          >
+            <Image
+              src={project.image}
+              alt={t(project.imageAltKey)}
+              fill
+              quality={65}
+              sizes="(min-width: 768px) 33vw, 100vw"
+              className="object-cover"
+            />
+          </m.div>
         </div>
 
         <CardContent className="flex flex-1 flex-col p-6">
@@ -56,34 +71,34 @@ export function ProjectCard({ project }: { project: Project }) {
         {(project.githubUrl || project.liveUrl) && (
           <CardFooter className="mt-auto flex flex-wrap gap-4 border-t border-border/70 px-6 py-4">
             {project.githubUrl && (
-              <a
+              <m.a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={t("links.githubLabel", { project: title })}
-                className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+                className="transition-colors duration-(--motion-duration-hover) inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
               >
                 <SiGithub aria-hidden="true" className="size-4" />
                 {t("links.github")}
                 <ArrowUpRight aria-hidden="true" className="size-4" />
-              </a>
+              </m.a>
             )}
             {project.liveUrl && (
-              <a
+              <m.a
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={t("links.liveLabel", { project: title })}
-                className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 transition-colors hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+                className="transition-colors duration-(--motion-duration-hover) inline-flex min-h-11 items-center gap-2 text-sm font-medium text-foreground underline-offset-4 hover:text-primary hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
               >
                 <LuGlobe aria-hidden="true" className="size-4" />
                 {t("links.live")}
                 <ArrowUpRight aria-hidden="true" className="size-4" />
-              </a>
+              </m.a>
             )}
           </CardFooter>
         )}
       </Card>
-    </article>
+    </m.article>
   );
 }

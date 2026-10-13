@@ -1,5 +1,7 @@
 import { Reveal } from "@/components/ui/animations/fade-up";
 import { useTranslations } from "next-intl";
+import { EventsFeed } from "@/components/sections/events/feed";
+import { events } from "@/components/sections/events/data";
 
 export function EventsSection() {
   const t = useTranslations("sections");
@@ -16,6 +18,8 @@ export function EventsSection() {
             </h2>
             <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{t("eventsDescription")}</p>
           </Reveal>
+
+          <EventsFeed events={events} initialNow={Date.now()} />
         </div>
       </div>
     </section>

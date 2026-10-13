@@ -79,7 +79,7 @@ Use the complete matrix for changes to layout, navigation, the join wizard, scro
 - Join poster: at most 150 KB and exactly 1280×720.
 - The large MP4 must keep its metadata before media data and preserve the expected sync-sample structure.
 
-`tests/unit/performance-budget.spec.ts` protects initial image quality settings, lazy homepage sections and limited ambient rays. Update a budget only with measured evidence and a clear explanation in the pull request.
+`tests/unit/performance-budget.spec.ts` protects initial image quality settings, lazy homepage sections and the absence of the removed ambient ray effect.
 
 ## Writing tests
 
